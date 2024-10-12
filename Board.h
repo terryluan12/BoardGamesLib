@@ -10,7 +10,7 @@ class Board {
     public:
         static const size_t MAX_BOARD_SIZE=N;
         virtual ~Board(void) = default;
-        virtual Cell* operator [](const Coordinate i)=0; // Possibly overload [][]?
+        virtual Cell* operator [](const Coordinate i)=0;
         virtual std::string toString()=0;
     protected:
         std::map<Coordinate, std::unique_ptr<Cell>> cells;

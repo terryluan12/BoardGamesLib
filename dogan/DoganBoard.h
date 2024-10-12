@@ -8,7 +8,7 @@ class DoganBoard : public Board<100> {
     public:
         DoganBoard(DoganConfig config=DoganConfig());
         ~DoganBoard(void) {};
-        Cell* operator [](const Coordinate i); // Possibly overload [][]?
+        Cell* operator [](const Coordinate i);
         std::string toString(void);
     private:
         std::mt19937 rengine;
