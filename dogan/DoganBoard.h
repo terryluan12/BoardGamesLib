@@ -1,18 +1,19 @@
 #pragma once
 
+#include "DoganConfig.h"
 #include "enums.h"
+#include "common.h"
 #include "../Board.h"
 
-class DoganBoard : public Board<19> {
-    typedef unsigned char pips;
+class DoganBoard : public Board<100> {
     public:
-        DoganBoard(void);
+        DoganBoard(DoganConfig config=DoganConfig());
         ~DoganBoard(void) {};
-        Cell *operator [](const int i); // Possibly overload [][]?
+        Cell* operator [](const Coordinate i); // Possibly overload [][]?
         std::string toString(void);
     private:
         std::mt19937 rengine;
-        std::array<DoganBoard::pips, BOARDSIZE> getNumberConfiguration(const std::string configValue="default");
-        std::array<Resource, BOARDSIZE> getResourceConfiguration(const std::string configValue="default");
+        std::vector<pip> getNumberConfiguration(const std::string configValue);
+        std::vector<Resource> getResourceConfiguration(const std::string configValue);
 
 };

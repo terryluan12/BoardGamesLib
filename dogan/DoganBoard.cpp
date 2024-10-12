@@ -2,90 +2,82 @@
 #include <iostream>
 #include <random>
 #include <sstream>
+#include <tuple>
+#include "../common.h"
 #include "DoganBoard.h"
 #include "DoganCell.h"
 #include "enums.h"
 
 
-Cell *DoganBoard::operator [](const int i) {
-    if( i >= this->BOARDSIZE || i < 0) {
-        std::cerr << "Error: Index out of bounds" << i << " is not between 0 and " << this->BOARDSIZE-1;
-        throw std::out_of_range("Index out of bounds in DoganBoard::operator[]");
+Cell* DoganBoard::operator [](const Coordinate coordinates) {
+    auto it = this->cells.find(coordinates);
+    if( it == this->cells.end() ) {
+        std::cerr << "Error: Coordinate of Cell not found";
+        throw std::domain_error("Coordinate of Cell not found");
     }
-    return this->cells[i].get();
+    return it->second.get();
 }
 
-DoganBoard::DoganBoard(void) {
+DoganBoard::DoganBoard(DoganConfig config) {
     rengine.seed(std::random_device{}());
-    
-    
-    std::array<Resource, BOARDSIZE> resources = getResourceConfiguration();
-    std::array<DoganBoard::pips, BOARDSIZE> numbers = getNumberConfiguration();
 
+    boardSize = config.boardSize;
+    
+    std::vector<pip> numbers = getNumberConfiguration(config.numberConfiguration);
+    std::vector<Resource> resources = getResourceConfiguration(config.resourceConfiguration);
 
-    for (size_t i = 0; i < BOARDSIZE; i++) {
-        this->cells[i] = std::make_unique<DoganCell>(resources[i], false, numbers[i]);
+    size_t i = 0;
+    for (const auto& c : config.tileLocations) {
+        this->cells[c] = std::make_unique<DoganCell>(resources[i], false, numbers[i]);
+        ++i;
     }
 
-    static_cast<DoganCell*>(this->cells[BOARDSIZE/2].get())->setRobber(true);
+    static_cast<DoganCell*>(this->cells[config.robberPosition].get())->setRobber(true);
 
 }
 
-std::array<DoganBoard::pips, DoganBoard::BOARDSIZE> DoganBoard::getNumberConfiguration(const std::string configValue) {
-    std::array<pips, BOARDSIZE> numberOrder;
+std::vector<pip> DoganBoard::getNumberConfiguration(const std::string configValue) {
+    std::vector<pip> numberOrder;
     std::uniform_int_distribution<uint32_t> pipRand(1, 6);
 
     if(configValue == "default"){
         // initialize vector with all numbers in board and shuffle
-        std::vector<pips> initialNumberOrder = {2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12};
-        std::shuffle(initialNumberOrder.begin(), initialNumberOrder.end(), rengine);
+        numberOrder = {2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12};
+        std::shuffle(numberOrder.begin(), numberOrder.end(), rengine);
         
-        // insert into final array
-        size_t j = 0;
-        for(size_t i = 0; i < BOARDSIZE; i++) {
-            if(i == BOARDSIZE/2) {
-                numberOrder[i] = Resource::INVAL;
-            }
-            numberOrder[i] = initialNumberOrder[j++];
-        }
+        numberOrder.insert(numberOrder.begin() + 9, 7);
     }
-    return numberOrder;
+        return numberOrder;
 }
 
-std::array<Resource, DoganBoard::BOARDSIZE> DoganBoard::getResourceConfiguration(const std::string configValue) {
-    std::array<Resource, BOARDSIZE> resourceOrder;
+std::vector<Resource> DoganBoard::getResourceConfiguration(const std::string configValue) {
+    std::vector<Resource> resourceOrder;
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
 
     if(configValue == "default"){
         // initialize vector with all resources in board and shuffle
-        std::vector<Resource> initialResourceOrder = {
-                                                        Resource::BRICK, Resource::BRICK, Resource::BRICK,
-                                                        Resource::SHEEP, Resource::SHEEP, Resource::SHEEP,
-                                                        Resource::STONE, Resource::STONE, Resource::STONE,
-                                                        Resource::WHEAT, Resource::WHEAT, Resource::WHEAT,
-                                                        Resource::WOOD,  Resource::WOOD,  Resource::WOOD,
-                                                        static_cast<Resource>(resourceRand(rengine)), 
-                                                        static_cast<Resource>(resourceRand(rengine)), 
-                                                        static_cast<Resource>(resourceRand(rengine))
-                                                    };
-        std::shuffle(initialResourceOrder.begin(), initialResourceOrder.end(), rengine);
+        resourceOrder = {
+                            Resource::BRICK, Resource::BRICK, Resource::BRICK,
+                            Resource::SHEEP, Resource::SHEEP, Resource::SHEEP,
+                            Resource::STONE, Resource::STONE, Resource::STONE,
+                            Resource::WHEAT, Resource::WHEAT, Resource::WHEAT,
+                            Resource::WOOD,  Resource::WOOD,  Resource::WOOD,
+                            static_cast<Resource>(resourceRand(rengine)), 
+                            static_cast<Resource>(resourceRand(rengine)), 
+                            static_cast<Resource>(resourceRand(rengine))
+                        };
+        std::shuffle(resourceOrder.begin(), resourceOrder.end(), rengine);
 
         // insert into final array
-        size_t j = 0;
-        for(size_t i = 0; i < BOARDSIZE; i++) {
-            if(i == BOARDSIZE/2) {
-                resourceOrder[i] = Resource::INVAL;
-            }
-            resourceOrder[i] = initialResourceOrder[j++];
-        }
+        resourceOrder.insert(resourceOrder.begin() + 9, Resource::INVAL);
     }
     return resourceOrder;
 }
 
 std::string DoganBoard::toString() {
     std::ostringstream oss;
-    for(size_t i = 0; i < BOARDSIZE; i++) {
-        oss << "Cell " << i << ": " << this->cells[i]->toString() << "\n";
+    for(const auto& c : this->cells) {
+        oss << "Cell {" << std::get<0>(c.first) << "," << std::get<1>(c.first) << "}: " << c.second->toString() << "\n";
     }
     return oss.str();
 }

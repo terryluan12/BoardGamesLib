@@ -8,3 +8,8 @@ enum Resource {
     STONE,
     INVAL
 };
+
+enum Parity {
+    EVEN,
+    ODD
+};
