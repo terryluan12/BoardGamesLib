@@ -9,7 +9,5 @@ Change all declarations of type* var to type *var
 Change all declarations of type& var to type &var
 Add const to all getter functions like func(...) const {}
 add use of std::optional where applicable
-Remove all #includes where it already exists in the parent header file
-Change from typedef to using using
 Replace all instances of Cell & Board with DoganCell & DoganBoard (where applicable)
 Possibly overwrite Cell to DoganCell in DoganBoard

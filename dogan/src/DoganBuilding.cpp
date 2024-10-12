@@ -1,7 +1,4 @@
-#include <stdexcept>
 #include "DoganBuilding.h"
-#include "Cell.h"
-#include "enums.h"
 
 
 void DoganBuilding::addVertex(DoganVertex &dv) {

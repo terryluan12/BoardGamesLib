@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "enums.h"
 
 Direction getOppositeDirection(Direction d) {

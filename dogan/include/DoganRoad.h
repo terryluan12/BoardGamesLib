@@ -1,10 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <utility>
 #include <vector>
-#include "enums.h"
-#include "DoganCell.h"
 #include "DoganEdge.h"
 
 class DoganRoad {

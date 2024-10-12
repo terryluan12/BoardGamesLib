@@ -2,7 +2,6 @@
 
 #include <utility>
 #include "enums.h"
-#include "DoganBuilding.h"
 #include "DoganVertex.h"
 
 class DoganPort {

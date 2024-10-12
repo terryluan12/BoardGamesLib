@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include "DoganBuilding.h"
 #include "DoganConfig.h"
 
 std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {

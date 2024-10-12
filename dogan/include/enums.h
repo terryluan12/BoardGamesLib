@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdexcept>
 #include "common.h"
 
 enum class Resource {

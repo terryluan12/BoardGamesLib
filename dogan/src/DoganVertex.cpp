@@ -1,4 +1,4 @@
-#include <iostream>
+#include <stdexcept>
 #include "DoganVertex.h"
 
 DoganVertex::DoganVertex(Direction d, DoganCell &dc) : direction(d), doganCell(dc), coordinate(dc.getCoordinate()), isReady(true) {

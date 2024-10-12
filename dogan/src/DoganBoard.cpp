@@ -1,12 +1,5 @@
-#include <iostream>
-#include <memory>
 #include <sstream>
-#include <tuple>
-#include "common.h"
-#include "DoganBuilding.h"
 #include "DoganBoard.h"
-#include "DoganCell.h"
-#include "enums.h"
 
 
 Cell* DoganBoard::operator [](const Coordinate coordinates) {

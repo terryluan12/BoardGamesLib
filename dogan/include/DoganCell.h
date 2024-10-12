@@ -2,7 +2,6 @@
 
 #include <unordered_map>
 #include <memory>
-#include <optional>
 #include <vector>
 #include "Cell.h"
 #include "common.h"

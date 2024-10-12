@@ -1,7 +1,3 @@
-#include <functional>
-#include <stdexcept>
-#include <tuple>
-#include "enums.h"
 #include "DoganRoad.h"
 
 void DoganRoad::addEdge(DoganEdge de){
