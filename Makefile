@@ -1,8 +1,11 @@
 CC=gcc
 CXX=g++
 RM=rm -f
+CPPFLAGS= -I $(DOGAN_INCLUDE_DIR) -I $(GENERAL_INCLUDE_DIR)
 
-DOGAN_SRC_DIR=dogan
+GENERAL_INCLUDE_DIR=include
+DOGAN_SRC_DIR=dogan/src
+DOGAN_INCLUDE_DIR=dogan/include
 DOGAN_BUILD_DIR=build
 
 DOGAN_SRCS=$(wildcard $(DOGAN_SRC_DIR)/*.cpp)
@@ -14,10 +17,10 @@ $(shell mkdir -p $(DOGAN_BUILD_DIR))
 all: dogan
 
 dogan: $(DOGAN_OBJS)
-	$(CXX) -Wall -o $(DOGAN_TARGET) $(DOGAN_OBJS)
+	$(CXX) $(CPPFLAGS) -Wall -o $(DOGAN_TARGET) $(DOGAN_OBJS)
 
 $(DOGAN_BUILD_DIR)/%.o: $(DOGAN_SRC_DIR)/%.cpp
-	$(CXX) -Wall -c $< -o $@
+	$(CXX) $(CPPFLAGS) -Wall -c $< -o $@
 
 clean: 
 	$(RM) $(DOGAN_OBJS) $(DOGAN_TARGET)

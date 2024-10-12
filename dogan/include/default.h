@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "enums.h"
-#include "../common.h"
+#include "common.h"
 
 namespace configDefault {
     const ResourceConfiguration resourceConfig = ResourceConfiguration::DEFAULT;

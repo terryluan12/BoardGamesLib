@@ -2,7 +2,7 @@
 
 #include <random>
 #include "DoganConfig.h"
-#include "../Board.h"
+#include "Board.h"
 
 class DoganBoard : public Board<100> {
     public:

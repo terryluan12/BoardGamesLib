@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sstream>
-#include "../common.h"
+#include "common.h"
 #include "DoganBoard.h"
 #include "DoganCell.h"
 #include "enums.h"
