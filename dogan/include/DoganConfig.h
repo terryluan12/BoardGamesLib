@@ -6,8 +6,6 @@
 #include "enums.h"
 #include "default.h"
 
-
-
 class DoganConfig {
     public:
         // add port locations

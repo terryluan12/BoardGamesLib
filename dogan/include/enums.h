@@ -24,11 +24,6 @@ enum class NumberConfiguration {
     DEFAULT,
 };
 
-enum class BuildingType {
-    VILLAGE,
-    CITY
-};
-
 enum class Direction {
     NORTH,
     NORTHEAST,
