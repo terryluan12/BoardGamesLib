@@ -14,7 +14,7 @@ class DoganConfig {
         size_t boardSize;
         std::vector<Coordinate> tileLocations;
         NumberConfiguration numberConfiguration;
-        Parity parity;
+        Parity parity; // Parity + Coordinate System is based on https://www.redblobgames.com/grids/hexagons/
         ResourceConfiguration resourceConfiguration;
         Coordinate robberPosition;
         DoganConfig(void) : 
