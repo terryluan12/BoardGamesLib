@@ -6,6 +6,7 @@
 #include "common.h"
 #include "enums.h"
 #include "default.h"
+#include "DoganVertex.h"
 
 class DoganConfig {
     public:
@@ -22,7 +23,7 @@ class DoganConfig {
         size_t boardSize;
         NumberConfiguration numberConfiguration;
         Parity parity; // Parity + Coordinate System is based on https://www.redblobgames.com/grids/hexagons/
-        std::vector<std::tuple<Vertex, Vertex>> portLocations;
+        std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
         ResourceConfiguration resourceConfiguration;
         Coordinate robberPosition;
         std::vector<Coordinate> tileLocations;

@@ -25,10 +25,10 @@ DoganBoard::DoganBoard(DoganConfig config) {
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
     std::vector<Resource> resources = config.getResourceConfiguration(rengine);
 
-    // create all tiles, and then connect adjacent tiles
+    // create all tiles
     size_t i = 0;
     for (const auto& c : config.tileLocations) {
-        this->cells[c] = std::make_unique<DoganCell>(false, c, resources[i], numbers[i]);
+        this->cells[c] = std::make_shared<DoganCell>(false, c, resources[i], numbers[i]);
         ++i;
     }
     for (const auto& [coords, cell] : this->cells) {
@@ -43,11 +43,11 @@ DoganBoard::DoganBoard(DoganConfig config) {
             std::make_pair(Direction::WEST, std::make_tuple(x-1, y)),
             std::make_pair(Direction::NORTHWEST, std::make_tuple(x-1, y+1))
         };
-        
+        // Connect all adjacent cells
         for (const auto& [d, c] : adjacentCells) {
             auto adjEntry = this->cells.find(c);
             if (adjEntry != this->cells.end()) {
-                std::shared_ptr<DoganCell> adjCell = std::static_pointer_cast<DoganCell>(adjEntry->second);
+                auto adjCell = std::static_pointer_cast<DoganCell>(adjEntry->second);
                 dynamic_cast<DoganCell *>(cell.get())->addAdjacentCell(d, adjCell);
             }
         }

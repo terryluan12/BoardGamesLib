@@ -5,14 +5,14 @@
 #include <vector>
 #include "enums.h"
 #include "DoganCell.h"
-
+#include "DoganEdge.h"
 
 class DoganRoad {
 
     public: 
-        void addEdge(Edge &e, DoganCell &dc);
+        void addEdge(DoganEdge de);
         void setPlayerID(int pid);
     private:
         int playerID;
-        std::vector<std::pair<Edge, DoganCell>> edges;
+        std::vector<DoganEdge> edges;
 };

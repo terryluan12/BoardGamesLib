@@ -1,5 +1,4 @@
 Separate out the enums from enums.h
-Overwrite cells in DoganBoard to use DoganCell, and refactor, so it's neater
 DoganBuilding is currently relying on the `getComplementDirections` function returning North and South first where relevant. Figure out a way to not rely on this.
 Add ports
 Add cards
@@ -13,3 +12,4 @@ add use of std::optional where applicable
 Remove all #includes where it already exists in the parent header file
 Change from typedef to using using
 Replace all instances of Cell & Board with DoganCell & DoganBoard (where applicable)
+Possibly overwrite Cell to DoganCell in DoganBoard

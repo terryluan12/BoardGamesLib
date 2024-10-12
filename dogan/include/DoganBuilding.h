@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include "DoganCell.h"
+#include "DoganVertex.h"
 
 
 enum class BuildingType {
@@ -12,12 +13,12 @@ enum class BuildingType {
 
 class DoganBuilding {
     public: 
-        void addVertex(Vertex &v, DoganCell &dc);
+        void addVertex(DoganVertex &dv);
         void setType(BuildingType t);
         void setPlayerID(int pid);
     private:
         int playerID;
         BuildingType buildingType;
-        std::vector<std::pair<Vertex, DoganCell>> vertices;
+        std::vector<DoganVertex> vertices;
 
 };

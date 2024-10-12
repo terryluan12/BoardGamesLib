@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <optional>
 #include <vector>
 #include "Cell.h"
 #include "common.h"
@@ -12,6 +13,7 @@ class DoganCell : public Cell {
     public:
         DoganCell(bool cr, Coordinate c, Resource t, int n) 
             : containsRobber(cr), coordinate(c), number(n), type(t) {}
+        DoganCell(Coordinate c) : coordinate(c) {}
         void addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac);
         std::shared_ptr<DoganCell> getAdjacentCell(Direction d);
         Coordinate getCoordinate(void);

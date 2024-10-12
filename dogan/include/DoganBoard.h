@@ -1,8 +1,9 @@
 #pragma once
 
 #include <random>
-#include "DoganConfig.h"
 #include "Board.h"
+#include "DoganConfig.h"
+#include "DoganVertex.h"
 
 class DoganBoard : public Board<100> {
     public:
@@ -11,7 +12,7 @@ class DoganBoard : public Board<100> {
         Cell* operator [](const Coordinate i);
         std::string toString(void);
     private:
-        std::vector<std::tuple<Vertex, Vertex>> portLocations;
+        std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
         std::mt19937 rengine;
 
 };
