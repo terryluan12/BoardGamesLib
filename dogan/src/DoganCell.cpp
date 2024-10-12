@@ -1,6 +1,17 @@
+#include <memory>
 #include <sstream>
 #include <string>
 #include "DoganCell.h"
+
+
+void DoganCell::addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac) {
+    adjacentCells[d] = ac;
+};
+
+std::shared_ptr<DoganCell> DoganCell::getAdjacentCell(Direction d) {
+    return adjacentCells[d];
+}
+
 
 std::string DoganCell::toString(void) {
     std::ostringstream oss;

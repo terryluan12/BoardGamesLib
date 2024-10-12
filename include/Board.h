@@ -13,6 +13,6 @@ class Board {
         virtual Cell* operator [](const Coordinate i)=0;
         virtual std::string toString()=0;
     protected:
-        std::map<Coordinate, std::unique_ptr<Cell>> cells;
+        std::map<Coordinate, std::shared_ptr<Cell>> cells;
         size_t boardSize;
 };
