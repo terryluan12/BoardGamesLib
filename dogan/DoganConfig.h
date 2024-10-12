@@ -22,4 +22,7 @@ class DoganConfig {
                     parity(configDefault::parity),
                     resourceConfiguration(configDefault::resourceConfig),
                     robberPosition(configDefault::robberPosition){};
+        
+        std::vector<pip> getNumberConfiguration(std::mt19937 rengine);
+        std::vector<Resource> getResourceConfiguration(std::mt19937 rengine);
 };
