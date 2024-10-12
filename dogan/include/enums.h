@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include "common.h"
 
 enum class Resource {
     WOOD,
@@ -37,3 +38,6 @@ enum class Direction {
 
 Direction getOppositeDirection(Direction d);
 std::pair<Direction, Direction> getComplementDirections(Direction d);
+
+typedef std::tuple<Direction, Coordinate> Vertex;
+typedef std::tuple<Direction, Coordinate> Edge;

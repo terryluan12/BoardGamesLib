@@ -9,7 +9,27 @@ void DoganCell::addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac
 };
 
 std::shared_ptr<DoganCell> DoganCell::getAdjacentCell(Direction d) {
-    return adjacentCells[d];
+    auto it = adjacentCells.find(d);
+    if(it != adjacentCells.end()){
+        return adjacentCells[d];
+    }
+    return nullptr;
+}
+
+Coordinate DoganCell::getCoordinate(void) {
+    return coordinate;
+}
+
+int DoganCell::getNumber() { 
+    return this->number;
+}
+
+Resource DoganCell::getType() { 
+    return this->type;
+}
+
+bool DoganCell::hasRobber(){
+    return this->containsRobber;
 }
 
 

@@ -4,7 +4,6 @@
 #include <vector>
 #include "DoganCell.h"
 
-typedef std::tuple<Direction, std::shared_ptr<DoganCell>> Vertex;
 
 enum class BuildingType {
     VILLAGE,
@@ -13,12 +12,12 @@ enum class BuildingType {
 
 class DoganBuilding {
     public: 
-        void addVertex(Vertex v);
+        void addVertex(Vertex &v, DoganCell &dc);
         void setType(BuildingType t);
         void setPlayerID(int pid);
     private:
         int playerID;
         BuildingType buildingType;
-        std::vector<Vertex> vertices;
+        std::vector<std::pair<Vertex, DoganCell>> vertices;
 
 };

@@ -26,7 +26,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
 
     size_t i = 0;
     for (const auto& c : config.tileLocations) {
-        this->cells[c] = std::make_unique<DoganCell>(false, resources[i], numbers[i]);
+        this->cells[c] = std::make_unique<DoganCell>(false, c, resources[i], numbers[i]);
         ++i;
     }
     for (const auto& [coords, cell] : this->cells) {
