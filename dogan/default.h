@@ -6,8 +6,8 @@
 #include "../common.h"
 
 namespace configDefault {
-    const std::string resourceConfig = "default";
-    const std::string numberConfig = "default";
+    const ResourceConfiguration resourceConfig = ResourceConfiguration::DEFAULT;
+    const NumberConfiguration numberConfig = NumberConfiguration::DEFAULT;
     const Parity parity = Parity::ODD;
     const std::vector<Coordinate> tileLocations = { 
                                                                         {1, 0}, {2, 0}, {3, 0}, 

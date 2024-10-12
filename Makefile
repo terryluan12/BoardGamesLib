@@ -14,10 +14,10 @@ $(shell mkdir -p $(DOGAN_BUILD_DIR))
 all: dogan
 
 dogan: $(DOGAN_OBJS)
-	$(CXX) -o $(DOGAN_TARGET) $(DOGAN_OBJS)
+	$(CXX) -Wall -o $(DOGAN_TARGET) $(DOGAN_OBJS)
 
 $(DOGAN_BUILD_DIR)/%.o: $(DOGAN_SRC_DIR)/%.cpp
-	$(CXX) -c $< -o $@
+	$(CXX) -Wall -c $< -o $@
 
 clean: 
 	$(RM) $(DOGAN_OBJS) $(DOGAN_TARGET)

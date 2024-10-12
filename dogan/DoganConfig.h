@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "../common.h"
+#include "enums.h"
 #include "default.h"
 
 
@@ -12,9 +13,9 @@ class DoganConfig {
         // add port locations
         size_t boardSize;
         std::vector<Coordinate> tileLocations;
-        std::string numberConfiguration;
+        NumberConfiguration numberConfiguration;
         Parity parity;
-        std::string resourceConfiguration;
+        ResourceConfiguration resourceConfiguration;
         Coordinate robberPosition;
         DoganConfig(void) : 
                     boardSize(configDefault::tileLocations.size()), 

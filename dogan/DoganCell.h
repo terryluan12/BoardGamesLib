@@ -5,8 +5,8 @@
 
 class DoganCell : public Cell {
     public:
-        DoganCell(int t, bool hr, int n) 
-            : type(static_cast<Resource>(t)), containsRobber(hr), number(n) {}
+        DoganCell(Resource t, bool hr, int n) 
+            : type(t), containsRobber(hr), number(n) {}
         Resource getType() { return this->type;}
         bool hasRobber() { return this->containsRobber;}
         int getNumber() { return this->number;}

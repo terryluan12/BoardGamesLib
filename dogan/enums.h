@@ -1,6 +1,6 @@
 #pragma once
 
-enum Resource {
+enum class Resource {
     WOOD,
     SHEEP,
     WHEAT,
@@ -9,7 +9,14 @@ enum Resource {
     INVAL
 };
 
-enum Parity {
+enum class Parity {
     EVEN,
     ODD
+};
+enum class ResourceConfiguration {
+    DEFAULT,
+};
+
+enum class NumberConfiguration {
+    DEFAULT,
 };
