@@ -1,5 +1,6 @@
+#pragma once
+
 #include <string>
-#include <tuple>
 #include <vector>
 #include "enums.h"
 #include "../common.h"

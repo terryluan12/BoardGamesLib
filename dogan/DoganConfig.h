@@ -1,6 +1,7 @@
+#pragma once
+
 #include <string>
 #include <vector>
-#include <tuple>
 #include "../common.h"
 #include "default.h"
 

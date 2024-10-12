@@ -1,6 +1,5 @@
 #include <iostream>
 #include <sstream>
-#include <tuple>
 #include "../common.h"
 #include "DoganBoard.h"
 #include "DoganCell.h"
