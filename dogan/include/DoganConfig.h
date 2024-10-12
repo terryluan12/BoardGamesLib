@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "../../common.h"
+#include "common.h"
 #include "enums.h"
 #include "default.h"
 
@@ -13,11 +13,11 @@ class DoganConfig {
         // add port locations
         DoganConfig(void) : 
                     boardSize(configDefault::tileLocations.size()), 
-                    tileLocations(configDefault::tileLocations),
                     numberConfiguration(configDefault::numberConfig), 
                     parity(configDefault::parity),
                     resourceConfiguration(configDefault::resourceConfig),
-                    robberPosition(configDefault::robberPosition){};
+                    robberPosition(configDefault::robberPosition),
+                    tileLocations(configDefault::tileLocations){};
 
         size_t boardSize;
         NumberConfiguration numberConfiguration;
