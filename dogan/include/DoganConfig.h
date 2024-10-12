@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <utility>
 #include <vector>
 #include "common.h"
 #include "enums.h"
@@ -13,6 +14,7 @@ class DoganConfig {
                     boardSize(configDefault::tileLocations.size()), 
                     numberConfiguration(configDefault::numberConfig), 
                     parity(configDefault::parity),
+                    portLocations(configDefault::portLocations),
                     resourceConfiguration(configDefault::resourceConfig),
                     robberPosition(configDefault::robberPosition),
                     tileLocations(configDefault::tileLocations){};
@@ -20,6 +22,7 @@ class DoganConfig {
         size_t boardSize;
         NumberConfiguration numberConfiguration;
         Parity parity; // Parity + Coordinate System is based on https://www.redblobgames.com/grids/hexagons/
+        std::vector<std::tuple<Vertex, Vertex>> portLocations;
         ResourceConfiguration resourceConfiguration;
         Coordinate robberPosition;
         std::vector<Coordinate> tileLocations;

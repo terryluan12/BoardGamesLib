@@ -3,6 +3,7 @@
 #include <sstream>
 #include <tuple>
 #include "common.h"
+#include "DoganBuilding.h"
 #include "DoganBoard.h"
 #include "DoganCell.h"
 #include "enums.h"
@@ -19,11 +20,12 @@ Cell* DoganBoard::operator [](const Coordinate coordinates) {
 DoganBoard::DoganBoard(DoganConfig config) {
     rengine.seed(std::random_device{}());
 
-    boardSize = config.boardSize;
-    
+    boardSize = config.boardSize; 
+    this->portLocations = config.portLocations;
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
     std::vector<Resource> resources = config.getResourceConfiguration(rengine);
 
+    // create all tiles, and then connect adjacent tiles
     size_t i = 0;
     for (const auto& c : config.tileLocations) {
         this->cells[c] = std::make_unique<DoganCell>(false, c, resources[i], numbers[i]);
@@ -50,8 +52,10 @@ DoganBoard::DoganBoard(DoganConfig config) {
             }
         }
     }
+    DoganCell *robberCell = static_cast<DoganCell*>(this->cells[config.robberPosition].get());
+    robberCell->setRobber(true);
 
-    static_cast<DoganCell*>(this->cells[config.robberPosition].get())->setRobber(true);
+
 
 }
 

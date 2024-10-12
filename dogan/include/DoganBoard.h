@@ -11,6 +11,7 @@ class DoganBoard : public Board<100> {
         Cell* operator [](const Coordinate i);
         std::string toString(void);
     private:
+        std::vector<std::tuple<Vertex, Vertex>> portLocations;
         std::mt19937 rengine;
 
 };
