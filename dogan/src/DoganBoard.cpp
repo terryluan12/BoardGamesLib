@@ -2,7 +2,7 @@
 #include <sstream>
 #include "DoganBoard.h"
 
-DoganCell &DoganBoard::operator [](const Coordinate<2> coordinates) {
+DoganCell &DoganBoard::operator [](const Cell2D coordinates) {
     auto it = this->cells.find(coordinates);
     if(it == this->cells.end()) {
         throw std::out_of_range("Error: Coordinate not found");
@@ -27,15 +27,15 @@ DoganBoard::DoganBoard(DoganConfig config) {
     }
     for (auto& [coords, cell] : this->cells) {
         const auto [x, y] = coords;
-        std::array<std::pair<Direction, Coordinate<2>>, 8> adjacentCells = {
-            std::make_pair<Direction, Coordinate<2>>(Direction::NORTH, {x, y+1}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::NORTHEAST, {x+1, y+1}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::EAST, {x+1, y}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::SOUTHEAST, {x+1, y-1}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::SOUTH, {x, y-1}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::SOUTHWEST, {x-1, y-1}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::WEST, {x-1, y}),
-            std::make_pair<Direction, Coordinate<2>>(Direction::NORTHWEST, {x-1, y+1})
+        std::array<std::pair<Direction, Cell2D>, 8> adjacentCells = {
+            std::make_pair<Direction, Cell2D>(Direction::NORTH, {x, y+1}),
+            std::make_pair<Direction, Cell2D>(Direction::NORTHEAST, {x+1, y+1}),
+            std::make_pair<Direction, Cell2D>(Direction::EAST, {x+1, y}),
+            std::make_pair<Direction, Cell2D>(Direction::SOUTHEAST, {x+1, y-1}),
+            std::make_pair<Direction, Cell2D>(Direction::SOUTH, {x, y-1}),
+            std::make_pair<Direction, Cell2D>(Direction::SOUTHWEST, {x-1, y-1}),
+            std::make_pair<Direction, Cell2D>(Direction::WEST, {x-1, y}),
+            std::make_pair<Direction, Cell2D>(Direction::NORTHWEST, {x-1, y+1})
         };
         // Connect all adjacent cells
         for (const auto& [d, c] : adjacentCells) {
@@ -63,7 +63,7 @@ size_t DoganBoard::getBoardSize(void) const {
     return boardSize;
 }
 
-std::map<Coordinate<2>, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) {
+std::map<Cell2D, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) {
     return cells;
 }
 
