@@ -1,7 +1,7 @@
+#include "DoganConfig.h"
 #include <algorithm>
 #include <iostream>
 #include <random>
-#include "DoganConfig.h"
 
 std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
     std::vector<pip> numberOrder;

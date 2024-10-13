@@ -1,7 +1,7 @@
-#include <memory>
-#include <sstream>
 #include "DoganBoard.h"
 #include "enums.h"
+#include <memory>
+#include <sstream>
 
 DoganCell &DoganBoard::operator [](const Coordinate2D coordinates) {
     auto it = this->cells.find(coordinates);

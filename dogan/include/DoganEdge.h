@@ -1,9 +1,9 @@
 #pragma once
 
-#include <vector>
 #include "Coordinate.h"
 #include "enums.h"
 #include "DoganCell.h"
+#include <vector>
 
 class DoganEdge {
     public:

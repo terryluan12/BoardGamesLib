@@ -1,5 +1,5 @@
-#include <iostream>
 #include "DoganGame.h"
+#include <iostream>
 
 
 void DoganGame::printBoard(void) {

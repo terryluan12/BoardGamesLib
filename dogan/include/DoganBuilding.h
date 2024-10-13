@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include "DoganVertex.h"
+#include <vector>
 
 
 enum class BuildingType {

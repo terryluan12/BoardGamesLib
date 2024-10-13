@@ -1,10 +1,12 @@
 #pragma once
 
-#include <vector>
 #include "common.h"
 #include "enums.h"
 #include "default.h"
 #include "DoganVertex.h"
+#include <ostream>
+#include <vector>
+#include <random>
 
 class DoganConfig {
     public:

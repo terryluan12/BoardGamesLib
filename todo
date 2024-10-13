@@ -13,3 +13,5 @@ Replace all instances of Cell & Board with DoganCell & DoganBoard (where applica
 Possibly overwrite Cell to DoganCell in DoganBoard
 Figure out a way to bring the getBoard function to the parent BoardInterface (std::map<Coordinate, Cell> is not covariant to std::map<Coordinate, Cell>, so can't override/load it)
 Decide if I want to return a shared_ptr in [] operator
+Add clang-format
+Add CppDoc

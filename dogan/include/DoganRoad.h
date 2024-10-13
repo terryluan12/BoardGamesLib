@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include "DoganEdge.h"
+#include <vector>
 
 class DoganRoad {
 

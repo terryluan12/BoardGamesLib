@@ -1,9 +1,9 @@
 #pragma once
 
-#include <vector>
 #include "enums.h"
 #include "Coordinate.h"
 #include "DoganVertex.h"
+#include <vector>
 
 namespace configDefault {
     inline const ResourceConfiguration resourceConfig = ResourceConfiguration::DEFAULT;

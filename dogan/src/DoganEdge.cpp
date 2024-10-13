@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include "DoganEdge.h"
+#include <stdexcept>
 
 
 DoganEdge::DoganEdge(Direction d, Coordinate2D c): direction(d), coordinate(c) {

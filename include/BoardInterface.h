@@ -1,10 +1,10 @@
 #pragma once
 
-#include <map>
-#include <memory>
 #include "CellInterface.h"
 #include "common.h"
 #include "Coordinate.h"
+#include <map>
+#include <memory>
 
 template <size_t N>
 class BoardInterface {

@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include "DoganVertex.h"
+#include <stdexcept>
 
 DoganVertex::DoganVertex(Direction d, Coordinate2D c): direction(d), coordinate(c)  {
     if(d == Direction::EAST || d == Direction::WEST) {

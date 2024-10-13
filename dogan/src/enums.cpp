@@ -1,6 +1,5 @@
-#include <ostream>
-#include <stdexcept>
 #include "enums.h"
+#include <stdexcept>
 
 Direction getOppositeDirection(Direction d) {
     switch(d) {

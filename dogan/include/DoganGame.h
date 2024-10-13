@@ -1,7 +1,7 @@
 #pragma once
 
-#include <random>
 #include "DoganBoard.h"
+#include <random>
 
 class DoganGame {
     public:

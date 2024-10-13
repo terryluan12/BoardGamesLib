@@ -1,8 +1,8 @@
 #pragma once
 
-#include <utility>
 #include "enums.h"
 #include "DoganVertex.h"
+#include <utility>
 
 class DoganPort {
     public:

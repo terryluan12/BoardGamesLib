@@ -1,11 +1,11 @@
 #pragma once
 
-#include <random>
 #include "BoardInterface.h"
 #include "Coordinate.h"
 #include "DoganCell.h"
 #include "DoganConfig.h"
 #include "DoganVertex.h"
+#include <random>
 
 class DoganBoard : public BoardInterface<100> {
     public:

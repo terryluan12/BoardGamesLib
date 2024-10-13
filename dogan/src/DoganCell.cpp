@@ -1,5 +1,5 @@
-#include <sstream>
 #include "DoganCell.h"
+#include <sstream>
 
 std::unordered_set<Coordinate2D> DoganCell::allCoordinates;
 
