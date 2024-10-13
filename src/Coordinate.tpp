@@ -61,7 +61,7 @@ bool Coordinate<N>::operator<(const Coordinate<N> &c) const {
 
 
 template<size_t N>
-Coordinate<N> Coordinate<N>::operator+(Coordinate<N> const& c) {
+Coordinate<N> Coordinate<N>::operator+(Coordinate<N> const& c) const {
     std::array<int, N> resultingArray;
     for(int i = 0; i < N; i++){
         resultingArray[i] = coordinates[i] + c.coordinates[i];
@@ -70,7 +70,7 @@ Coordinate<N> Coordinate<N>::operator+(Coordinate<N> const& c) {
 }
 
 template<size_t N>
-Coordinate<N> Coordinate<N>::operator-(Coordinate<N> const& c) {
+Coordinate<N> Coordinate<N>::operator-(Coordinate<N> const& c) const {
     std::array<int, N> resultingArray;
     for(int i = 0; i < N; i++){
         resultingArray[i] = coordinates[i] - c.coordinates[i];

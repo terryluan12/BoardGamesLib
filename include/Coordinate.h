@@ -17,8 +17,8 @@ class Coordinate {
         int operator[](const size_t ci) const;
         inline bool operator==(const Coordinate& c) const {return coordinates == c.coordinates;};
         bool operator<(const Coordinate &c) const;
-        Coordinate<N> operator+(Coordinate const& obj);
-        Coordinate<N> operator-(Coordinate const& obj);
+        Coordinate<N> operator+(Coordinate const& obj) const;
+        Coordinate<N> operator-(Coordinate const& obj) const;
 
         int getX(void) const;
         int getY(void) const;
