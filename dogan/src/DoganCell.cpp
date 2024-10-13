@@ -2,9 +2,9 @@
 #include <sstream>
 #include "DoganCell.h"
 
-std::unordered_set<Cell2D> DoganCell::allCoordinates;
+std::unordered_set<Coordinate2D> DoganCell::allCoordinates;
 
-DoganCell::DoganCell(bool cr, Cell2D c, Resource t, int n) 
+DoganCell::DoganCell(bool cr, Coordinate2D c, Resource t, int n) 
     : containsRobber(cr), coordinate(c), number(n), type(t) {
         auto [_, didInsert] = allCoordinates.insert(c);
         if(!didInsert) {
@@ -29,7 +29,7 @@ bool DoganCell::hasAdjacentCell(Direction d) const {
     return it != this->adjacentCells.end();
 }
 
-Cell2D DoganCell::getCoordinate(void) const {
+Coordinate2D DoganCell::getCoordinate(void) const {
     return coordinate;
 }
 

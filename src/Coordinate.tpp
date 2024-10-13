@@ -32,12 +32,7 @@ Coordinate<N>::Coordinate(std::initializer_list<int> parameters) {
     if (parameters.size() != N) {
         throw std::out_of_range("Error: initializer list size must be " + N);
     }
-    auto it = parameters.begin();
-    size_t size = parameters.size();
-    for(size_t i = 0; i < size; i++) {
-        coordinates[i] = *it;
-        ++it;
-    }
+    std::copy(parameters.begin(), parameters.end(), coordinates.begin());
 }
 
 template<size_t N>

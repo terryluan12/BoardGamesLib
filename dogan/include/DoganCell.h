@@ -12,10 +12,10 @@
 
 class DoganCell : public CellInterface {
     public:
-        DoganCell(bool cr, Cell2D c, Resource t, int n);
+        DoganCell(bool cr, Coordinate2D c, Resource t, int n);
         void addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac);
         std::shared_ptr<DoganCell> getAdjacentCell(Direction d);
-        Cell2D getCoordinate(void) const;
+        Coordinate2D getCoordinate(void) const;
         Resource getType(void) const;
         int getNumber(void) const;
         bool hasRobber(void) const;
@@ -26,9 +26,9 @@ class DoganCell : public CellInterface {
         std::vector<std::shared_ptr<class DoganBuilding>> buildings;
         std::vector<std::shared_ptr<class DoganRoad>> roads;
         std::unordered_map<Direction, std::shared_ptr<DoganCell>> adjacentCells;
-        static std::unordered_set<Cell2D> allCoordinates;
+        static std::unordered_set<Coordinate2D> allCoordinates;
         bool containsRobber;
-        Cell2D coordinate;
+        Coordinate2D coordinate;
         int number;
         Resource type;
 };

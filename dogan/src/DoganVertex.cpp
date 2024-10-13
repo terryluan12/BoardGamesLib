@@ -7,11 +7,11 @@ DoganVertex::DoganVertex(Direction d, std::shared_ptr<DoganCell> dc) : direction
     }
 }
 
-DoganVertex::DoganVertex(std::initializer_list<std::variant<Direction, Cell2D>> parameters) : isReady(false) {
+DoganVertex::DoganVertex(std::initializer_list<std::variant<Direction, Coordinate2D>> parameters) : isReady(false) {
     if(parameters.size() == 2) {
         auto it = parameters.begin();
         direction = std::get<Direction>(*it);
-        coordinate = std::get<Cell2D>(*(it + 1));
+        coordinate = std::get<Coordinate2D>(*(it + 1));
     }else {
         throw std::invalid_argument("Initializer list invalid. Must contain 2 elements");
     }
@@ -48,7 +48,7 @@ std::shared_ptr<DoganCell> DoganVertex::getDoganCell(void) {
     return doganCell;
 }
 
-void DoganVertex::ready(std::map<Cell2D, std::shared_ptr<DoganCell>> cells) {
+void DoganVertex::ready(std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells) {
     auto it = cells.find(coordinate);
     if(it == cells.end()) throw std::runtime_error("Error: Attempting to make a vertex that doesn't exist");
     doganCell = cells[coordinate];

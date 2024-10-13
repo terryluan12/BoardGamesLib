@@ -32,5 +32,5 @@ class Coordinate {
 
 #include "../src/Coordinate.tpp"
 
-using Cell2D = Coordinate<2>;
-using Cell3D = Coordinate<3>;
+using Coordinate2D = Coordinate<2>;
+using Coordinate3D = Coordinate<3>;
