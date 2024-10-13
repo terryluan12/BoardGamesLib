@@ -2,6 +2,7 @@
 
 #include <random>
 #include "BoardInterface.h"
+#include "Coordinate.h"
 #include "DoganCell.h"
 #include "DoganConfig.h"
 #include "DoganVertex.h"
@@ -10,14 +11,14 @@ class DoganBoard : public BoardInterface<100> {
     public:
         DoganBoard(DoganConfig config=DoganConfig());
         ~DoganBoard(void) {};
-        DoganCell &operator [](const Coordinate i) override;
-        std::map<Coordinate, std::shared_ptr<DoganCell>> getBoard(void);
+        DoganCell &operator [](const Coordinate<2> i) override;
+        std::map<Coordinate<2>, std::shared_ptr<DoganCell>> getBoard(void);
         std::string toString(void) const override;
         size_t getBoardSize(void) const override;
         void setBoardSize(size_t bs) override;
     private:
         size_t boardSize;
-        std::map<Coordinate, std::shared_ptr<DoganCell>> cells;
+        std::map<Coordinate<2>, std::shared_ptr<DoganCell>> cells;
         std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
         std::mt19937 rengine;
 

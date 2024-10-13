@@ -12,6 +12,4 @@ add use of std::optional where applicable
 Replace all instances of Cell & Board with DoganCell & DoganBoard (where applicable)
 Possibly overwrite Cell to DoganCell in DoganBoard
 Figure out a way to bring the getBoard function to the parent BoardInterface (std::map<Coordinate, Cell> is not covariant to std::map<Coordinate, Cell>, so can't override/load it)
-Add a static unordered_set to prevent duplicate tiles
-Figure out if I really need a default constructor for DoganCell
 Decide if I want to return a shared_ptr in [] operator

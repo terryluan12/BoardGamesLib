@@ -2,7 +2,7 @@
 #include <sstream>
 #include "DoganBoard.h"
 
-DoganCell &DoganBoard::operator [](const Coordinate coordinates) {
+DoganCell &DoganBoard::operator [](const Coordinate<2> coordinates) {
     auto it = this->cells.find(coordinates);
     if(it == this->cells.end()) {
         throw std::out_of_range("Error: Coordinate not found");
@@ -17,6 +17,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
     this->portLocations = config.portLocations;
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
     std::vector<Resource> resources = config.getResourceConfiguration(rengine);
+    portLocations = config.portLocations;
 
     // create all tiles
     size_t i = 0;
@@ -25,16 +26,16 @@ DoganBoard::DoganBoard(DoganConfig config) {
         ++i;
     }
     for (auto& [coords, cell] : this->cells) {
-        auto [x, y] = coords;
-        std::array<std::pair<Direction, Coordinate>, 8> adjacentCells = {
-            std::make_pair(Direction::NORTH, std::make_tuple(x, y+1)),
-            std::make_pair(Direction::NORTHEAST, std::make_tuple(x+1, y+1)),
-            std::make_pair(Direction::EAST, std::make_tuple(x+1, y)),
-            std::make_pair(Direction::SOUTHEAST, std::make_tuple(x+1, y-1)),
-            std::make_pair(Direction::SOUTH, std::make_tuple(x, y-1)),
-            std::make_pair(Direction::SOUTHWEST, std::make_tuple(x-1, y-1)),
-            std::make_pair(Direction::WEST, std::make_tuple(x-1, y)),
-            std::make_pair(Direction::NORTHWEST, std::make_tuple(x-1, y+1))
+        const auto [x, y] = coords;
+        std::array<std::pair<Direction, Coordinate<2>>, 8> adjacentCells = {
+            std::make_pair<Direction, Coordinate<2>>(Direction::NORTH, {x, y+1}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::NORTHEAST, {x+1, y+1}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::EAST, {x+1, y}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::SOUTHEAST, {x+1, y-1}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::SOUTH, {x, y-1}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::SOUTHWEST, {x-1, y-1}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::WEST, {x-1, y}),
+            std::make_pair<Direction, Coordinate<2>>(Direction::NORTHWEST, {x-1, y+1})
         };
         // Connect all adjacent cells
         for (const auto& [d, c] : adjacentCells) {
@@ -52,7 +53,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
 std::string DoganBoard::toString() const {
     std::ostringstream oss;
     for(const auto& c : this->cells) {
-        oss << "Cell {" << std::get<0>(c.first) << "," << std::get<1>(c.first) << "}: " << c.second->toString() << "\n";
+        oss << "Cell {" << c.first.getX() << "," << c.first.getY() << "}: " << c.second->toString() << "\n";
     }
     return oss.str();
 }
@@ -62,7 +63,7 @@ size_t DoganBoard::getBoardSize(void) const {
     return boardSize;
 }
 
-std::map<Coordinate, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) {
+std::map<Coordinate<2>, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) {
     return cells;
 }
 

@@ -1,21 +1,21 @@
 #pragma once
 
 #include <unordered_map>
+#include <unordered_set>
 #include <memory>
 #include <vector>
 #include "CellInterface.h"
+#include "Coordinate.h"
 #include "common.h"
 #include "enums.h"
 
 
 class DoganCell : public CellInterface {
     public:
-        DoganCell(bool cr, Coordinate c, Resource t, int n) 
-            : containsRobber(cr), coordinate(c), number(n), type(t) {}
-        DoganCell() {}
+        DoganCell(bool cr, Coordinate<2> c, Resource t, int n);
         void addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac);
         std::shared_ptr<DoganCell> getAdjacentCell(Direction d);
-        Coordinate getCoordinate(void) const;
+        Coordinate<2> getCoordinate(void) const;
         Resource getType(void) const;
         int getNumber(void) const;
         bool hasRobber(void) const;
@@ -27,7 +27,7 @@ class DoganCell : public CellInterface {
         std::vector<std::shared_ptr<class DoganRoad>> roads;
         std::unordered_map<Direction, std::shared_ptr<DoganCell>> adjacentCells;
         bool containsRobber;
-        Coordinate coordinate;
+        Coordinate<2> coordinate;
         int number;
         Resource type;
 };

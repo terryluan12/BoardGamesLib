@@ -23,8 +23,8 @@ class DoganConfig {
         Parity parity; // Parity + Coordinate System is based on https://www.redblobgames.com/grids/hexagons/
         std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
         ResourceConfiguration resourceConfiguration;
-        Coordinate robberPosition;
-        std::vector<Coordinate> tileLocations;
+        Coordinate<2> robberPosition;
+        std::vector<Coordinate<2>> tileLocations;
 
         std::vector<pip> getNumberConfiguration(std::mt19937 rengine);
         std::vector<Resource> getResourceConfiguration(std::mt19937 rengine);

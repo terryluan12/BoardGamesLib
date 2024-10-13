@@ -2,6 +2,8 @@
 #include <sstream>
 #include "DoganCell.h"
 
+DoganCell::DoganCell(bool cr, Coordinate<2> c, Resource t, int n) 
+    : containsRobber(cr), coordinate(c), number(n), type(t) {}
 
 void DoganCell::addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac) {
     adjacentCells[d] = ac;
@@ -12,7 +14,7 @@ std::shared_ptr<DoganCell> DoganCell::getAdjacentCell(Direction d) {
     if(it == adjacentCells.end()){
         throw std::out_of_range("Error: Adjacent Cell not found");
     }
-    return adjacentCells[d];
+    return it->second;
 }
 
 bool DoganCell::hasAdjacentCell(Direction d) const {
@@ -20,7 +22,7 @@ bool DoganCell::hasAdjacentCell(Direction d) const {
     return it != this->adjacentCells.end();
 }
 
-Coordinate DoganCell::getCoordinate(void) const {
+Coordinate<2> DoganCell::getCoordinate(void) const {
     return coordinate;
 }
 
