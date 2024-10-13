@@ -12,7 +12,7 @@
 
 class DoganCell : public CellInterface {
     public:
-        DoganCell(bool cr, Coordinate2D c, Resource t, int n);
+        DoganCell(bool cr, Coordinate2D c, int n, Resource t);
         void addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac);
         std::shared_ptr<DoganCell> getAdjacentCell(Direction d);
         Coordinate2D getCoordinate(void) const;

@@ -22,7 +22,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
     // create all tiles
     size_t i = 0;
     for (const auto& c : config.tileLocations) {
-        this->cells[c] = std::make_shared<DoganCell>(DoganCell(false, c, resources[i], numbers[i]));
+        this->cells[c] = std::make_shared<DoganCell>(DoganCell(false, c, numbers[i], resources[i]));
         ++i;
     }
     for (auto& [coords, cell] : this->cells) {

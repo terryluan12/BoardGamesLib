@@ -4,7 +4,7 @@
 
 std::unordered_set<Coordinate2D> DoganCell::allCoordinates;
 
-DoganCell::DoganCell(bool cr, Coordinate2D c, Resource t, int n) 
+DoganCell::DoganCell(bool cr, Coordinate2D c, int n, Resource t) 
     : containsRobber(cr), coordinate(c), number(n), type(t) {
         auto [_, didInsert] = allCoordinates.insert(c);
         if(!didInsert) {
