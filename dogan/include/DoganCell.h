@@ -26,6 +26,7 @@ class DoganCell : public CellInterface {
         std::vector<std::shared_ptr<class DoganBuilding>> buildings;
         std::vector<std::shared_ptr<class DoganRoad>> roads;
         std::unordered_map<Direction, std::shared_ptr<DoganCell>> adjacentCells;
+        static std::unordered_set<Coordinate<2>> allCoordinates;
         bool containsRobber;
         Coordinate<2> coordinate;
         int number;

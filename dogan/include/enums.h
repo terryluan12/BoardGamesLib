@@ -37,6 +37,3 @@ enum class Direction {
 
 Direction getOppositeDirection(Direction d);
 std::pair<Direction, Direction> getComplementDirections(Direction d);
-
-typedef std::tuple<Direction, Coordinate> Vertex;
-typedef std::tuple<Direction, Coordinate> Edge;

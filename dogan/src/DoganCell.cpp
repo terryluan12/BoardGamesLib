@@ -2,8 +2,15 @@
 #include <sstream>
 #include "DoganCell.h"
 
+std::unordered_set<Coordinate<2>> DoganCell::allCoordinates;
+
 DoganCell::DoganCell(bool cr, Coordinate<2> c, Resource t, int n) 
-    : containsRobber(cr), coordinate(c), number(n), type(t) {}
+    : containsRobber(cr), coordinate(c), number(n), type(t) {
+        auto [_, didInsert] = allCoordinates.insert(c);
+        if(!didInsert) {
+            throw std::invalid_argument("Error: Cell already exists");
+        }
+    }
 
 void DoganCell::addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac) {
     adjacentCells[d] = ac;
