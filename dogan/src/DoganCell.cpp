@@ -1,4 +1,3 @@
-#include <memory>
 #include <sstream>
 #include "DoganCell.h"
 
@@ -6,11 +5,17 @@ std::unordered_set<Coordinate2D> DoganCell::allCoordinates;
 
 DoganCell::DoganCell(bool cr, Coordinate2D c, int n, Resource t) 
     : containsRobber(cr), coordinate(c), number(n), type(t) {
-        auto [_, didInsert] = allCoordinates.insert(c);
-        if(!didInsert) {
-            throw std::invalid_argument("Error: Cell already exists");
-        }
+    auto [_, didInsert] = allCoordinates.insert(c);
+    if(!didInsert) {
+        throw std::invalid_argument("Error: Cell already exists");
     }
+    for (auto &d : vertexDirections ) {
+        vertices.emplace(d, std::make_shared<DoganVertex>(DoganVertex(d, coordinate)));
+    }
+    for (auto &e : edgeDirections ) {
+        edges.emplace(e, std::make_shared<DoganEdge>(DoganEdge(e, coordinate)));
+    }
+}
 
 void DoganCell::addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac) {
     adjacentCells[d] = ac;

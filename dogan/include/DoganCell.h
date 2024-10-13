@@ -6,7 +6,8 @@
 #include <vector>
 #include "CellInterface.h"
 #include "Coordinate.h"
-#include "common.h"
+#include "DoganEdge.h"
+#include "DoganVertex.h"
 #include "enums.h"
 
 
@@ -25,7 +26,9 @@ class DoganCell : public CellInterface {
     private:
         std::vector<std::shared_ptr<class DoganBuilding>> buildings;
         std::vector<std::shared_ptr<class DoganRoad>> roads;
-        std::unordered_map<Direction, std::shared_ptr<DoganCell>> adjacentCells;
+        std::unordered_map<Direction, std::shared_ptr<class DoganCell>> adjacentCells;
+        std::unordered_map<Direction, std::shared_ptr<class DoganEdge>> edges;
+        std::unordered_map<Direction, std::shared_ptr<class DoganVertex>> vertices;
         static std::unordered_set<Coordinate2D> allCoordinates;
         bool containsRobber;
         Coordinate2D coordinate;

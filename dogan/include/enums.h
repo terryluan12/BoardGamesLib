@@ -35,5 +35,23 @@ enum class Direction {
     NORTHWEST
 };
 
+inline std::array vertexDirections = {
+        Direction::NORTH,
+        Direction::NORTHEAST,
+        Direction::SOUTHEAST,
+        Direction::SOUTH,
+        Direction::SOUTHWEST,
+        Direction::NORTHWEST
+    };
+
+inline std::array edgeDirections = {
+    Direction::NORTHEAST,
+    Direction::EAST,
+    Direction::SOUTHEAST,
+    Direction::SOUTHWEST,
+    Direction::WEST,
+    Direction::NORTHWEST
+};
+
 Direction getOppositeDirection(Direction d);
 std::pair<Direction, Direction> getComplementDirections(Direction d);

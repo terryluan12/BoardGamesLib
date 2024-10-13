@@ -37,7 +37,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
             std::make_pair<Direction, Coordinate2D>(Direction::WEST, {x-1, y}),
             std::make_pair<Direction, Coordinate2D>(Direction::NORTHWEST, {x-1, y+1})
         };
-        // Connect all adjacent cells
+        // populate cell neighbours
         for (const auto& [d, c] : adjacentCells) {
             auto adjEntry = this->cells.find(c);
             if (adjEntry != this->cells.end()) {
@@ -46,6 +46,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
             }
         }
     }
+    
     cells[config.robberPosition]->setRobber(true);
 }
 

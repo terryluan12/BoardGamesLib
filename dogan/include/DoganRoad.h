@@ -6,7 +6,7 @@
 class DoganRoad {
 
     public: 
-        void addEdge(DoganEdge de);
+        void addEdge(DoganEdge de, DoganCell &dc);
         void setPlayerID(int pid);
     private:
         int playerID;
