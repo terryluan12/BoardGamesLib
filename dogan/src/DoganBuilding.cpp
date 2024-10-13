@@ -2,7 +2,7 @@
 
 
 void DoganBuilding::addVertex(DoganVertex &dv) {
-    vertices.emplace_back(dv);
+    vertices.push_back(dv);
     auto corrVertices = dv.getCorrespondingVertices();
     vertices.insert(vertices.end(), std::make_move_iterator(corrVertices.begin()), std::make_move_iterator(corrVertices.end()));
 }

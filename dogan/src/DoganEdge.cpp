@@ -2,7 +2,7 @@
 #include "DoganEdge.h"
 
 
-DoganEdge::DoganEdge(Direction d, DoganCell &dc) : direction(d), doganCell(dc) {
+DoganEdge::DoganEdge(Direction d, std::shared_ptr<DoganCell> dc) : direction(d), doganCell(dc) {
     if(d == Direction::NORTH || d == Direction::SOUTH) {
         throw std::invalid_argument("Error: Direction::NORTH and Direction::SOUTH are invalid directions for edges");
     }
@@ -10,9 +10,9 @@ DoganEdge::DoganEdge(Direction d, DoganCell &dc) : direction(d), doganCell(dc) {
 
 std::vector<DoganEdge> DoganEdge::getCorrespondingEdge(void) {
     std::vector<DoganEdge> corrEdge;
-    auto dc1 = doganCell.getAdjacentCell(direction);
-    if(dc1 != nullptr){
-        corrEdge.emplace_back(getOppositeDirection(direction), *dc1);
+    if(doganCell->hasAdjacentCell(direction)){
+        auto dc1 = doganCell->getAdjacentCell(direction);
+        corrEdge.emplace_back(getOppositeDirection(direction), dc1);
     }
     return corrEdge;
 }
@@ -20,6 +20,6 @@ std::vector<DoganEdge> DoganEdge::getCorrespondingEdge(void) {
 Direction DoganEdge::getDirection(void) {
     return direction;
 }
-DoganCell DoganEdge::getDoganCell(void) {
+std::shared_ptr<DoganCell> DoganEdge::getDoganCell(void) {
     return doganCell;
 }

@@ -4,12 +4,12 @@
 #include "DoganCell.h"
 class DoganEdge {
     public:
-        DoganEdge(Direction d, DoganCell &dc);
+        DoganEdge(Direction d, std::shared_ptr<DoganCell> dc);
         std::vector<DoganEdge> getCorrespondingEdge(void);
         Direction getDirection(void);
-        DoganCell getDoganCell(void); 
+        std::shared_ptr<DoganCell> getDoganCell(void); 
     private:
         Direction direction;
-        DoganCell doganCell;
+        std::shared_ptr<DoganCell> doganCell;
 
 };

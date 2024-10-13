@@ -1,13 +1,13 @@
+#include <memory>
 #include <sstream>
 #include "DoganBoard.h"
 
-
-Cell* DoganBoard::operator [](const Coordinate coordinates) {
+DoganCell &DoganBoard::operator [](const Coordinate coordinates) {
     auto it = this->cells.find(coordinates);
-    if( it == this->cells.end() ) {
-        return nullptr;
+    if(it == this->cells.end()) {
+        throw std::out_of_range("Error: Coordinate not found");
     }
-    return it->second.get();
+    return *(it->second);
 }
 
 DoganBoard::DoganBoard(DoganConfig config) {
@@ -21,10 +21,10 @@ DoganBoard::DoganBoard(DoganConfig config) {
     // create all tiles
     size_t i = 0;
     for (const auto& c : config.tileLocations) {
-        this->cells[c] = std::make_shared<DoganCell>(false, c, resources[i], numbers[i]);
+        this->cells[c] = std::make_shared<DoganCell>(DoganCell(false, c, resources[i], numbers[i]));
         ++i;
     }
-    for (const auto& [coords, cell] : this->cells) {
+    for (auto& [coords, cell] : this->cells) {
         auto [x, y] = coords;
         std::array<std::pair<Direction, Coordinate>, 8> adjacentCells = {
             std::make_pair(Direction::NORTH, std::make_tuple(x, y+1)),
@@ -40,23 +40,37 @@ DoganBoard::DoganBoard(DoganConfig config) {
         for (const auto& [d, c] : adjacentCells) {
             auto adjEntry = this->cells.find(c);
             if (adjEntry != this->cells.end()) {
-                auto adjCell = std::static_pointer_cast<DoganCell>(adjEntry->second);
-                dynamic_cast<DoganCell *>(cell.get())->addAdjacentCell(d, adjCell);
+                auto adjCell = adjEntry->second;
+                cell->addAdjacentCell(d, adjCell);
             }
         }
     }
-    DoganCell *robberCell = static_cast<DoganCell*>(this->cells[config.robberPosition].get());
-    robberCell->setRobber(true);
-
-
-
+    cells[config.robberPosition]->setRobber(true);
 }
 
 
-std::string DoganBoard::toString() {
+std::string DoganBoard::toString() const {
     std::ostringstream oss;
     for(const auto& c : this->cells) {
         oss << "Cell {" << std::get<0>(c.first) << "," << std::get<1>(c.first) << "}: " << c.second->toString() << "\n";
     }
     return oss.str();
+}
+
+
+size_t DoganBoard::getBoardSize(void) const {
+    return boardSize;
+}
+
+std::map<Coordinate, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) {
+    return cells;
+}
+
+void DoganBoard::setBoardSize(size_t bs) {
+    if(bs > MAX_BOARD_SIZE) {
+        throw std::out_of_range("Error, attempting to set Board Size to greater than limit. Must be less than " + MAX_BOARD_SIZE);
+    }
+    else {
+        boardSize = bs;
+    }
 }
