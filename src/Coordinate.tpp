@@ -1,5 +1,6 @@
 #include <memory>
 #include <stdexcept>
+#include <ostream>
 
 template<size_t N>
 class Coordinate;
@@ -91,4 +92,16 @@ decltype(auto) Coordinate<N>::get(void) const {
         throw std::out_of_range("Error: maximum amount of coordinates is " + N);
     }
     return coordinates[M];
+}
+
+template<size_t N>
+std::ostream &operator<< (std::ostream &os, Coordinate<N> const &c) {
+  os << "{";
+  for(size_t i = 0; i < N-1; i++) {
+    os << c[i] << ", ";
+  }
+
+  os << c[N-1] << "}";
+
+  return os;
 }

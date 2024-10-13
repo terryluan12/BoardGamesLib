@@ -8,7 +8,8 @@ class DoganVertex {
     public:
         DoganVertex(Direction d, Coordinate2D c);
         std::vector<DoganVertex> getCorrespondingVertices(class DoganCell &dc);
-        Direction getDirection(void);
+        Coordinate2D getCoordinate(void) const;
+        Direction getDirection(void) const;
     private:
         Direction direction;
         Coordinate2D coordinate;

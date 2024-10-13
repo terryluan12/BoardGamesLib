@@ -55,3 +55,4 @@ inline std::array edgeDirections = {
 
 Direction getOppositeDirection(Direction d);
 std::pair<Direction, Direction> getComplementDirections(Direction d);
+std::ostream &operator<< (std::ostream &os, Direction const &d);

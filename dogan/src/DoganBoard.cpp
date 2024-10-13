@@ -1,6 +1,7 @@
 #include <memory>
 #include <sstream>
 #include "DoganBoard.h"
+#include "enums.h"
 
 DoganCell &DoganBoard::operator [](const Coordinate2D coordinates) {
     auto it = this->cells.find(coordinates);
@@ -55,6 +56,11 @@ std::string DoganBoard::toString() const {
     std::ostringstream oss;
     for(const auto& c : this->cells) {
         oss << "Cell {" << c.first.getX() << "," << c.first.getY() << "}: " << c.second->toString() << "\n";
+    }
+    size_t i = 1;
+    for(auto &[pl1, pl2] : this->portLocations) {
+        oss << "Port " << i << ": " << pl1.getCoordinate() << " " << pl1.getDirection() << ", " << pl2.getCoordinate() << " " << pl2.getDirection() << "\n"; 
+        ++i;
     }
     return oss.str();
 }

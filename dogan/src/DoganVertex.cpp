@@ -27,6 +27,10 @@ std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(DoganCell &dc) {
     return corrVertices;
 }
 
-Direction DoganVertex::getDirection(void) {
+Coordinate2D DoganVertex::getCoordinate(void) const {
+    return coordinate;
+}
+
+Direction DoganVertex::getDirection(void) const {
     return direction;
 }
