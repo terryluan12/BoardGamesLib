@@ -25,13 +25,5 @@ enum class Parity {
     ODD
 };
 
-enum class ResourceConfiguration {
-    DEFAULT,
-};
-
-enum class NumberConfiguration {
-    DEFAULT,
-};
-
 std::ostream &operator<< (std::ostream &os, ResourceType const &d);
 std::ostream &operator<< (std::ostream &os, DevelopmentType const &d);

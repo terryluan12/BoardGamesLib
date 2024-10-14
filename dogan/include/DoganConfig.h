@@ -19,9 +19,12 @@ class DoganConfig {
                     tileLocations(configDefault::tileLocations), 
                     resourceCount(configDefault::resourceCount),
                     developmentCount(configDefault::developmentCount),
-                    numberConfiguration(configDefault::numberConfig),
-                    resourceConfiguration(configDefault::resourceConfig),
-                    portConfiguration(configDefault::portConfiguration),
+                    numberOrder(configDefault::numberOrder),
+                    portOrder(configDefault::portOrder),
+                    resourceOrder(configDefault::resourceOrder),
+                    numberOrderConfiguration(configDefault::numberOrderConfiguration),
+                    portOrderConfiguration(configDefault::portOrderConfiguration),
+                    resourceOrderConfiguration(configDefault::resourceOrderConfiguration),
                     portLocations(configDefault::portLocations){};
 
         size_t boardSize;
@@ -33,11 +36,16 @@ class DoganConfig {
         std::array<size_t, 5> developmentCount;
 
         std::vector<pip> getNumberConfiguration(std::mt19937 rengine);
+        std::vector<ResourceType> getPortConfiguration(std::mt19937 rengine);
         std::vector<ResourceType> getResourceConfiguration(std::mt19937 rengine);
         std::vector<DoganPort> getPortLocations(std::mt19937 rengine);
     private:
-        NumberConfiguration numberConfiguration;
-        ResourceConfiguration resourceConfiguration;
+        std::vector<pip> numberOrder;
+        std::vector<ResourceType> portOrder;
+        std::vector<ResourceType> resourceOrder;
+        OrderConfiguration numberOrderConfiguration;
+        OrderConfiguration portOrderConfiguration;
+        OrderConfiguration resourceOrderConfiguration;
         std::vector<ResourceType> portConfiguration;
         std::vector<std::vector<DoganVertex>> portLocations;
         

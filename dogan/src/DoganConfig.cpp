@@ -4,73 +4,106 @@
 #include <random>
 
 std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
-    std::vector<pip> numberOrder;
     std::uniform_int_distribution<uint32_t> pipRand(1, 6);
-    
-    switch(numberConfiguration) {
-        case NumberConfiguration::DEFAULT:
-            if(boardSize != 19) {
-                std::cerr << "Error: Board Size should be 19. It is " << boardSize;
-                throw("Board Size should be 19");
+    size_t sizeDifference = boardSize - numberOrder.size();
+
+    if(sizeDifference != 0) {
+        
+        if(sizeDifference != 0) {
+            std::cerr   << "WARNING: Board size (" 
+                        << boardSize
+                        << ") does not match Number Order size ("
+                        << numberOrder.size() 
+                        << "). If this is not intended, please fix this\n";
+        }
+        if(sizeDifference > 0) {
+            for(size_t i = 0; i < sizeDifference; i++) {
+                numberOrder.push_back(pipRand(rengine));
             }
-            // initialize vector with all numbers in board and shuffle
-            numberOrder = {2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12};
+        }
+    }
+    
+    switch(numberOrderConfiguration) {
+        case OrderConfiguration::DEFAULT:
+        case OrderConfiguration::SHUFFLE:
             std::shuffle(numberOrder.begin(), numberOrder.end(), rengine);
-            
-            numberOrder.insert(numberOrder.begin() + 9, 7);
+            break;
+        case OrderConfiguration::EXACT:
             break;
     }
     return numberOrder;
 }
 
-std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 rengine) {
-    std::vector<ResourceType> resourceOrder;
+
+std::vector<ResourceType> DoganConfig::getPortConfiguration(std::mt19937 rengine) {
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
+    size_t sizeDifference = portLocations.size() - portOrder.size();
 
-    switch(resourceConfiguration) {
-        case ResourceConfiguration::DEFAULT:
-            if(boardSize != 19) {
-                std::cerr << "Error: Board Size should be 19. It is " << boardSize;
-                throw("Board Size should be 19");
+    if(sizeDifference != 0) {
+        
+        if(sizeDifference != 0) {
+            std::cerr   << "WARNING: Port amount (" 
+                        << portLocations.size()
+                        << ") does not match Port Order size ("
+                        << portOrder.size() 
+                        << "). If this is not intended, please fix this\n";
+        }
+        if(sizeDifference > 0) {
+            for(size_t i = 0; i < sizeDifference; i++) {
+                portOrder.push_back(static_cast<ResourceType>(resourceRand(rengine)));
             }
-            // initialize vector with all resources in board and shuffle
-            resourceOrder = {
-                                ResourceType::BRICK, ResourceType::BRICK, ResourceType::BRICK,
-                                ResourceType::SHEEP, ResourceType::SHEEP, ResourceType::SHEEP,
-                                ResourceType::STONE, ResourceType::STONE, ResourceType::STONE,
-                                ResourceType::WHEAT, ResourceType::WHEAT, ResourceType::WHEAT,
-                                ResourceType::WOOD,  ResourceType::WOOD,  ResourceType::WOOD,
-                                static_cast<ResourceType>(resourceRand(rengine)), 
-                                static_cast<ResourceType>(resourceRand(rengine)), 
-                                static_cast<ResourceType>(resourceRand(rengine))
-                            };
-            std::shuffle(resourceOrder.begin(), resourceOrder.end(), rengine);
+        }
+    }
 
-            // insert into final array
-            resourceOrder.insert(resourceOrder.begin() + 9, ResourceType::OTHER);
+    switch(resourceOrderConfiguration) {
+        case OrderConfiguration::DEFAULT:
+        case OrderConfiguration::SHUFFLE:
+            std::shuffle(portOrder.begin(), portOrder.end(), rengine);
+            break;
+        case OrderConfiguration::EXACT:
+            break;
+    }
+    return portOrder;
+}
+
+
+
+std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 rengine) {
+    std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
+    size_t sizeDifference = boardSize - resourceOrder.size();
+
+    if(sizeDifference != 0) {
+        
+        if(sizeDifference != 0) {
+            std::cerr   << "WARNING: Board size (" 
+                        << boardSize
+                        << ") does not match Resource Order size ("
+                        << resourceOrder.size() 
+                        << "). If this is not intended, please fix this\n";
+        }
+        if(sizeDifference > 0) {
+            for(size_t i = 0; i < sizeDifference; i++) {
+                resourceOrder.push_back(static_cast<ResourceType>(resourceRand(rengine)));
+            }
+        }
+    }
+
+    switch(resourceOrderConfiguration) {
+        case OrderConfiguration::DEFAULT:
+        case OrderConfiguration::SHUFFLE:
+            std::shuffle(resourceOrder.begin(), resourceOrder.end(), rengine);
+            break;
+        case OrderConfiguration::EXACT:
             break;
     }
     return resourceOrder;
 }
 
+
+
 std::vector<DoganPort> DoganConfig::getPortLocations(std::mt19937 rengine) {
     std::vector<DoganPort> ports;
-    size_t sizeDifference = portLocations.size() - portConfiguration.size();
-    if(sizeDifference != 0) {
-        std::cerr   << "WARNING: portLocations size (" 
-                    << portLocations.size() 
-                    << ") does not match portConfiguration size ("
-                    << portConfiguration.size() 
-                    << "). If this is not intended, please fix this\n";
-        if(sizeDifference > 0) {
-            for(size_t i = 0; i < sizeDifference; i++) {
-                portConfiguration.push_back(ResourceType::OTHER);
-            }
-        }
-    }
-
-    // Shuffle the portConfiguration and then create the ports
-    std::shuffle(portConfiguration.begin(), portConfiguration.end(), rengine);
+    std::vector<ResourceType> portConfiguration = getPortConfiguration(rengine);
 
     for(size_t i = 0; i < portConfiguration.size(); i++) {
         // portConfiguration is a vector of ResourceType

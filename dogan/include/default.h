@@ -1,14 +1,30 @@
 #pragma once
 
-#include "enums.h"
+#include "config.enum.h"
 #include "Coordinate.h"
 #include "DoganPort.h"
 #include "DoganVertex.h"
 #include <vector>
 
 namespace configDefault {
-    inline const ResourceConfiguration resourceConfig = ResourceConfiguration::DEFAULT;
-    inline const NumberConfiguration numberConfig = NumberConfiguration::DEFAULT;
+    inline const OrderConfiguration resourceOrderConfiguration = OrderConfiguration::DEFAULT;
+    inline const OrderConfiguration numberOrderConfiguration = OrderConfiguration::DEFAULT;
+    inline const OrderConfiguration portOrderConfiguration = OrderConfiguration::DEFAULT;
+    inline const std::vector<ResourceType> resourceOrder = {
+                                ResourceType::BRICK, ResourceType::BRICK, ResourceType::BRICK,
+                                ResourceType::SHEEP, ResourceType::SHEEP, ResourceType::SHEEP,
+                                ResourceType::STONE, ResourceType::STONE, ResourceType::STONE,
+                                ResourceType::WHEAT, ResourceType::WHEAT, ResourceType::WHEAT,
+                                ResourceType::WOOD,  ResourceType::WOOD,  ResourceType::WOOD,
+                                ResourceType::OTHER, ResourceType::OTHER, ResourceType::OTHER
+                            };
+    inline const std::vector<ResourceType> portOrder = {
+                                ResourceType::BRICK, ResourceType::WOOD, ResourceType::SHEEP, 
+                                ResourceType::WHEAT, ResourceType::STONE, ResourceType::OTHER,
+                                ResourceType::OTHER, ResourceType::OTHER, ResourceType::OTHER
+                            };
+    inline const std::vector<pip> numberOrder = {2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12};
+
     inline std::vector<std::vector<DoganVertex>> portLocations =    {
                                                                         {{Direction::NORTH, {1, 0}}, {Direction::NORTHWEST, {1, 0}}},
                                                                         {{Direction::NORTH, {2, 0}}, {Direction::NORTHWEST, {2, 0}}},
