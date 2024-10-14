@@ -47,8 +47,48 @@ std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 ren
             std::shuffle(resourceOrder.begin(), resourceOrder.end(), rengine);
 
             // insert into final array
-            resourceOrder.insert(resourceOrder.begin() + 9, ResourceType::INVAL);
+            resourceOrder.insert(resourceOrder.begin() + 9, ResourceType::OTHER);
             break;
     }
     return resourceOrder;
+}
+
+std::vector<DoganPort> DoganConfig::getPortLocations(std::mt19937 rengine) {
+    std::vector<DoganPort> ports;
+    size_t sizeDifference = portLocations.size() - portConfiguration.size();
+    if(sizeDifference != 0) {
+        std::cerr   << "WARNING: portLocations size (" 
+                    << portLocations.size() 
+                    << ") does not match portConfiguration size ("
+                    << portConfiguration.size() 
+                    << "). If this is not intended, please fix this\n";
+        if(sizeDifference > 0) {
+            for(size_t i = 0; i < sizeDifference; i++) {
+                portConfiguration.push_back(ResourceType::OTHER);
+            }
+        }
+    }
+
+    // Shuffle the portConfiguration and then create the ports
+    std::shuffle(portConfiguration.begin(), portConfiguration.end(), rengine);
+
+    for(size_t i = 0; i < portConfiguration.size(); i++) {
+        // portConfiguration is a vector of ResourceType
+        // portLocations is a vector of all vertices that the port touches
+        // A DoganPort is created with a direction (portConfiguration[i]) and
+        // a vector of all possible representations of a vertex
+        std::vector<std::vector<DoganVertex>> portVertices;
+        
+        for(size_t j = 0; j < portLocations[i].size(); j++) {
+            // for vertex j get all equivalent vertex 
+            // representations of vertex portLocations[i][j]
+            std::vector<DoganVertex>portVertexRepresentations{portLocations[i][j].getCorrespondingVertices()};
+            portVertexRepresentations.push_back(portLocations[i][j]);
+            portVertices.push_back(portVertexRepresentations);
+        }
+        // create the port and add it to the ports vector
+        ports.emplace_back(portConfiguration[i], portVertices);
+    }
+    return ports;
+
 }

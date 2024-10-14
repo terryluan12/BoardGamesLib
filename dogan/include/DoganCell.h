@@ -5,6 +5,7 @@
 #include "DoganEdge.h"
 #include "DoganVertex.h"
 #include "enums.h"
+#include "direction.enum.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>
@@ -17,11 +18,10 @@ class DoganCell : public CellInterface {
         void addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac);
         std::shared_ptr<DoganCell> getAdjacentCell(Direction d);
         Coordinate2D getCoordinate(void) const;
-        ResourceType getType(void) const;
+        ResourceType getResource(void) const;
         int getNumber(void) const;
         bool hasRobber(void) const;
         void setRobber(bool robber);
-        std::string toString(void) const override;
         bool hasAdjacentCell(Direction d) const;
     private:
         std::vector<std::shared_ptr<class DoganBuilding>> buildings;
@@ -35,3 +35,5 @@ class DoganCell : public CellInterface {
         int number;
         ResourceType type;
 };
+
+std::ostream &operator<< (std::ostream &os, DoganCell const &dc);

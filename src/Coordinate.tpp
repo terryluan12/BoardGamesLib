@@ -59,7 +59,7 @@ bool Coordinate<N>::operator<(const Coordinate<N> &c) const {
 template<size_t N>
 Coordinate<N> Coordinate<N>::operator+(Coordinate<N> const& c) const {
     std::array<int, N> resultingArray;
-    for(int i = 0; i < N; i++){
+    for(size_t i = 0; i < N; i++){
         resultingArray[i] = coordinates[i] + c.coordinates[i];
     }
     return Coordinate(resultingArray);
@@ -96,12 +96,12 @@ decltype(auto) Coordinate<N>::get(void) const {
 
 template<size_t N>
 std::ostream &operator<< (std::ostream &os, Coordinate<N> const &c) {
-  os << "{";
+  os << "(";
   for(size_t i = 0; i < N-1; i++) {
     os << c[i] << ", ";
   }
 
-  os << c[N-1] << "}";
+  os << c[N-1] << ")";
 
   return os;
 }

@@ -7,23 +7,14 @@ DoganVertex::DoganVertex(Direction d, Coordinate2D c): direction(d), coordinate(
     }
 }
 
-std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(DoganCell &dc) {
+std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
     std::vector<DoganVertex> corrVertices;
     auto [d1, d2] = getComplementDirections(direction);
     Direction dc1Dir = (direction == Direction::NORTH || direction == Direction::SOUTH) ? getOppositeDirection(d1) : direction;
     Direction dc2Dir = getOppositeDirection(d2);
-
-    bool dc1Exists = dc.hasAdjacentCell(dc1Dir);
-    bool dc2Exists = dc.hasAdjacentCell(dc2Dir);
     
-    if (dc1Exists) {
-        auto dc1 = dc.getAdjacentCell(dc1Dir);
-        corrVertices.emplace_back(DoganVertex(d1, dc1->getCoordinate()));
-    }
-    if (dc2Exists) {
-        auto dc2 = dc.getAdjacentCell(dc2Dir);
-        corrVertices.emplace_back(DoganVertex(d2, dc2->getCoordinate()));
-    }
+    corrVertices.emplace_back(DoganVertex(d1, this->coordinate + directionCoordinates.at(dc1Dir)));
+    corrVertices.emplace_back(DoganVertex(d2, this->coordinate + directionCoordinates.at(dc2Dir)));
     return corrVertices;
 }
 
@@ -33,4 +24,9 @@ Coordinate2D DoganVertex::getCoordinate(void) const {
 
 Direction DoganVertex::getDirection(void) const {
     return direction;
+}
+
+std::ostream &operator<< (std::ostream &os, DoganVertex const &dv) {
+    os << "Vertex " << dv.getCoordinate() << " " << dv.getDirection();
+    return os;
 }

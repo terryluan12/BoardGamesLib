@@ -3,6 +3,7 @@
 #include "common.h"
 #include "enums.h"
 #include "default.h"
+#include "DoganPort.h"
 #include "DoganVertex.h"
 #include <ostream>
 #include <vector>
@@ -13,20 +14,18 @@ class DoganConfig {
         // add port locations
         DoganConfig(void) : 
                     boardSize(configDefault::tileLocations.size()), 
-                    numberConfiguration(configDefault::numberConfig), 
                     parity(configDefault::parity),
-                    portLocations(configDefault::portLocations),
-                    resourceConfiguration(configDefault::resourceConfig),
                     robberPosition(configDefault::robberPosition),
-                    tileLocations(configDefault::tileLocations),
+                    tileLocations(configDefault::tileLocations), 
                     resourceCount(configDefault::resourceCount),
-                    developmentCount(configDefault::developmentCount) {};
+                    developmentCount(configDefault::developmentCount),
+                    numberConfiguration(configDefault::numberConfig),
+                    resourceConfiguration(configDefault::resourceConfig),
+                    portConfiguration(configDefault::portConfiguration),
+                    portLocations(configDefault::portLocations){};
 
         size_t boardSize;
-        NumberConfiguration numberConfiguration;
         Parity parity; // Parity + Coordinate System is based on https://www.redblobgames.com/grids/hexagons/
-        std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
-        ResourceConfiguration resourceConfiguration;
         Coordinate2D robberPosition;
         std::vector<Coordinate2D> tileLocations;
         
@@ -35,4 +34,11 @@ class DoganConfig {
 
         std::vector<pip> getNumberConfiguration(std::mt19937 rengine);
         std::vector<ResourceType> getResourceConfiguration(std::mt19937 rengine);
+        std::vector<DoganPort> getPortLocations(std::mt19937 rengine);
+    private:
+        NumberConfiguration numberConfiguration;
+        ResourceConfiguration resourceConfiguration;
+        std::vector<ResourceType> portConfiguration;
+        std::vector<std::vector<DoganVertex>> portLocations;
+        
 };

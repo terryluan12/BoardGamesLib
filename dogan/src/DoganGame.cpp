@@ -7,7 +7,7 @@ void DoganGame::addPlayer(DoganPlayer p) {
 
 
 void DoganGame::printBoard(void) {
-    std::cout << this->board.toString();
+    std::cout << this->board;
     for(auto & p : this->players) {
         std::cout << p;
     }

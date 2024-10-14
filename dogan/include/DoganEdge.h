@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Coordinate.h"
-#include "enums.h"
+#include "direction.enum.h"
 #include "DoganCell.h"
 #include <vector>
 

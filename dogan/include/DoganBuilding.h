@@ -11,7 +11,7 @@ enum class BuildingType {
 
 class DoganBuilding {
     public: 
-        void addVertex(DoganVertex &dv, DoganCell &dc);
+        void addVertex(DoganVertex &dv);
         void setType(BuildingType t);
         void setPlayerID(int pid);
     private:

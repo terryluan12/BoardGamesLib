@@ -1,9 +1,9 @@
 #include "DoganBuilding.h"
 
 
-void DoganBuilding::addVertex(DoganVertex &dv, DoganCell &dc) {
+void DoganBuilding::addVertex(DoganVertex &dv) {
     vertices.push_back(dv);
-    auto corrVertices = dv.getCorrespondingVertices(dc);
+    auto corrVertices = dv.getCorrespondingVertices();
     vertices.insert(vertices.end(), std::make_move_iterator(corrVertices.begin()), std::make_move_iterator(corrVertices.end()));
 }
 

@@ -17,4 +17,9 @@ Add clang-format
 Add CppDoc
 Set int to size_t where relevant
 Remove iostream where necessary, and throw specific error where relevant
-Update toString to << where relevant, and make consistent format
+Figure out a better way to implement DoganPort other than std::vector<std::vector<DoganVertex>> 
+Make Configuration more consistent (Probably random configuration and constant configuration)
+Fix CellInterface to have more members
+Replace Tuples with Arrays where relevant
+Actually make DoganConfig be constructable. Probably turn into a factory
+Decide if it's better to always do checks for if DoganVertex is a valid tile on the board

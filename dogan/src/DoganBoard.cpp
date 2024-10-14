@@ -15,16 +15,13 @@ DoganBoard::DoganBoard(DoganConfig config) {
     rengine.seed(std::random_device{}());
 
     this->boardSize = config.boardSize; 
-    this->portLocations = config.portLocations;
     this->robberPosition = config.robberPosition;
+    this->ports = config.getPortLocations(rengine);
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
     std::vector<ResourceType> resources = config.getResourceConfiguration(rengine);
     std::array<size_t, 5> resourceCount = config.resourceCount;
     std::array<size_t, 5> developmentCount = config.developmentCount;
-
     bank = DoganBank(resourceCount, developmentCount);
-
-    
 
     // create all tiles
     size_t i = 0;
@@ -61,28 +58,27 @@ Coordinate2D DoganBoard::getRobberPosition(void) const {
     return robberPosition;
 }
 
-std::string DoganBoard::toString() const {
-    std::ostringstream oss;
-    for(const auto& c : this->cells) {
-        oss << "Cell {" << c.first.getX() << "," << c.first.getY() << "}: " << c.second->toString() << "\n";
-    }
-    size_t i = 1;
-    for(auto &[pl1, pl2] : this->portLocations) {
-        oss << "Port " << i << ": " << pl1.getCoordinate() << " " << pl1.getDirection() << ", " << pl2.getCoordinate() << " " << pl2.getDirection() << "\n"; 
-        ++i;
-    }
-    oss << bank;
-    return oss.str();
+const DoganBank DoganBoard::getBank(void) const {
+    return bank;
 }
-
 
 size_t DoganBoard::getBoardSize(void) const {
     return boardSize;
 }
 
-std::map<Coordinate2D, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) {
+const std::map<Coordinate2D, std::shared_ptr<DoganCell>> DoganBoard::getBoard(void) const {
     return cells;
 }
+
+const std::vector<DoganPort> DoganBoard::getPorts(void) const {
+    return ports;
+}
+
+
+bool DoganBoard::hasVertex(const Coordinate2D c) const {
+    return cells.find(c) != cells.end();
+}
+
 
 void DoganBoard::setBoardSize(size_t bs) {
     if(bs > MAX_BOARD_SIZE) {
@@ -91,4 +87,17 @@ void DoganBoard::setBoardSize(size_t bs) {
     else {
         boardSize = bs;
     }
+}
+
+std::ostream &operator<< (std::ostream &os, DoganBoard const &db) {
+    for(const auto& c : db.getBoard()) {
+        os << *(c.second);
+    }
+    size_t i = 1;
+    for(auto &pl : db.getPorts()) {
+        os << pl;
+        ++i;
+    }
+    os << db.getBank();
+    return os;
 }

@@ -42,7 +42,7 @@ int DoganCell::getNumber(void) const {
     return this->number;
 }
 
-ResourceType DoganCell::getType(void) const { 
+ResourceType DoganCell::getResource(void) const { 
     return this->type;
 }
 
@@ -50,16 +50,11 @@ bool DoganCell::hasRobber(void) const {
     return this->containsRobber;
 }
 
-
-std::string DoganCell::toString(void) const {
-    std::ostringstream oss;
-    oss << "Type: " << type << ", ContainsRobber: " << containsRobber << ", Number: " << number;
-    return oss.str();
-
-    // TODO: Change when g++ supports C++20
-    // return std::format("Type: {}; ContainsRobber: {}, Number: {}", type, containsRobber, number);
-}
-
 void DoganCell::setRobber(bool robber) {
     this->containsRobber=robber;
+}
+
+std::ostream &operator<< (std::ostream &os, DoganCell const &dc) {
+    os << "DoganCell " << dc.getCoordinate() << ": Number(" << dc.getNumber() << "), Resource(" << dc.getResource() << "), hasRobber(" << dc.hasRobber() << ")" << "\n";
+    return os;
 }
