@@ -53,7 +53,7 @@ bool DoganCell::hasRobber(void) const {
 
 std::string DoganCell::toString(void) const {
     std::ostringstream oss;
-    oss << "Type: " << static_cast<int>(type) << "; ContainsRobber: " << containsRobber << ", Number: " << number;
+    oss << "Type: " << type << ", ContainsRobber: " << containsRobber << ", Number: " << number;
     return oss.str();
 
     // TODO: Change when g++ supports C++20

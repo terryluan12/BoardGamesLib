@@ -15,3 +15,4 @@ Figure out a way to bring the getBoard function to the parent BoardInterface (st
 Decide if I want to return a shared_ptr in [] operator
 Add clang-format
 Add CppDoc
+Set int to size_t where relevant

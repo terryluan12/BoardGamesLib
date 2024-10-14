@@ -4,20 +4,20 @@
 #include <ostream>
 
 enum class ResourceType {
-    WOOD,
-    SHEEP,
-    WHEAT,
-    BRICK,
-    STONE,
-    INVAL
+    WOOD = 0,
+    SHEEP = 1,
+    WHEAT = 2,
+    BRICK = 3,
+    STONE = 4,
+    INVAL = 5
 };
 enum class DevelopmentType {
-    MONOPOLY,
-    SOLDIER,
-    BUILDROAD,
-    TAKETWO,
-    VICPOINT,
-    INVAL
+    MONOPOLY = 0,
+    SOLDIER = 1,
+    BUILDROAD = 2,
+    TAKETWO = 3,
+    VICPOINT = 4,
+    INVAL = 5
 };
 
 
