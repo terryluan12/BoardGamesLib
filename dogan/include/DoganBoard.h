@@ -16,8 +16,10 @@ class DoganBoard : public BoardInterface<100> {
         std::string toString(void) const override;
         size_t getBoardSize(void) const override;
         void setBoardSize(size_t bs) override;
+        Coordinate2D getRobberPosition(void) const;
     private:
         size_t boardSize;
+        Coordinate2D robberPosition;
         std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
         std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
         std::mt19937 rengine;

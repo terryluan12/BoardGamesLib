@@ -3,7 +3,7 @@
 
 std::unordered_set<Coordinate2D> DoganCell::allCoordinates;
 
-DoganCell::DoganCell(bool cr, Coordinate2D c, int n, Resource t) 
+DoganCell::DoganCell(bool cr, Coordinate2D c, int n, ResourceType t) 
     : containsRobber(cr), coordinate(c), number(n), type(t) {
     auto [_, didInsert] = allCoordinates.insert(c);
     if(!didInsert) {
@@ -42,7 +42,7 @@ int DoganCell::getNumber(void) const {
     return this->number;
 }
 
-Resource DoganCell::getType(void) const { 
+ResourceType DoganCell::getType(void) const { 
     return this->type;
 }
 

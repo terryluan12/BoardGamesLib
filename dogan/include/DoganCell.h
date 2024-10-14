@@ -13,11 +13,11 @@
 
 class DoganCell : public CellInterface {
     public:
-        DoganCell(bool cr, Coordinate2D c, int n, Resource t);
+        DoganCell(bool cr, Coordinate2D c, int n, ResourceType t);
         void addAdjacentCell(const Direction d, std::shared_ptr<DoganCell> ac);
         std::shared_ptr<DoganCell> getAdjacentCell(Direction d);
         Coordinate2D getCoordinate(void) const;
-        Resource getType(void) const;
+        ResourceType getType(void) const;
         int getNumber(void) const;
         bool hasRobber(void) const;
         void setRobber(bool robber);
@@ -33,5 +33,5 @@ class DoganCell : public CellInterface {
         bool containsRobber;
         Coordinate2D coordinate;
         int number;
-        Resource type;
+        ResourceType type;
 };

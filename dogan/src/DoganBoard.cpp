@@ -14,11 +14,11 @@ DoganCell &DoganBoard::operator [](const Coordinate2D coordinates) {
 DoganBoard::DoganBoard(DoganConfig config) {
     rengine.seed(std::random_device{}());
 
-    boardSize = config.boardSize; 
+    this->boardSize = config.boardSize; 
     this->portLocations = config.portLocations;
+    this->robberPosition = config.robberPosition;
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
-    std::vector<Resource> resources = config.getResourceConfiguration(rengine);
-    portLocations = config.portLocations;
+    std::vector<ResourceType> resources = config.getResourceConfiguration(rengine);
 
     // create all tiles
     size_t i = 0;
@@ -51,6 +51,9 @@ DoganBoard::DoganBoard(DoganConfig config) {
     cells[config.robberPosition]->setRobber(true);
 }
 
+Coordinate2D DoganBoard::getRobberPosition(void) const {
+    return robberPosition;
+}
 
 std::string DoganBoard::toString() const {
     std::ostringstream oss;

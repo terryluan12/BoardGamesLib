@@ -3,7 +3,7 @@
 #include "common.h"
 #include <ostream>
 
-enum class Resource {
+enum class ResourceType {
     WOOD,
     SHEEP,
     WHEAT,
@@ -11,6 +11,15 @@ enum class Resource {
     STONE,
     INVAL
 };
+enum class DevelopmentType {
+    MONOPOLY,
+    SOLDIER,
+    BUILDROAD,
+    TAKETWO,
+    VICPOINT,
+    INVAL
+};
+
 
 enum class Parity {
     EVEN,
@@ -57,3 +66,5 @@ inline std::array edgeDirections = {
 Direction getOppositeDirection(Direction d);
 std::pair<Direction, Direction> getComplementDirections(Direction d);
 std::ostream &operator<< (std::ostream &os, Direction const &d);
+std::ostream &operator<< (std::ostream &os, ResourceType const &d);
+std::ostream &operator<< (std::ostream &os, DevelopmentType const &d);

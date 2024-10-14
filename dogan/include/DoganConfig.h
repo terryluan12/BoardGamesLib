@@ -29,5 +29,5 @@ class DoganConfig {
         std::vector<Coordinate2D> tileLocations;
 
         std::vector<pip> getNumberConfiguration(std::mt19937 rengine);
-        std::vector<Resource> getResourceConfiguration(std::mt19937 rengine);
+        std::vector<ResourceType> getResourceConfiguration(std::mt19937 rengine);
 };

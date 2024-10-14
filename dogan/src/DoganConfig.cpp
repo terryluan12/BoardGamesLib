@@ -23,8 +23,8 @@ std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
     return numberOrder;
 }
 
-std::vector<Resource> DoganConfig::getResourceConfiguration(std::mt19937 rengine) {
-    std::vector<Resource> resourceOrder;
+std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 rengine) {
+    std::vector<ResourceType> resourceOrder;
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
 
     switch(resourceConfiguration) {
@@ -35,19 +35,19 @@ std::vector<Resource> DoganConfig::getResourceConfiguration(std::mt19937 rengine
             }
             // initialize vector with all resources in board and shuffle
             resourceOrder = {
-                                Resource::BRICK, Resource::BRICK, Resource::BRICK,
-                                Resource::SHEEP, Resource::SHEEP, Resource::SHEEP,
-                                Resource::STONE, Resource::STONE, Resource::STONE,
-                                Resource::WHEAT, Resource::WHEAT, Resource::WHEAT,
-                                Resource::WOOD,  Resource::WOOD,  Resource::WOOD,
-                                static_cast<Resource>(resourceRand(rengine)), 
-                                static_cast<Resource>(resourceRand(rengine)), 
-                                static_cast<Resource>(resourceRand(rengine))
+                                ResourceType::BRICK, ResourceType::BRICK, ResourceType::BRICK,
+                                ResourceType::SHEEP, ResourceType::SHEEP, ResourceType::SHEEP,
+                                ResourceType::STONE, ResourceType::STONE, ResourceType::STONE,
+                                ResourceType::WHEAT, ResourceType::WHEAT, ResourceType::WHEAT,
+                                ResourceType::WOOD,  ResourceType::WOOD,  ResourceType::WOOD,
+                                static_cast<ResourceType>(resourceRand(rengine)), 
+                                static_cast<ResourceType>(resourceRand(rengine)), 
+                                static_cast<ResourceType>(resourceRand(rengine))
                             };
             std::shuffle(resourceOrder.begin(), resourceOrder.end(), rengine);
 
             // insert into final array
-            resourceOrder.insert(resourceOrder.begin() + 9, Resource::INVAL);
+            resourceOrder.insert(resourceOrder.begin() + 9, ResourceType::INVAL);
             break;
     }
     return resourceOrder;
