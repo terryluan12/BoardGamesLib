@@ -4,3 +4,8 @@ enum class OrderConfiguration {
     SHUFFLE,
     EXACT
 };
+
+enum class Parity {
+    EVEN,
+    ODD
+};

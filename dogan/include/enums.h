@@ -19,11 +19,5 @@ enum class DevelopmentType {
     TAKETWO = 4,
 };
 
-
-enum class Parity {
-    EVEN,
-    ODD
-};
-
 std::ostream &operator<< (std::ostream &os, ResourceType const &d);
 std::ostream &operator<< (std::ostream &os, DevelopmentType const &d);
