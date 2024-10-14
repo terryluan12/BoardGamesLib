@@ -2,6 +2,7 @@
 
 #include "BoardInterface.h"
 #include "Coordinate.h"
+#include "DoganBank.h"
 #include "DoganCell.h"
 #include "DoganConfig.h"
 #include "DoganVertex.h"
@@ -20,6 +21,7 @@ class DoganBoard : public BoardInterface<100> {
     private:
         size_t boardSize;
         Coordinate2D robberPosition;
+        DoganBank bank;
         std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
         std::vector<std::tuple<DoganVertex, DoganVertex>> portLocations;
         std::mt19937 rengine;

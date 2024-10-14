@@ -28,4 +28,7 @@ namespace configDefault {
                                                                         {1, 4}, {2, 4}, {3, 4} 
                                                     };
     inline const Coordinate2D robberPosition = {2, 2};
+
+    inline const std::array<size_t, 5> resourceCount = {19, 19, 19, 19, 19};
+    inline const std::array<size_t, 5> developmentCount = {5, 2, 2, 2, 2};
 }

@@ -12,11 +12,11 @@ enum class ResourceType {
     INVAL = 5
 };
 enum class DevelopmentType {
-    MONOPOLY = 0,
-    SOLDIER = 1,
-    BUILDROAD = 2,
-    TAKETWO = 3,
-    VICPOINT = 4,
+    VICPOINT = 0,
+    MONOPOLY = 1,
+    SOLDIER = 2,
+    BUILDROAD = 3,
+    TAKETWO = 4,
     INVAL = 5
 };
 

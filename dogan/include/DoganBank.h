@@ -29,3 +29,5 @@ class DoganBank {
         std::array<size_t, 5> resources;
         std::array<size_t, 5> developments;
 };
+
+std::ostream &operator<< (std::ostream &os, DoganBank const &d);

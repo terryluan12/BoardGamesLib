@@ -19,6 +19,12 @@ DoganBoard::DoganBoard(DoganConfig config) {
     this->robberPosition = config.robberPosition;
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
     std::vector<ResourceType> resources = config.getResourceConfiguration(rengine);
+    std::array<size_t, 5> resourceCount = config.resourceCount;
+    std::array<size_t, 5> developmentCount = config.developmentCount;
+
+    bank = DoganBank(resourceCount, developmentCount);
+
+    
 
     // create all tiles
     size_t i = 0;
@@ -65,6 +71,7 @@ std::string DoganBoard::toString() const {
         oss << "Port " << i << ": " << pl1.getCoordinate() << " " << pl1.getDirection() << ", " << pl2.getCoordinate() << " " << pl2.getDirection() << "\n"; 
         ++i;
     }
+    oss << bank;
     return oss.str();
 }
 

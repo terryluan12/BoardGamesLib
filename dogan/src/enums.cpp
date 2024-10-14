@@ -100,6 +100,9 @@ std::ostream &operator<< (std::ostream &os, ResourceType const &rt) {
 }
 std::ostream &operator<< (std::ostream &os, DevelopmentType const &dt) {
     switch(dt) {
+        case DevelopmentType::VICPOINT:
+            os << "Victory Point";
+            break;
         case DevelopmentType::MONOPOLY:
             os << "Monopoly";
             break;
@@ -111,9 +114,6 @@ std::ostream &operator<< (std::ostream &os, DevelopmentType const &dt) {
             break;
         case DevelopmentType::TAKETWO:
             os << "Take Two";
-            break;
-        case DevelopmentType::VICPOINT:
-            os << "Victory Point";
             break;
         case DevelopmentType::INVAL:
             os << "Invalid";

@@ -16,3 +16,5 @@ Decide if I want to return a shared_ptr in [] operator
 Add clang-format
 Add CppDoc
 Set int to size_t where relevant
+Remove iostream where necessary, and throw specific error where relevant
+Update toString to << where relevant, and make consistent format

@@ -57,13 +57,15 @@ std::string DoganPlayer::getName(void) const {
 
 
 std::ostream& operator<<(std::ostream& os, const DoganPlayer& p) {
-    os << "Player " << p.getName() << ": \n  VP: " << p.getVictoryPoints() << "\n  Resources:\n";
+    os << "Player " << p.getName() << ": \n  VP: " << p.getVictoryPoints() << "\n  Resource Cards:\n";
     for(size_t i = 0; i < 5; ++i) { 
-        os << "\t" << static_cast<ResourceType>(i) << ": " << p.getResources()[i] << "\n";
+        ResourceType rt = static_cast<ResourceType>(i);
+        os << "    " << rt << ": " << p.getResourceCount(rt) << "\n";
     }
-    os << "  Developments:\n";
+    os << "  Development Cards:\n";
     for(size_t i = 0; i < 5; ++i) {
-        os << "\t" << static_cast<DevelopmentType>(i) << ": " << p.getDevelopments()[i] << "\n";
+        DevelopmentType dt = static_cast<DevelopmentType>(i);
+        os << "    " << dt << ": " << p.getDevelopmentCount(dt) << "\n";
     }
     os << "\n";
     return os;

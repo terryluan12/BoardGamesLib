@@ -41,3 +41,17 @@ const std::array<size_t, 10> DoganBank::getHand(void) const {
     std::copy(developments.begin(), developments.end(), hand.begin() + 5);
     return hand;
 }
+
+std::ostream &operator<< (std::ostream &os, DoganBank const &d) {
+    os << "Bank:\n" << "  Resource Cards:\n";
+    for(size_t i = 0; i < 5; i++) {
+        ResourceType rt = static_cast<ResourceType>(i);
+        os << "    " << static_cast<ResourceType>(rt) << ": " << d.getResourceCount(rt) << "\n";
+    }
+    os << "  Development Cards:\n";
+    for(size_t i = 0; i < 5; i++) {
+        DevelopmentType dt = static_cast<DevelopmentType>(i);
+        os << "    " << dt << ": " << d.getDevelopmentCount(dt) << "\n";
+    }
+    return os;
+}
