@@ -11,7 +11,7 @@ class DoganGame {
         void printBoard(void);
     private:
         std::mt19937 rengine;
-        std::uniform_int_distribution<u_int32_t> die;
+        std::uniform_int_distribution<pip> die;
         DoganBoard board;
         std::vector<DoganPlayer> players;
 };

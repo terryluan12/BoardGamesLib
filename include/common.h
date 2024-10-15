@@ -1,3 +1,3 @@
 #include <tuple>
 
-using pip = unsigned char;
+using pip = int;

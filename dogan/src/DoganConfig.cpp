@@ -4,31 +4,37 @@
 #include <random>
 
 std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
-    std::uniform_int_distribution<uint32_t> pipRand(1, 6);
+    std::uniform_int_distribution<pip> pipRand(1, 6);
     size_t sizeDifference = boardSize - initialNumberLocations.size();
-
-    if(sizeDifference != 0) {
-        std::cerr   << "WARNING: Board size (" 
-                    << boardSize
-                    << ") does not match Tile Number Config size ("
-                    << initialNumberLocations.size() 
-                    << "). If this is not intended, please fix this\n";
-        if(sizeDifference > 0) {
-            for(size_t i = 0; i < sizeDifference; i++) {
-                initialNumberLocations.push_back(pipRand(rengine));
-            }
-        }
-    }
     
     switch(initialNumberConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
+
+            if(sizeDifference-1 != 0) {
+                std::cerr   << "WARNING: Board size (" 
+                            << boardSize
+                            << ") does not match Tile Number Config size ("
+                            << initialNumberLocations.size() 
+                            << "). You should not include 7 as a number. If this is not intended, please fix this\n";
+                if(sizeDifference-1 > 0) {
+                    for(size_t i = 0; i < sizeDifference; i++) {
+                        initialNumberLocations.push_back(pipRand(rengine));
+                    }
+                }
+            }
+
+            std::replace(initialNumberLocations.begin(), initialNumberLocations.end(), -1, pipRand(rengine));
             std::shuffle(initialNumberLocations.begin(), initialNumberLocations.end(), rengine);
+            initialNumberLocations.insert(initialNumberLocations.begin() + robberIndex, 7);
             break;
         case OrderConfiguration::EXACT:
+            if(sizeDifference != 0) {
+                throw std::invalid_argument("Error: Exact Number Configuration requires number of numbers equal to board size");
+            }
+            std::replace(initialNumberLocations.begin(), initialNumberLocations.end(), -1, pipRand(rengine));
             break;
     }
-    initialNumberLocations.insert(initialNumberLocations.begin() + robberIndex, 7);
     return initialNumberLocations;
 }
 
@@ -36,26 +42,31 @@ std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
 std::vector<ResourceType> DoganConfig::getPortConfiguration(std::mt19937 rengine) {
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
     size_t sizeDifference = initialPortLocations.size() - initialPortResources.size();
-
-    if(sizeDifference != 0) {
-        std::cerr   << "WARNING: Amount of Ports (" 
-                    << initialPortLocations.size()
-                    << ") does not match Port Resources Config size ("
-                    << initialPortResources.size() 
-                    << "). If this is not intended, please fix this\n";
-        if(sizeDifference > 0) {
-            for(size_t i = 0; i < sizeDifference; i++) {
-                initialPortResources.push_back(static_cast<ResourceType>(resourceRand(rengine)));
-            }
-        }
-    }
+    
 
     switch(initialResourceConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
+
+            if(sizeDifference != 0) {
+                std::cerr   << "WARNING: Amount of Ports (" 
+                            << initialPortLocations.size()
+                            << ") does not match Port Resources Config size ("
+                            << initialPortResources.size() 
+                            << "). If this is not intended, please fix this\n";
+                if(sizeDifference > 0) {
+                    for(size_t i = 0; i < sizeDifference; i++) {
+                        initialPortResources.push_back(static_cast<ResourceType>(resourceRand(rengine)));
+                    }
+                }
+            }
+
             std::shuffle(initialPortResources.begin(), initialPortResources.end(), rengine);
             break;
         case OrderConfiguration::EXACT:
+            if(sizeDifference != 0) {
+                throw std::invalid_argument("Error: Exact Resource Configuration requires number of resources equal to board size");
+            }
             break;
     }
     return initialPortResources;
@@ -67,28 +78,30 @@ std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 ren
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
     size_t sizeDifference = boardSize - initialResources.size();
 
-    if(sizeDifference != 0) {
-        
-        if(sizeDifference != 0) {
-            std::cerr   << "WARNING: Board size (" 
-                        << boardSize
-                        << ") does not match Resource size ("
-                        << initialResources.size() 
-                        << "). If this is not intended, please fix this\n";
-        }
-        if(sizeDifference > 0) {
-            for(size_t i = 0; i < sizeDifference; i++) {
-                initialResources.push_back(static_cast<ResourceType>(resourceRand(rengine)));
-            }
-        }
-    }
 
     switch(initialResourceConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
+        
+            if(sizeDifference-1 != 0) {
+                    std::cerr   << "WARNING: Board size (" 
+                                << boardSize
+                                << ") does not match Resource size ("
+                                << initialResources.size() 
+                                << "). Do not include the ResourceType::OTHER for the Robber."
+                                << "If this is not intended, please fix this\n";
+                if(sizeDifference > 0) {
+                    for(size_t i = 0; i < sizeDifference; i++) {
+                        initialResources.push_back(static_cast<ResourceType>(resourceRand(rengine)));
+                    }
+                }
+            }
+            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             std::shuffle(initialResources.begin(), initialResources.end(), rengine);
+            initialResources.insert(initialResources.begin() + robberIndex, ResourceType::OTHER);
             break;
         case OrderConfiguration::EXACT:
+            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             break;
     }
     return initialResources;
@@ -102,14 +115,14 @@ std::vector<DoganPort> DoganConfig::getPortLocations(std::mt19937 rengine) {
 
     for(size_t i = 0; i < portConfiguration.size(); i++) {
         // portConfiguration is a vector of ResourceType
-        // portLocations is a vector of all vertices that the port touches
+        // initialPortLocations is a vector of all vertices that the port touches
         // A DoganPort is created with a direction (portConfiguration[i]) and
         // a vector of all possible representations of a vertex
         std::vector<std::vector<DoganVertex>> portVertices;
         
         for(size_t j = 0; j < initialPortLocations[i].size(); j++) {
             // for vertex j get all equivalent vertex 
-            // representations of vertex portLocations[i][j]
+            // representations of vertex initialPortLocations[i][j]
             std::vector<DoganVertex>portVertexRepresentations{initialPortLocations[i][j].getCorrespondingVertices()};
             portVertexRepresentations.push_back(initialPortLocations[i][j]);
             portVertices.push_back(portVertexRepresentations);
