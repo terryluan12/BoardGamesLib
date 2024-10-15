@@ -15,17 +15,17 @@ DoganBoard::DoganBoard(DoganConfig config) {
     rengine.seed(std::random_device{}());
 
     this->boardSize = config.boardSize; 
-    this->robberPosition = config.robberPosition;
+    this->robberPosition = config.initialRobberLocation;
     this->ports = config.getPortLocations(rengine);
     std::vector<pip> numbers = config.getNumberConfiguration(rengine);
     std::vector<ResourceType> resources = config.getResourceConfiguration(rengine);
-    std::array<size_t, 5> resourceCount = config.resourceCount;
-    std::array<size_t, 5> developmentCount = config.developmentCount;
+    std::array<size_t, 5> resourceCount = config.initialResourceCount;
+    std::array<size_t, 5> developmentCount = config.initialDevelopmentCount;
     bank = DoganBank(resourceCount, developmentCount);
 
     // create all tiles
     size_t i = 0;
-    for (const auto& c : config.tileLocations) {
+    for (const auto& c : config.initialTileLocations) {
         this->cells[c] = std::make_shared<DoganCell>(DoganCell(false, c, numbers[i], resources[i]));
         ++i;
     }
@@ -51,7 +51,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
         }
     }
     
-    cells[config.robberPosition]->setRobber(true);
+    cells[config.initialRobberLocation]->setRobber(true);
 }
 
 Coordinate2D DoganBoard::getRobberPosition(void) const {
