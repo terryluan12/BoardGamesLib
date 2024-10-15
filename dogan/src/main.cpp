@@ -1,7 +1,9 @@
+#include "DoganConfigBuilder.h"
 #include "DoganGame.h"
 
 int main(int argc, char* argv[]) {
-    DoganGame *game = new DoganGame();
+    DoganConfig config = DoganConfigBuilder().build();
+    DoganGame *game = new DoganGame(config);
     DoganPlayer *player = new DoganPlayer("Dogan");
     game->addPlayer(*player);
     game->printBoard();

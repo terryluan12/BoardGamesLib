@@ -38,7 +38,6 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
     return initialNumberLocations;
 }
 
-
 std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
     size_t sizeDifference = initialPortLocations.size() - initialPortResources.size();
@@ -71,8 +70,6 @@ std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
     }
     return initialPortResources;
 }
-
-
 
 std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
@@ -107,8 +104,6 @@ std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
     return initialResources;
 }
 
-
-
 std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
     std::vector<DoganPort> ports;
     std::vector<ResourceType> portConfiguration = getPortResources(rengine);
@@ -134,6 +129,50 @@ std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
 
 }
 
+// Getters
+
+size_t DoganConfig::getBoardSize(void) const {
+    return boardSize;
+}
+
+Parity DoganConfig::getParity(void) const {
+    return parity;
+}
+
+Coordinate2D DoganConfig::getRobberLocation(void) const {
+    return initialRobberLocation;
+}
+
+const std::vector<Coordinate2D> DoganConfig::getTileLocations(void) const {
+    return initialTileLocations;
+}
+
+const std::array<size_t, 5> DoganConfig::getResourceCount(void) const {
+    return initialResourceCount;
+}
+
+const std::array<size_t, 5> DoganConfig::getDevelopmentCount(void) const {
+    return initialDevelopmentCount;
+}
+
+// Setters
+
+void DoganConfig::setBoardSize(size_t s) {
+    boardSize = s;
+}
+
+void DoganConfig::setParity(Parity p) {
+    parity = p;
+}
+
+void DoganConfig::setResourceCount(std::array<size_t, 5> rc) {
+    initialResourceCount = rc;
+}
+
+void DoganConfig::setDevelopmentCount(std::array<size_t, 5> dc) {
+    initialDevelopmentCount = dc;
+}
+
 void DoganConfig::setNumberConfig(OrderConfiguration nc) {
     initialNumberConfig = nc;
 }
@@ -154,10 +193,18 @@ void DoganConfig::setPortLocations(std::vector<std::vector<DoganVertex>> pl) {
     initialPortLocations = pl;
 }
 
+void DoganConfig::setRobberLocation(Coordinate2D irl) {
+    initialRobberLocation = irl;
+}
+
+void DoganConfig::setTileLocations(const std::vector<Coordinate2D>& tl) {
+    initialTileLocations = tl;
+}
 
 void DoganConfig::setResources(const std::vector<ResourceType>& r) {
     initialResources = r;
 }
+
 void DoganConfig::setPortResources(const std::vector<ResourceType>& pr) {
     initialPortResources = pr;
 }

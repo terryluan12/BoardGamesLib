@@ -11,7 +11,7 @@
 
 class DoganBoard : public BoardInterface<100> {
     public:
-        DoganBoard(DoganConfig config=DoganConfig());
+        DoganBoard(DoganConfig config);
         ~DoganBoard(void) {};
         DoganCell &operator [](const Coordinate2D i) override;
         const DoganBank getBank(void) const;
@@ -19,11 +19,11 @@ class DoganBoard : public BoardInterface<100> {
         const std::vector<DoganPort> getPorts(void) const;
         size_t getBoardSize(void) const override;
         void setBoardSize(size_t bs) override;
-        Coordinate2D getRobberPosition(void) const;
+        Coordinate2D getRobberLocation(void) const;
         bool hasVertex(const Coordinate2D c) const;
     private:
         size_t boardSize;
-        Coordinate2D robberPosition;
+        Coordinate2D robberLocation;
         DoganBank bank;
         std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
         std::vector<DoganPort> ports;

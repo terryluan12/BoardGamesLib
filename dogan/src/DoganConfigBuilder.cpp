@@ -1,32 +1,32 @@
 #include "DoganConfigBuilder.h"
 
 DoganConfigBuilder& DoganConfigBuilder::setBoardSize(size_t s) {
-    config.boardSize = s;
+    config.setBoardSize(s);
     return *this;
 }
 
 DoganConfigBuilder& DoganConfigBuilder::setParity(Parity p) {
-    config.parity = p;
+    config.setParity(p);
     return *this;
 }
 
-DoganConfigBuilder& DoganConfigBuilder::setRobberPosition(Coordinate2D irl) {
-    config.initialRobberLocation = irl;
+DoganConfigBuilder& DoganConfigBuilder::setRobberLocation(Coordinate2D irl) {
+    config.setRobberLocation(irl);
     return *this;
 }
 
 DoganConfigBuilder& DoganConfigBuilder::setTileLocations(const std::vector<Coordinate2D>& tl) {
-    config.initialTileLocations = tl;
+    config.setTileLocations(tl);
     return *this;
 }
 
 DoganConfigBuilder& DoganConfigBuilder::setResourceCount(std::array<size_t, 5> rc) {
-    config.initialResourceCount = rc;
+    config.setResourceCount(rc);
     return *this;
 }
 
 DoganConfigBuilder& DoganConfigBuilder::setDevelopmentCount(std::array<size_t, 5> dc) {
-    config.initialDevelopmentCount = dc;
+    config.setDevelopmentCount(dc);
     return *this;
 }
 

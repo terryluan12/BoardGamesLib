@@ -14,18 +14,18 @@ DoganCell &DoganBoard::operator [](const Coordinate2D coordinates) {
 DoganBoard::DoganBoard(DoganConfig config) {
     rengine.seed(std::random_device{}());
 
-    this->boardSize = config.boardSize; 
-    this->robberPosition = config.initialRobberLocation;
+    this->boardSize = config.getBoardSize(); 
+    this->robberLocation = config.getRobberLocation();
     this->ports = config.getPorts(rengine);
     std::vector<pip> numbers = config.getNumbers(rengine);
     std::vector<ResourceType> resources = config.getResources(rengine);
-    std::array<size_t, 5> resourceCount = config.initialResourceCount;
-    std::array<size_t, 5> developmentCount = config.initialDevelopmentCount;
+    std::array<size_t, 5> resourceCount = config.getResourceCount();
+    std::array<size_t, 5> developmentCount = config.getDevelopmentCount();
     bank = DoganBank(resourceCount, developmentCount);
 
     // create all tiles
     size_t i = 0;
-    for (const auto& c : config.initialTileLocations) {
+    for (const auto& c : config.getTileLocations()) {
         this->cells[c] = std::make_shared<DoganCell>(DoganCell(false, c, numbers[i], resources[i]));
         ++i;
     }
@@ -51,11 +51,11 @@ DoganBoard::DoganBoard(DoganConfig config) {
         }
     }
     
-    cells[config.initialRobberLocation]->setRobber(true);
+    cells[config.getRobberLocation()]->setRobber(true);
 }
 
-Coordinate2D DoganBoard::getRobberPosition(void) const {
-    return robberPosition;
+Coordinate2D DoganBoard::getRobberLocation(void) const {
+    return robberLocation;
 }
 
 const DoganBank DoganBoard::getBank(void) const {

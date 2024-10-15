@@ -6,7 +6,7 @@
 
 class DoganGame {
     public:
-        DoganGame(void) : rengine(std::random_device{}()), die(1, 6), board(DoganBoard()){};
+        DoganGame(DoganConfig config) : rengine(std::random_device{}()), die(1, 6), board(DoganBoard(config)){};
         void addPlayer(DoganPlayer p);
         void printBoard(void);
     private:
