@@ -43,10 +43,19 @@ class DoganConfig {
         std::array<size_t, 5> initialResourceCount;
         std::array<size_t, 5> initialDevelopmentCount;
 
-        std::vector<pip> getNumberConfiguration(std::mt19937 rengine);
-        std::vector<ResourceType> getPortConfiguration(std::mt19937 rengine);
-        std::vector<ResourceType> getResourceConfiguration(std::mt19937 rengine);
-        std::vector<DoganPort> getPortLocations(std::mt19937 rengine);
+        std::vector<pip> getNumbers(std::mt19937 rengine);
+        std::vector<ResourceType> getPortResources(std::mt19937 rengine);
+        std::vector<ResourceType> getResources(std::mt19937 rengine);
+        std::vector<DoganPort> getPorts(std::mt19937 rengine);
+
+        void setNumberConfig(OrderConfiguration nc);
+        void setPortResourceConfig(OrderConfiguration prc);
+        void setResourceConfig(OrderConfiguration rc);
+        
+        void setNumberLocations(std::vector<pip> nl);
+        void setPortLocations(std::vector<std::vector<DoganVertex>> pl);
+        void setResources(const std::vector<ResourceType>& r);
+        void setPortResources(const std::vector<ResourceType>& pr);
     private:
         // Default Configurations
         OrderConfiguration initialNumberConfig;

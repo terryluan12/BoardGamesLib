@@ -3,7 +3,7 @@
 #include <iostream>
 #include <random>
 
-std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
+std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
     std::uniform_int_distribution<pip> pipRand(1, 6);
     size_t sizeDifference = boardSize - initialNumberLocations.size();
     
@@ -39,7 +39,7 @@ std::vector<pip> DoganConfig::getNumberConfiguration(std::mt19937 rengine) {
 }
 
 
-std::vector<ResourceType> DoganConfig::getPortConfiguration(std::mt19937 rengine) {
+std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
     size_t sizeDifference = initialPortLocations.size() - initialPortResources.size();
     
@@ -74,7 +74,7 @@ std::vector<ResourceType> DoganConfig::getPortConfiguration(std::mt19937 rengine
 
 
 
-std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 rengine) {
+std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
     std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
     size_t sizeDifference = boardSize - initialResources.size();
 
@@ -109,9 +109,9 @@ std::vector<ResourceType> DoganConfig::getResourceConfiguration(std::mt19937 ren
 
 
 
-std::vector<DoganPort> DoganConfig::getPortLocations(std::mt19937 rengine) {
+std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
     std::vector<DoganPort> ports;
-    std::vector<ResourceType> portConfiguration = getPortConfiguration(rengine);
+    std::vector<ResourceType> portConfiguration = getPortResources(rengine);
 
     for(size_t i = 0; i < portConfiguration.size(); i++) {
         // portConfiguration is a vector of ResourceType
@@ -132,4 +132,32 @@ std::vector<DoganPort> DoganConfig::getPortLocations(std::mt19937 rengine) {
     }
     return ports;
 
+}
+
+void DoganConfig::setNumberConfig(OrderConfiguration nc) {
+    initialNumberConfig = nc;
+}
+
+void DoganConfig::setPortResourceConfig(OrderConfiguration prc) {
+    initialPortResourceConfig = prc;
+}
+
+void DoganConfig::setResourceConfig(OrderConfiguration rc) {
+    initialResourceConfig = rc;
+}
+
+void DoganConfig::setNumberLocations(std::vector<pip> nl) {
+    initialNumberLocations = nl;
+}
+
+void DoganConfig::setPortLocations(std::vector<std::vector<DoganVertex>> pl) {
+    initialPortLocations = pl;
+}
+
+
+void DoganConfig::setResources(const std::vector<ResourceType>& r) {
+    initialResources = r;
+}
+void DoganConfig::setPortResources(const std::vector<ResourceType>& pr) {
+    initialPortResources = pr;
 }

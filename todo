@@ -18,6 +18,5 @@ Remove iostream where necessary, and throw specific error where relevant
 Figure out a better way to implement DoganPort other than std::vector<std::vector<DoganVertex>> 
 Fix CellInterface to have more members
 Replace Tuples with Arrays where relevant
-Actually make DoganConfig be constructable. Probably turn into a factory
 Decide if it's better to always do checks for if DoganVertex is a valid tile on the board
 Make Configuration format more consistent

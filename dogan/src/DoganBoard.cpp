@@ -16,9 +16,9 @@ DoganBoard::DoganBoard(DoganConfig config) {
 
     this->boardSize = config.boardSize; 
     this->robberPosition = config.initialRobberLocation;
-    this->ports = config.getPortLocations(rengine);
-    std::vector<pip> numbers = config.getNumberConfiguration(rengine);
-    std::vector<ResourceType> resources = config.getResourceConfiguration(rengine);
+    this->ports = config.getPorts(rengine);
+    std::vector<pip> numbers = config.getNumbers(rengine);
+    std::vector<ResourceType> resources = config.getResources(rengine);
     std::array<size_t, 5> resourceCount = config.initialResourceCount;
     std::array<size_t, 5> developmentCount = config.initialDevelopmentCount;
     bank = DoganBank(resourceCount, developmentCount);
