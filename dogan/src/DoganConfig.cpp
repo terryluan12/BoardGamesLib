@@ -60,12 +60,14 @@ std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
                 }
             }
 
+            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             std::shuffle(initialPortResources.begin(), initialPortResources.end(), rengine);
             break;
         case OrderConfiguration::EXACT:
             if(sizeDifference != 0) {
                 throw std::invalid_argument("Error: Exact Resource Configuration requires number of resources equal to board size");
             }
+            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             break;
     }
     return initialPortResources;

@@ -13,16 +13,16 @@ std::ostream &operator<< (std::ostream &os, DoganPort const &dp) {
     os << "Port " << dp.getResource() << ":\n";
 
     for(size_t i = 0; i < vertices.size(); i++) {
-        os << "  (";
+        os << "  [";
 
         const auto &vec = vertices[i];
-        for(size_t j = 0; j < vec.size()-1; j++) {
+        for(size_t j = 0; j < vec.size(); j++) {
             os << vec[j];
             if(j < vec.size() - 1) {
-                os << " ";
+                os << ", ";
             }
         }
-        os << ")\n";
+        os << "]\n";
     }
 
     return os;

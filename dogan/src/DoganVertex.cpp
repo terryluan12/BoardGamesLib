@@ -27,6 +27,6 @@ Direction DoganVertex::getDirection(void) const {
 }
 
 std::ostream &operator<< (std::ostream &os, DoganVertex const &dv) {
-    os << "Vertex " << dv.getCoordinate() << " " << dv.getDirection();
+    os << "Vertex" << dv.getCoordinate() << ": " << dv.getDirection();
     return os;
 }
