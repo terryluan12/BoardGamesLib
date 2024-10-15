@@ -1,4 +1,5 @@
 #include "DoganBoard.h"
+#include "direction.enum.h"
 #include "enums.h"
 #include <memory>
 #include <sstream>
@@ -29,28 +30,16 @@ DoganBoard::DoganBoard(DoganConfig config) {
         this->cells[c] = std::make_shared<DoganCell>(DoganCell(false, c, numbers[i], resources[i]));
         ++i;
     }
-    for (auto& [coords, cell] : this->cells) {
-        const auto [x, y] = coords;
-        std::array<std::pair<Direction, Coordinate2D>, 8> adjacentCells = {
-            std::make_pair<Direction, Coordinate2D>(Direction::NORTH, {x, y+1}),
-            std::make_pair<Direction, Coordinate2D>(Direction::NORTHEAST, {x+1, y+1}),
-            std::make_pair<Direction, Coordinate2D>(Direction::EAST, {x+1, y}),
-            std::make_pair<Direction, Coordinate2D>(Direction::SOUTHEAST, {x+1, y-1}),
-            std::make_pair<Direction, Coordinate2D>(Direction::SOUTH, {x, y-1}),
-            std::make_pair<Direction, Coordinate2D>(Direction::SOUTHWEST, {x-1, y-1}),
-            std::make_pair<Direction, Coordinate2D>(Direction::WEST, {x-1, y}),
-            std::make_pair<Direction, Coordinate2D>(Direction::NORTHWEST, {x-1, y+1})
-        };
+    for (auto& [coord, cell] : this->cells) {
         // populate cell neighbours
-        for (const auto& [d, c] : adjacentCells) {
-            auto adjEntry = this->cells.find(c);
+        for (const auto& direction : allDirections) {
+            auto adjEntry = this->cells.find(coord+directionCoordinates.at(direction));
             if (adjEntry != this->cells.end()) {
                 auto adjCell = adjEntry->second;
-                cell->addAdjacentCell(d, adjCell);
+                cell->addAdjacentCell(direction, adjCell);
             }
         }
     }
-    
     cells[config.getRobberLocation()]->setRobber(true);
 }
 
