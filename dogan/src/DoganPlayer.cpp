@@ -22,9 +22,16 @@ void DoganPlayer::giveDevelopment(DevelopmentType dt) {
   inventory.addDevelopment(dt);
 }
 
-void DoganPlayer::addCity(void) {
-  ++victoryPoints;
-  availableStructures[2] -= 1;
+void DoganPlayer::buildStructure(StructureType st) {
+  if (st == StructureType::VILLAGE || st == StructureType::CITY) {
+    ++victoryPoints;
+  }
+
+  if (availableStructures[static_cast<int>(st)] == 0) {
+    throw std::invalid_argument(
+        "Error: Player does not have enough structures");
+  }
+  availableStructures[static_cast<int>(st)] -= 1;
 }
 
 std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {

@@ -4,12 +4,12 @@
 #include "DoganVertex.h"
 #include <vector>
 
-enum class BuildingType { VILLAGE = 0, CITY = 1, ROAD = 2 };
+enum class StructureType { VILLAGE = 0, CITY = 1, ROAD = 2 };
 
-template <BuildingType T> class DoganBuilding {
+template <StructureType T> class DoganBuilding {
 public:
   DoganBuilding(int pid = -1) : playerID(pid) {
-    if (T == BuildingType::ROAD) {
+    if (T == StructureType::ROAD) {
       throw std::invalid_argument("Error: Invalid Building Type");
     }
   };
@@ -23,6 +23,7 @@ private:
 
 class DoganRoad {
 public:
+  DoganRoad(int pid = -1) : playerID(pid){};
   void addEdge(DoganEdge de, DoganCell &dc);
   void setPlayerID(int pid);
 

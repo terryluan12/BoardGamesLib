@@ -22,7 +22,7 @@ public:
   std::string getName(void) const;
   int getPlayerID(void) const;
   void giveDevelopment(DevelopmentType dt);
-  void addCity(void);
+  void buildStructure(StructureType st);
 
 private:
   std::string name;
@@ -31,8 +31,8 @@ private:
   std::array<size_t, 3> availableStructures;
   std::array<size_t, 5> resources;
   std::array<size_t, 5> developments;
-  std::vector<DoganBuilding<BuildingType::VILLAGE>> villages;
-  std::vector<DoganBuilding<BuildingType::CITY>> cities;
+  std::vector<DoganBuilding<StructureType::VILLAGE>> villages;
+  std::vector<DoganBuilding<StructureType::CITY>> cities;
   int victoryPoints;
 };
 

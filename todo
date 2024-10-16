@@ -17,3 +17,4 @@ Remove iostream where necessary, and throw specific error where relevant
 Figure out a better way to implement DoganPort other than std::vector<std::vector<DoganVertex>> 
 Fix CellInterface to have more members
 Decide if it's better to always do checks for if DoganVertex is a valid tile on the board
+Do checks if village exists when building city

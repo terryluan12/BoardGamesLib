@@ -11,8 +11,8 @@ public:
   void addPlayer(DoganPlayer p);
   void printBoard(void);
   void givePlayerDevCard(DoganPlayer p, std::array<size_t, 5> c);
-  void addCity(Coordinate2D t, Direction d, DoganPlayer p,
-               std::array<size_t, 5> c);
+  void buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
+                      StructureType st, std::array<size_t, 5> c);
 
 private:
   DoganConfig config;

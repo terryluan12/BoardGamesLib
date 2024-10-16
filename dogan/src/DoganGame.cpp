@@ -25,11 +25,11 @@ void DoganGame::givePlayerDevCard(DoganPlayer p, std::array<size_t, 5> c) {
         "card");
   }
 }
-void DoganGame::addCity(Coordinate2D t, Direction d, DoganPlayer p,
-                        std::array<size_t, 5> c) {
+void DoganGame::buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
+                               StructureType st, std::array<size_t, 5> c) {
   if (p.getInventory().canAfford(c)) {
-    board.addCity(t, d, p);
-    p.addCity();
+    board.buildStructure(t, d, p.getPlayerID(), st);
+    p.buildStructure(st);
   } else {
     throw InsufficientResourcesException(
         "Error: Player does not have enough resources to build city");

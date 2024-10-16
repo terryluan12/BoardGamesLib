@@ -42,15 +42,28 @@ DoganBoard::DoganBoard(DoganConfig config) {
   cells[config.getRobberLocation()]->setRobber(true);
 }
 
-void DoganBoard::addCity(Coordinate2D c, Direction d, DoganPlayer p) {
+void DoganBoard::buildStructure(Coordinate2D c, Direction d, int pid,
+                                StructureType st) {
   auto it = cells.find(c);
   if (it == cells.end()) {
     throw std::invalid_argument("Error: Invalid Coordinate");
   }
-  DoganBuilding db = DoganBuilding<BuildingType::CITY>(p.getPlayerID());
-  DoganVertex dv = DoganVertex(d, c);
-  db.addVertex(dv);
-  this->cities[c] = db;
+  if (st == StructureType::ROAD) {
+    DoganRoad dr = DoganRoad(pid);
+    DoganEdge de = DoganEdge(d, c);
+    dr.addEdge(de, *(it->second));
+    this->roads[c] = dr;
+  } else if (st == StructureType::VILLAGE) {
+    DoganBuilding db = DoganBuilding<StructureType::VILLAGE>(pid);
+    DoganVertex dv = DoganVertex(d, c);
+    db.addVertex(dv);
+    this->villages[c] = db;
+  } else {
+    DoganBuilding db = DoganBuilding<StructureType::CITY>(pid);
+    DoganVertex dv = DoganVertex(d, c);
+    db.addVertex(dv);
+    this->cities[c] = db;
+  }
 }
 
 Coordinate2D DoganBoard::getRobberLocation(void) const {
