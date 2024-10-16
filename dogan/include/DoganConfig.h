@@ -61,10 +61,10 @@ class DoganConfig {
         void setResourceCount(std::array<size_t, 5> rc);
         void setDevelopmentCount(std::array<size_t, 5> dc);
 
-        void setDevelopmentConfig(OrderConfiguration dc);
-        void setNumberConfig(OrderConfiguration nc);
-        void setPortResourceConfig(OrderConfiguration prc);
-        void setResourceConfig(OrderConfiguration rc);
+        void setDevelopmentConfig(Configuration dc);
+        void setNumberConfig(Configuration nc);
+        void setPortResourceConfig(Configuration prc);
+        void setResourceConfig(Configuration rc);
         
         void setDevelopmentLocations(std::vector<DevelopmentType> dl);
         void setNumberLocations(std::vector<pip> nl);
@@ -86,10 +86,10 @@ class DoganConfig {
         std::array<size_t, 5> initialDevelopmentCount;
 
         // Initial Configurations
-        OrderConfiguration initialDevelopmentConfig;
-        OrderConfiguration initialNumberConfig;
-        OrderConfiguration initialPortResourceConfig;
-        OrderConfiguration initialResourceConfig;
+        Configuration initialDevelopmentConfig;
+        Configuration initialNumberConfig;
+        Configuration initialPortResourceConfig;
+        Configuration initialResourceConfig;
 
         // Initial Locations
         std::vector<DevelopmentType> initialDevelopmentLocations;

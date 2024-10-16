@@ -4,10 +4,20 @@
 #include <random>
 
 std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
+    auto &[orderConfig, replaceConfig] = initialNumberConfig;
     std::uniform_int_distribution<pip> pipRand(1, 6);
     size_t sizeDifference = boardSize - initialNumberLocations.size();
     
-    switch(initialNumberConfig) {
+    switch(replaceConfig) {
+        case ReplaceConfiguration::DEFAULT:
+        case ReplaceConfiguration::REPLACE:
+            std::replace(initialNumberLocations.begin(), initialNumberLocations.end(), 7, pipRand(rengine));
+            break;
+        case ReplaceConfiguration::EXACT:
+            break;
+    }
+    
+    switch(orderConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
 
@@ -24,7 +34,6 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
                 }
             }
 
-            std::replace(initialNumberLocations.begin(), initialNumberLocations.end(), -1, pipRand(rengine));
             std::shuffle(initialNumberLocations.begin(), initialNumberLocations.end(), rengine);
             initialNumberLocations.insert(initialNumberLocations.begin() + robberIndex, 7);
             break;
@@ -32,18 +41,27 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
             if(sizeDifference != 0) {
                 throw std::invalid_argument("Error: Exact Number Configuration requires number of numbers equal to board size");
             }
-            std::replace(initialNumberLocations.begin(), initialNumberLocations.end(), -1, pipRand(rengine));
             break;
     }
+    
     return initialNumberLocations;
 }
 
 std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
-    std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
+    auto &[orderConfig, replaceConfig] = initialPortResourceConfig;
+    std::uniform_int_distribution<size_t> resourceRand(0, 4);
     size_t sizeDifference = initialPortLocations.size() - initialPortResources.size();
     
+    switch(replaceConfig) {
+        case ReplaceConfiguration::DEFAULT:
+        case ReplaceConfiguration::REPLACE:
+            std::replace(initialPortResources.begin(), initialPortResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
+            break;
+        case ReplaceConfiguration::EXACT:
+            break;
+    }
 
-    switch(initialResourceConfig) {
+    switch(orderConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
 
@@ -60,25 +78,32 @@ std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
                 }
             }
 
-            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             std::shuffle(initialPortResources.begin(), initialPortResources.end(), rengine);
             break;
         case OrderConfiguration::EXACT:
             if(sizeDifference != 0) {
-                throw std::invalid_argument("Error: Exact Resource Configuration requires number of resources equal to board size");
+                throw std::invalid_argument("Error: Exact Port Resource Configuration requires number of resources equal to board size");
             }
-            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             break;
     }
     return initialPortResources;
 }
 
 std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
-    std::uniform_int_distribution<uint32_t> resourceRand(0, 4);
+    auto &[orderConfig, replaceConfig] = initialResourceConfig;
+    std::uniform_int_distribution<size_t> resourceRand(0, 4);
     size_t sizeDifference = boardSize - initialResources.size();
 
+    switch(replaceConfig) {
+        case ReplaceConfiguration::DEFAULT:
+        case ReplaceConfiguration::REPLACE:
+            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
+            break;
+        case ReplaceConfiguration::EXACT:
+            break;
+    }
 
-    switch(initialResourceConfig) {
+    switch(orderConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
         
@@ -95,25 +120,37 @@ std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
                     }
                 }
             }
-            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
             std::shuffle(initialResources.begin(), initialResources.end(), rengine);
             initialResources.insert(initialResources.begin() + robberIndex, ResourceType::OTHER);
             break;
         case OrderConfiguration::EXACT:
-            std::replace(initialResources.begin(), initialResources.end(), ResourceType::OTHER, static_cast<ResourceType>(resourceRand(rengine)));
+            if(sizeDifference != 0) {
+                throw std::invalid_argument("Error: Exact Resource Configuration requires number of resources equal to board size");
+            }
             break;
     }
     return initialResources;
 }
 
 std::vector<DevelopmentType> DoganConfig::getDevelopments(std::mt19937 rengine) {
+    auto &[orderConfig, replaceConfig] = initialDevelopmentConfig;
+    std::uniform_int_distribution<size_t> developRand(0, 5);
     std::array<size_t, 5> sizeDifferences{initialDevelopmentCount};
+
+    switch(replaceConfig) {
+        case ReplaceConfiguration::DEFAULT:
+        case ReplaceConfiguration::REPLACE:
+            std::replace(initialDevelopmentLocations.begin(), initialDevelopmentLocations.end(), DevelopmentType::OTHER, static_cast<DevelopmentType>(developRand(rengine)));
+            break;
+        case ReplaceConfiguration::EXACT:
+            break;
+    }
+
+    bool allZero = true;
     for(auto &d : initialDevelopmentLocations) {
         sizeDifferences[static_cast<int>(d)] -= 1;
     }
-    
-    bool allZero = true;
-    switch(initialDevelopmentConfig) {
+    switch(orderConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
             for(size_t i = 0; i < sizeDifferences.size(); i++) {
@@ -140,6 +177,11 @@ std::vector<DevelopmentType> DoganConfig::getDevelopments(std::mt19937 rengine) 
             std::shuffle(initialDevelopmentLocations.begin(), initialDevelopmentLocations.end(), rengine);
             break;
         case OrderConfiguration::EXACT:
+            for(size_t i = 0; i < sizeDifferences.size(); i++) {
+                if(sizeDifferences[i] != 0) {
+                    throw std::invalid_argument("Error: Exact Development Configuration requires number of development cards equal to board size");
+                }
+            }
             break;
     }
     return initialDevelopmentLocations;
@@ -222,19 +264,19 @@ void DoganConfig::setDevelopmentCount(std::array<size_t, 5> dc) {
     initialDevelopmentCount = dc;
 }
 
-void DoganConfig::setDevelopmentConfig(OrderConfiguration dc) {
+void DoganConfig::setDevelopmentConfig(Configuration dc) {
     initialDevelopmentConfig = dc;
 }
 
-void DoganConfig::setNumberConfig(OrderConfiguration nc) {
+void DoganConfig::setNumberConfig(Configuration nc) {
     initialNumberConfig = nc;
 }
 
-void DoganConfig::setPortResourceConfig(OrderConfiguration prc) {
+void DoganConfig::setPortResourceConfig(Configuration prc) {
     initialPortResourceConfig = prc;
 }
 
-void DoganConfig::setResourceConfig(OrderConfiguration rc) {
+void DoganConfig::setResourceConfig(Configuration rc) {
     initialResourceConfig = rc;
 }
 

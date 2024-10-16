@@ -18,6 +18,7 @@ enum class DevelopmentType {
     SOLDIER = 2,
     BUILDROAD = 3,
     TAKETWO = 4,
+    OTHER = 5
 };
 
 using Direction = HexagonalDirection::Direction;

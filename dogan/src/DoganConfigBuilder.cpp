@@ -35,22 +35,22 @@ DoganConfigBuilder& DoganConfigBuilder::setDevelopmentCount(std::array<size_t, 5
     return *this;
 }
 
-DoganConfigBuilder& DoganConfigBuilder::setDevelopmentConfig(OrderConfiguration dc) {
+DoganConfigBuilder& DoganConfigBuilder::setDevelopmentConfig(Configuration dc) {
     config.setDevelopmentConfig(dc);
     return *this;
 }
 
-DoganConfigBuilder& DoganConfigBuilder::setNumberConfig(OrderConfiguration nc) {
+DoganConfigBuilder& DoganConfigBuilder::setNumberConfig(Configuration nc) {
     config.setNumberConfig(nc);
     return *this;
 }
 
-DoganConfigBuilder& DoganConfigBuilder::setPortResourceConfig(OrderConfiguration prc) {
+DoganConfigBuilder& DoganConfigBuilder::setPortResourceConfig(Configuration prc) {
     config.setPortResourceConfig(prc);
     return *this;
 }
 
-DoganConfigBuilder& DoganConfigBuilder::setResourceConfig(OrderConfiguration rc) {
+DoganConfigBuilder& DoganConfigBuilder::setResourceConfig(Configuration rc) {
     config.setResourceConfig(rc);
     return *this;
 }

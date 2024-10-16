@@ -40,6 +40,9 @@ std::ostream &operator<< (std::ostream &os, DevelopmentType const &dt) {
         case DevelopmentType::TAKETWO:
             os << "Take Two";
             break;
+        case DevelopmentType::OTHER:
+            os << "Other";
+            break;
     }
     return os;
 }

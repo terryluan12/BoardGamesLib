@@ -25,10 +25,10 @@ namespace configDefault {
     inline const std::array<size_t, 5> initialDevelopmentCount = {5, 2, 2, 2, 2};
 
     // Default Configurations
-    inline const OrderConfiguration initialNumberConfig = OrderConfiguration::DEFAULT;
-    inline const OrderConfiguration initialPortResourceConfig = OrderConfiguration::DEFAULT;
-    inline const OrderConfiguration initialResourceConfig = OrderConfiguration::DEFAULT;
-    inline const OrderConfiguration initialDevelopmentConfig = OrderConfiguration::DEFAULT;
+    inline const Configuration initialNumberConfig = {OrderConfiguration::DEFAULT, ReplaceConfiguration::DEFAULT};
+    inline const Configuration initialPortResourceConfig = {OrderConfiguration::DEFAULT, ReplaceConfiguration::DEFAULT};;
+    inline const Configuration initialResourceConfig = {OrderConfiguration::DEFAULT, ReplaceConfiguration::DEFAULT};;
+    inline const Configuration initialDevelopmentConfig = {OrderConfiguration::DEFAULT, ReplaceConfiguration::DEFAULT};;
 
     // Default Locations
     inline const std::vector<DevelopmentType> initialDevelopmentLocations = {

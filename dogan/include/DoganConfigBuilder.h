@@ -13,10 +13,10 @@ public:
     DoganConfigBuilder& setTileLocations(const std::vector<Coordinate2D>& tl);
     DoganConfigBuilder& setResourceCount(std::array<size_t, 5> rc);
     DoganConfigBuilder& setDevelopmentCount(std::array<size_t, 5> dc);
-    DoganConfigBuilder& setDevelopmentConfig(OrderConfiguration dc);
-    DoganConfigBuilder& setNumberConfig(OrderConfiguration nc);
-    DoganConfigBuilder& setPortResourceConfig(OrderConfiguration prc);
-    DoganConfigBuilder& setResourceConfig(OrderConfiguration rc);
+    DoganConfigBuilder& setDevelopmentConfig(Configuration dc);
+    DoganConfigBuilder& setNumberConfig(Configuration nc);
+    DoganConfigBuilder& setPortResourceConfig(Configuration prc);
+    DoganConfigBuilder& setResourceConfig(Configuration rc);
     DoganConfigBuilder& setDevelopmentLocations(const std::vector<DevelopmentType>& dl);
     DoganConfigBuilder& setNumberLocations(const std::vector<int>& nl);
     DoganConfigBuilder& setPortLocations(const std::vector<std::vector<DoganVertex>>& pl);
