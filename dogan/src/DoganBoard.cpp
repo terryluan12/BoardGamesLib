@@ -1,5 +1,4 @@
 #include "DoganBoard.h"
-#include "direction.enum.h"
 #include "enums.h"
 #include <memory>
 #include <sstream>
@@ -33,8 +32,8 @@ DoganBoard::DoganBoard(DoganConfig config) {
     }
     for (auto& [coord, cell] : this->cells) {
         // populate cell neighbours
-        for (const auto& direction : allDirections) {
-            auto adjEntry = this->cells.find(coord+directionCoordinates.at(direction));
+        for (const auto& direction : HexagonalDirection::getAllDirections()) {
+            auto adjEntry = this->cells.find(coord + HexagonalDirection::toCoordinate(direction));
             if (adjEntry != this->cells.end()) {
                 auto adjCell = adjEntry->second;
                 cell->addAdjacentCell(direction, adjCell);

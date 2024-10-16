@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Coordinate.h"
-#include "direction.enum.h"
 #include "DoganCell.h"
+#include "enums.h"
 #include <vector>
 
 class DoganEdge {

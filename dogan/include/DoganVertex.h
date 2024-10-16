@@ -2,7 +2,7 @@
 
 #include "Coordinate.h"
 #include "DoganCell.h"
-#include "direction.enum.h"
+#include "enums.h"
 
 class DoganVertex {
     public:

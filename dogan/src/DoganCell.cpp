@@ -9,10 +9,10 @@ DoganCell::DoganCell(bool cr, Coordinate2D c, int n, ResourceType t)
     if(!didInsert) {
         throw std::invalid_argument("Error: Cell already exists");
     }
-    for (auto &d : vertexDirections ) {
+    for (auto &d : HexagonalDirection::getVertexDirections() ) {
         vertices.emplace(d, std::make_shared<DoganVertex>(DoganVertex(d, coordinate)));
     }
-    for (auto &e : edgeDirections ) {
+    for (auto &e : HexagonalDirection::getEdgeDirections() ) {
         edges.emplace(e, std::make_shared<DoganEdge>(DoganEdge(e, coordinate)));
     }
 }

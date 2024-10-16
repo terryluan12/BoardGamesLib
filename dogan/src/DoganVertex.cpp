@@ -9,12 +9,12 @@ DoganVertex::DoganVertex(Direction d, Coordinate2D c): direction(d), coordinate(
 
 std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
     std::vector<DoganVertex> corrVertices;
-    auto [d1, d2] = getComplementDirections(direction);
-    Direction dc1Dir = (direction == Direction::NORTH || direction == Direction::SOUTH) ? getOppositeDirection(d1) : direction;
-    Direction dc2Dir = getOppositeDirection(d2);
+    auto [d1, d2] = HexagonalDirection::getComplementaryDirections(direction);
+    Direction dc1Dir = (direction == Direction::NORTH || direction == Direction::SOUTH) ? HexagonalDirection::getOppositeDirection(d1) : direction;
+    Direction dc2Dir = HexagonalDirection::getOppositeDirection(d2);
     
-    corrVertices.emplace_back(DoganVertex(d1, this->coordinate + directionCoordinates.at(dc1Dir)));
-    corrVertices.emplace_back(DoganVertex(d2, this->coordinate + directionCoordinates.at(dc2Dir)));
+    corrVertices.emplace_back(DoganVertex(d1, this->coordinate + HexagonalDirection::toCoordinate(dc1Dir)));
+    corrVertices.emplace_back(DoganVertex(d2, this->coordinate + HexagonalDirection::toCoordinate(dc2Dir)));
     return corrVertices;
 }
 

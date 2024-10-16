@@ -5,7 +5,6 @@
 #include "DoganEdge.h"
 #include "DoganVertex.h"
 #include "enums.h"
-#include "direction.enum.h"
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>

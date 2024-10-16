@@ -12,7 +12,7 @@ std::vector<DoganEdge> DoganEdge::getCorrespondingEdge(DoganCell &dc) {
     std::vector<DoganEdge> corrEdge;
     if(dc.hasAdjacentCell(direction)){
         auto dc1 = dc.getAdjacentCell(direction);
-        corrEdge.emplace_back(getOppositeDirection(direction), dc1->getCoordinate());
+        corrEdge.emplace_back(HexagonalDirection::getOppositeDirection(direction), dc1->getCoordinate());
     }
     return corrEdge;
 }
