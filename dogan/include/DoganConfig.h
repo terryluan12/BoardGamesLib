@@ -18,9 +18,11 @@ class DoganConfig {
                     parity(configDefault::parity),
                     initialResourceCount(configDefault::initialResourceCount),
                     initialDevelopmentCount(configDefault::initialDevelopmentCount),
+                    initialDevelopmentConfig(configDefault::initialDevelopmentConfig),
                     initialNumberConfig(configDefault::initialNumberConfig),
                     initialPortResourceConfig(configDefault::initialPortResourceConfig),
                     initialResourceConfig(configDefault::initialResourceConfig),
+                    initialDevelopmentLocations(configDefault::initialDevelopmentLocations),
                     initialNumberLocations(configDefault::initialNumberLocations),
                     initialPortLocations(configDefault::initialPortLocations),
                     initialRobberLocation(configDefault::initialRobberLocation),
@@ -38,6 +40,7 @@ class DoganConfig {
         std::vector<ResourceType> getPortResources(std::mt19937 rengine);
         std::vector<ResourceType> getResources(std::mt19937 rengine);
         std::vector<DoganPort> getPorts(std::mt19937 rengine);
+        std::vector<DevelopmentType> getDevelopments(std::mt19937 rengine);
 
         // Getters
         size_t getBoardSize(void) const;
@@ -46,7 +49,6 @@ class DoganConfig {
         Coordinate2D getRobberLocation(void) const;
         const std::vector<Coordinate2D> getTileLocations(void) const;
         const std::array<size_t, 5> getResourceCount(void) const;
-        const std::array<size_t, 5> getDevelopmentCount(void) const;
 
         // Setters
         void setBoardSize(size_t s);
@@ -55,10 +57,12 @@ class DoganConfig {
         void setResourceCount(std::array<size_t, 5> rc);
         void setDevelopmentCount(std::array<size_t, 5> dc);
 
+        void setDevelopmentConfig(OrderConfiguration dc);
         void setNumberConfig(OrderConfiguration nc);
         void setPortResourceConfig(OrderConfiguration prc);
         void setResourceConfig(OrderConfiguration rc);
         
+        void setDevelopmentLocations(std::vector<DevelopmentType> dl);
         void setNumberLocations(std::vector<pip> nl);
         void setPortLocations(std::vector<std::vector<DoganVertex>> pl);
         void setRobberLocation(Coordinate2D irl);
@@ -77,11 +81,13 @@ class DoganConfig {
         std::array<size_t, 5> initialDevelopmentCount;
 
         // Initial Configurations
+        OrderConfiguration initialDevelopmentConfig;
         OrderConfiguration initialNumberConfig;
         OrderConfiguration initialPortResourceConfig;
         OrderConfiguration initialResourceConfig;
 
         // Initial Locations
+        std::vector<DevelopmentType> initialDevelopmentLocations;
         std::vector<pip> initialNumberLocations;
         std::vector<std::vector<DoganVertex>> initialPortLocations;
         Coordinate2D initialRobberLocation;

@@ -106,6 +106,19 @@ std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
     return initialResources;
 }
 
+std::vector<DevelopmentType> DoganConfig::getDevelopments(std::mt19937 rengine) {
+
+    switch(initialDevelopmentConfig) {
+        case OrderConfiguration::DEFAULT:
+        case OrderConfiguration::SHUFFLE:
+            std::shuffle(initialDevelopmentLocations.begin(), initialDevelopmentLocations.end(), rengine);
+            break;
+        case OrderConfiguration::EXACT:
+            break;
+    }
+    return initialDevelopmentLocations;
+}
+
 std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
     std::vector<DoganPort> ports;
     std::vector<ResourceType> portConfiguration = getPortResources(rengine);
@@ -153,10 +166,6 @@ const std::array<size_t, 5> DoganConfig::getResourceCount(void) const {
     return initialResourceCount;
 }
 
-const std::array<size_t, 5> DoganConfig::getDevelopmentCount(void) const {
-    return initialDevelopmentCount;
-}
-
 // Setters
 
 void DoganConfig::setBoardSize(size_t s) {
@@ -175,6 +184,10 @@ void DoganConfig::setDevelopmentCount(std::array<size_t, 5> dc) {
     initialDevelopmentCount = dc;
 }
 
+void DoganConfig::setDevelopmentConfig(OrderConfiguration dc) {
+    initialDevelopmentConfig = dc;
+}
+
 void DoganConfig::setNumberConfig(OrderConfiguration nc) {
     initialNumberConfig = nc;
 }
@@ -185,6 +198,10 @@ void DoganConfig::setPortResourceConfig(OrderConfiguration prc) {
 
 void DoganConfig::setResourceConfig(OrderConfiguration rc) {
     initialResourceConfig = rc;
+}
+
+void DoganConfig::setDevelopmentLocations(std::vector<DevelopmentType> dl) {
+    initialDevelopmentLocations = dl;
 }
 
 void DoganConfig::setNumberLocations(std::vector<pip> nl) {

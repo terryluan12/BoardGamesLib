@@ -20,9 +20,6 @@ DoganBoard::DoganBoard(DoganConfig config) {
     this->ports = config.getPorts(rengine);
     std::vector<pip> numbers = config.getNumbers(rengine);
     std::vector<ResourceType> resources = config.getResources(rengine);
-    std::array<size_t, 5> resourceCount = config.getResourceCount();
-    std::array<size_t, 5> developmentCount = config.getDevelopmentCount();
-    bank = DoganBank(resourceCount, developmentCount);
 
     // create all tiles
     size_t i = 0;
@@ -47,10 +44,6 @@ Coordinate2D DoganBoard::getRobberLocation(void) const {
     return robberLocation;
 }
 
-const DoganBank DoganBoard::getBank(void) const {
-    return bank;
-}
-
 size_t DoganBoard::getBoardSize(void) const {
     return boardSize;
 }
@@ -64,7 +57,7 @@ const std::vector<DoganPort> DoganBoard::getPorts(void) const {
 }
 
 
-bool DoganBoard::hasVertex(const Coordinate2D c) const {
+bool DoganBoard::hasTile(const Coordinate2D c) const {
     return cells.find(c) != cells.end();
 }
 
@@ -87,6 +80,5 @@ std::ostream &operator<< (std::ostream &os, DoganBoard const &db) {
         os << pl;
         ++i;
     }
-    os << db.getBank();
     return os;
 }

@@ -7,27 +7,31 @@
 class DoganBank {
     public:
         DoganBank(void) : resources({0, 0, 0, 0, 0}){};
-        DoganBank(std::array<size_t, 5> r, std::array<size_t, 5> d) : resources(r), developments(d){};
+        DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d) : resources(r), developments(d){};
 
         // Resource Functions
         void addResource(const ResourceType r, const int n);
+        void addResources(const std::array<size_t, 5> r);
         size_t getResourceCount(const ResourceType r) const;
-        const std::array<size_t, 5> getResources(void) const;
+        const std::array<size_t, 5> getTotalResources(void) const;
         void setResources(const std::array<size_t, 5> r);
         void removeResource(const ResourceType r, const int n);
+        void removeResources(const std::array<size_t, 5> r);
+        bool canAfford(const std::array<size_t, 5> r);
 
         // Development Functions
         void addDevelopment(const DevelopmentType d);
         size_t getDevelopmentCount(const DevelopmentType d) const;
-        const std::array<size_t, 5> getDevelopments(void) const;
-        void setDevelopments(const std::array<size_t, 5> d);
-        void removeDevelopment(const DevelopmentType d);
+        const std::array<size_t, 5> getTotalDevelopments(void) const;
+        void setDevelopments(const std::vector<DevelopmentType> d);
+        DevelopmentType popDevelopment(void);
 
         // Other Functions
         const std::array<size_t, 10> getFullCount(void) const;
     private:
         std::array<size_t, 5> resources;
-        std::array<size_t, 5> developments;
+        std::vector<DevelopmentType> developments;
+        std::array<size_t, 5> developmentCount;
 };
 
 std::ostream &operator<< (std::ostream &os, DoganBank const &d);

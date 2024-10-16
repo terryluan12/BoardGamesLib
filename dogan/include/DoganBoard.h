@@ -5,7 +5,9 @@
 #include "DoganBank.h"
 #include "DoganCell.h"
 #include "DoganConfig.h"
+#include "DoganPlayer.h"
 #include "DoganPort.h"
+#include "DoganRoad.h"
 #include "DoganVertex.h"
 #include <random>
 
@@ -20,11 +22,10 @@ class DoganBoard : public BoardInterface<100> {
         size_t getBoardSize(void) const override;
         void setBoardSize(size_t bs) override;
         Coordinate2D getRobberLocation(void) const;
-        bool hasVertex(const Coordinate2D c) const;
+        bool hasTile(const Coordinate2D c) const;
     private:
         size_t boardSize;
         Coordinate2D robberLocation;
-        DoganBank bank;
         std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
         std::vector<DoganPort> ports;
         std::mt19937 rengine;

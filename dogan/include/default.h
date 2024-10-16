@@ -27,8 +27,16 @@ namespace configDefault {
     inline const OrderConfiguration initialNumberConfig = OrderConfiguration::DEFAULT;
     inline const OrderConfiguration initialPortResourceConfig = OrderConfiguration::DEFAULT;
     inline const OrderConfiguration initialResourceConfig = OrderConfiguration::DEFAULT;
+    inline const OrderConfiguration initialDevelopmentConfig = OrderConfiguration::DEFAULT;
 
     // Default Locations
+    inline const std::vector<DevelopmentType> initialDevelopmentLocations = {
+                                                                            DevelopmentType::VICPOINT, DevelopmentType::VICPOINT, DevelopmentType::VICPOINT, DevelopmentType::VICPOINT, DevelopmentType::VICPOINT, 
+                                                                            DevelopmentType::MONOPOLY, DevelopmentType::MONOPOLY, 
+                                                                            DevelopmentType::SOLDIER, DevelopmentType::SOLDIER, 
+                                                                            DevelopmentType::BUILDROAD, DevelopmentType::BUILDROAD,
+                                                                            DevelopmentType::TAKETWO, DevelopmentType::TAKETWO
+                                                                            };
     inline const std::vector<pip> initialNumberLocations = {2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12};
 
     inline std::vector<std::vector<DoganVertex>> initialPortLocations =    {
