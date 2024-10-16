@@ -1,4 +1,13 @@
 #include "DoganBank.h"
+#include <iostream>
+
+DoganBank::DoganBank(void) : resources({0, 0, 0, 0, 0}), developments({}), developmentCount({0, 0, 0, 0, 0}) {}
+
+DoganBank::DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d) : resources(r), developments(d), developmentCount({0, 0, 0, 0, 0}) {
+    for(auto dev : d) {
+        developmentCount[static_cast<int>(dev)] += 1;
+    }
+}
 
 // Resource Functions
 void DoganBank::addResource(const ResourceType r, const int n) {

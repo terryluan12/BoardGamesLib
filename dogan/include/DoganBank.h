@@ -6,8 +6,8 @@
 
 class DoganBank {
     public:
-        DoganBank(void) : resources({0, 0, 0, 0, 0}){};
-        DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d) : resources(r), developments(d){};
+        DoganBank(void);
+        DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d);
 
         // Resource Functions
         void addResource(const ResourceType r, const int n);
