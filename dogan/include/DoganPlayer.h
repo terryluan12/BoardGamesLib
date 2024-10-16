@@ -2,7 +2,7 @@
 
 #include "enums.h"
 #include "DoganBank.h"
-#include "DoganBuilding.h"
+#include "DoganStructure.h"
 #include <array>
 
 class DoganPlayer {

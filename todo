@@ -20,4 +20,3 @@ Fix CellInterface to have more members
 Replace Tuples with Arrays where relevant
 Decide if it's better to always do checks for if DoganVertex is a valid tile on the board
 Separate out replacement of enum::OTHER's in configs
-Combine DoganBuilding and DoganRoad into DoganStructure file

@@ -1,3 +1,4 @@
+#include "DoganStructure.h"
 
 template <BuildingType T>
 void DoganBuilding<T>::addVertex(DoganVertex &dv) {

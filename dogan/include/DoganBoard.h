@@ -7,7 +7,7 @@
 #include "DoganConfig.h"
 #include "DoganPlayer.h"
 #include "DoganPort.h"
-#include "DoganRoad.h"
+#include "DoganStructure.h"
 #include "DoganVertex.h"
 #include <random>
 
