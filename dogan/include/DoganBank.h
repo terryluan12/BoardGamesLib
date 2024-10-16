@@ -24,7 +24,7 @@ class DoganBank {
         void removeDevelopment(const DevelopmentType d);
 
         // Other Functions
-        const std::array<size_t, 10> getHand(void) const;
+        const std::array<size_t, 10> getFullCount(void) const;
     private:
         std::array<size_t, 5> resources;
         std::array<size_t, 5> developments;

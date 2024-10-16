@@ -41,6 +41,8 @@ const Coordinate2D HexagonalDirection::toCoordinate(Direction d) {
             return {-1, 0};
         case Direction::NORTHWEST:
             return {-1, 1};
+        default:
+            throw std::invalid_argument("Error: Invalid Direction");
     }
 }
 

@@ -34,14 +34,6 @@ void DoganBank::removeDevelopment(const DevelopmentType d) {
     developments[static_cast<int>(d)] -= 1;
 }
 
-// Other Functions
-const std::array<size_t, 10> DoganBank::getHand(void) const {
-    std::array<size_t, 10> hand;
-    std::copy(resources.begin(), resources.end(), hand.begin());
-    std::copy(developments.begin(), developments.end(), hand.begin() + 5);
-    return hand;
-}
-
 std::ostream &operator<< (std::ostream &os, DoganBank const &d) {
     os << "Bank:\n" << "  Resource Cards:\n";
     for(size_t i = 0; i < 5; i++) {
