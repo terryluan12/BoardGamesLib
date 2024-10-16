@@ -51,7 +51,8 @@ class DoganConfig {
         Coordinate2D getRobberLocation(void) const;
         const std::vector<Coordinate2D> getTileLocations(void) const;
         const std::array<size_t, 5> getResourceCount(void) const;
-
+        const std::array<size_t, 5> getDevelopmentCount(void) const;
+        
         // Setters
         void setBoardSize(size_t s);
         void setParity(Parity p);

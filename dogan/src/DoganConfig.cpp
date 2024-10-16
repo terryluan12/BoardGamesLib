@@ -107,10 +107,36 @@ std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
 }
 
 std::vector<DevelopmentType> DoganConfig::getDevelopments(std::mt19937 rengine) {
-
+    std::array<size_t, 5> sizeDifferences{initialDevelopmentCount};
+    for(auto &d : initialDevelopmentLocations) {
+        sizeDifferences[static_cast<int>(d)] -= 1;
+    }
+    
+    bool allZero = true;
     switch(initialDevelopmentConfig) {
         case OrderConfiguration::DEFAULT:
         case OrderConfiguration::SHUFFLE:
+            for(size_t i = 0; i < sizeDifferences.size(); i++) {
+                if(sizeDifferences[i] != 0) {
+                    allZero = false;
+                }
+                else if(sizeDifferences[i] > 0 ) {
+                    for(size_t j = 0; j < sizeDifferences[i]; j++) {
+                        initialDevelopmentLocations.push_back(static_cast<DevelopmentType>(i));
+                    }
+                }
+                else {
+                    for(size_t j = 0; j < sizeDifferences[i]; j++) {
+                        initialDevelopmentLocations.erase(std::find(initialDevelopmentLocations.begin(), initialDevelopmentLocations.end(), static_cast<DevelopmentType>(i)));
+                    }
+                }
+
+            }
+            if(!allZero) {
+                std::cerr   << "WARNING: Development Card Locations does not match "
+                                << "initial development card count given."
+                                << "If this is not intended, please fix this\n";
+            }
             std::shuffle(initialDevelopmentLocations.begin(), initialDevelopmentLocations.end(), rengine);
             break;
         case OrderConfiguration::EXACT:
@@ -169,6 +195,10 @@ const std::vector<Coordinate2D> DoganConfig::getTileLocations(void) const {
 const std::array<size_t, 5> DoganConfig::getResourceCount(void) const {
     return initialResourceCount;
 }
+const std::array<size_t, 5> DoganConfig::getDevelopmentCount(void) const {
+    return initialDevelopmentCount;
+}
+
 
 // Setters
 
