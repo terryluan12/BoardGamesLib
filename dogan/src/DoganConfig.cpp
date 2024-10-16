@@ -154,6 +154,10 @@ Parity DoganConfig::getParity(void) const {
     return parity;
 }
 
+std::array<size_t, 3> DoganConfig::getTotalStructureCount(void) const {
+    return totalStructureCount;
+}
+
 Coordinate2D DoganConfig::getRobberLocation(void) const {
     return initialRobberLocation;
 }
@@ -174,6 +178,10 @@ void DoganConfig::setBoardSize(size_t s) {
 
 void DoganConfig::setParity(Parity p) {
     parity = p;
+}
+
+void DoganConfig::setTotalStructureCount(std::array<size_t, 3> tsc) {
+    totalStructureCount = tsc;
 }
 
 void DoganConfig::setResourceCount(std::array<size_t, 5> rc) {

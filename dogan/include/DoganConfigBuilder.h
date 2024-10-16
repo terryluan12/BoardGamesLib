@@ -9,6 +9,7 @@ public:
     DoganConfigBuilder& setBoardSize(size_t s);
     DoganConfigBuilder& setParity(Parity p);
     DoganConfigBuilder& setRobberLocation(Coordinate2D irl);
+    DoganConfigBuilder& setTotalStructureCount(std::array<size_t, 3> tsc);
     DoganConfigBuilder& setTileLocations(const std::vector<Coordinate2D>& tl);
     DoganConfigBuilder& setResourceCount(std::array<size_t, 5> rc);
     DoganConfigBuilder& setDevelopmentCount(std::array<size_t, 5> dc);

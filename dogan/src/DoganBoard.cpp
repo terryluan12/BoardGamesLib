@@ -40,6 +40,18 @@ DoganBoard::DoganBoard(DoganConfig config) {
     cells[config.getRobberLocation()]->setRobber(true);
 }
 
+
+void DoganBoard::addCity(Coordinate2D c, Direction d, DoganPlayer p) {
+    auto it = cells.find(c);
+    if(it == cells.end()) {
+        throw std::invalid_argument("Error: Invalid Coordinate");
+    }
+    DoganBuilding db = DoganBuilding<BuildingType::CITY>(p.getPlayerID());
+    DoganVertex dv = DoganVertex(d, c);
+    db.addVertex(dv);
+    this->cities[c] = db;
+}
+
 Coordinate2D DoganBoard::getRobberLocation(void) const {
     return robberLocation;
 }

@@ -9,14 +9,16 @@ enum class BuildingType {
     CITY
 };
 
+template <BuildingType T>
 class DoganBuilding {
-    public: 
+    public:
+        DoganBuilding(int pid=-1) : playerID(pid) {};
         void addVertex(DoganVertex &dv);
-        void setType(BuildingType t);
         void setPlayerID(int pid);
     private:
         int playerID;
-        BuildingType buildingType;
         std::vector<DoganVertex> vertices;
 
 };
+
+#include "DoganBuilding.tpp"

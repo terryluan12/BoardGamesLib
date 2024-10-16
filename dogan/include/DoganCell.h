@@ -23,8 +23,6 @@ class DoganCell : public CellInterface {
         void setRobber(bool robber);
         bool hasAdjacentCell(Direction d) const;
     private:
-        std::vector<std::shared_ptr<class DoganBuilding>> buildings;
-        std::vector<std::shared_ptr<class DoganRoad>> roads;
         std::unordered_map<Direction, std::shared_ptr<class DoganCell>> adjacentCells;
         std::unordered_map<Direction, std::shared_ptr<class DoganEdge>> edges;
         std::unordered_map<Direction, std::shared_ptr<class DoganVertex>> vertices;

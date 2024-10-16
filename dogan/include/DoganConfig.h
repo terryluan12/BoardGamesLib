@@ -16,6 +16,7 @@ class DoganConfig {
         DoganConfig(void) : 
                     boardSize(configDefault::initialTileLocations.size()), 
                     parity(configDefault::parity),
+                    totalStructureCount(configDefault::totalStructureCount),
                     initialResourceCount(configDefault::initialResourceCount),
                     initialDevelopmentCount(configDefault::initialDevelopmentCount),
                     initialDevelopmentConfig(configDefault::initialDevelopmentConfig),
@@ -45,6 +46,7 @@ class DoganConfig {
         // Getters
         size_t getBoardSize(void) const;
         Parity getParity(void) const;
+        std::array<size_t, 3> getTotalStructureCount(void) const;
 
         Coordinate2D getRobberLocation(void) const;
         const std::vector<Coordinate2D> getTileLocations(void) const;
@@ -53,6 +55,7 @@ class DoganConfig {
         // Setters
         void setBoardSize(size_t s);
         void setParity(Parity p);
+        void setTotalStructureCount(std::array<size_t, 3> tsc);
 
         void setResourceCount(std::array<size_t, 5> rc);
         void setDevelopmentCount(std::array<size_t, 5> dc);
@@ -75,6 +78,7 @@ class DoganConfig {
     
         size_t boardSize;
         Parity parity; // Parity + Coordinate System is based on https://www.redblobgames.com/grids/hexagons/
+        std::array<size_t, 3> totalStructureCount; // {Villages, Cities, Roads}
         
         // Initial Counts
         std::array<size_t, 5> initialResourceCount;

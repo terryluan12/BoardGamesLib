@@ -9,6 +9,7 @@
 namespace configDefault {
 
     inline const Parity parity = Parity::ODD;
+    inline const std::array<size_t, 3> totalStructureCount = {5, 4, 15};
     inline const Coordinate2D initialRobberLocation = {2, 2};
 
     inline const std::vector<Coordinate2D> initialTileLocations = { 

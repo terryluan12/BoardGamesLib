@@ -16,6 +16,7 @@ class DoganBoard : public BoardInterface<100> {
         DoganBoard(DoganConfig config);
         ~DoganBoard(void) {};
         DoganCell &operator [](const Coordinate2D i) override;
+        void addCity(Coordinate2D c, Direction d, DoganPlayer p);
         const DoganBank getBank(void) const;
         const std::map<Coordinate2D, std::shared_ptr<DoganCell>> getBoard(void) const;
         const std::vector<DoganPort> getPorts(void) const;
@@ -27,6 +28,9 @@ class DoganBoard : public BoardInterface<100> {
         size_t boardSize;
         Coordinate2D robberLocation;
         std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
+        std::map<Coordinate2D, DoganBuilding<BuildingType::VILLAGE>> villages; 
+        std::map<Coordinate2D, DoganBuilding<BuildingType::CITY>> cities;
+        std::map<Coordinate2D, DoganRoad> roads;
         std::vector<DoganPort> ports;
         std::mt19937 rengine;
 };

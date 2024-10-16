@@ -15,6 +15,11 @@ DoganConfigBuilder& DoganConfigBuilder::setRobberLocation(Coordinate2D irl) {
     return *this;
 }
 
+DoganConfigBuilder& DoganConfigBuilder::setTotalStructureCount(std::array<size_t, 3> tsc) {
+    config.setTotalStructureCount(tsc);
+    return *this;
+}
+
 DoganConfigBuilder& DoganConfigBuilder::setTileLocations(const std::vector<Coordinate2D>& tl) {
     config.setTileLocations(tl);
     return *this;
