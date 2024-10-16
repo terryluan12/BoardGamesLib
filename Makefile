@@ -13,8 +13,12 @@ DOGAN_BUILD_DIR=build/dogan
 
 DOGAN_SRCS=$(wildcard $(DOGAN_SRC_DIR)/*.cpp)
 GEN_SRCS=$(wildcard $(GEN_SRC_DIR)/*.cpp)
+
 DOGAN_OBJS=$(patsubst $(DOGAN_SRC_DIR)/%.cpp, $(DOGAN_BUILD_DIR)/%.o, $(DOGAN_SRCS))
 GEN_OBJS=$(patsubst $(GEN_SRC_DIR)/%.cpp, $(GEN_BUILD_DIR)/%.o, $(GEN_SRCS))
+
+DOGAN_HEADERS = $(wildcard $(DOGAN_INCLUDE_DIR)/*.h)
+GENERAL_HEADERS = $(wildcard $(GEN_INCLUDE_DIR)/*.h)
 
 DOGAN_TARGET=dogan.exe
 
@@ -37,5 +41,8 @@ $(GEN_BUILD_DIR)/%.o: $(GEN_SRC_DIR)/%.cpp  | $(GEN_BUILD_DIR)
 
 clean: 
 	$(RM) $(DOGAN_OBJS) $(GEN_OBJS) $(DOGAN_TARGET)
+
+format:
+	clang-format -i $(DOGAN_SRCS) $(GEN_SRCS) $(DOGAN_HEADERS) $(GENERAL_HEADERS)
 
 .PHONY: all clean

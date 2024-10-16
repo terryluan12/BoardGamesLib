@@ -1,17 +1,19 @@
 #pragma once
 
-#include "enums.h"
 #include "DoganVertex.h"
+#include "enums.h"
 #include <utility>
 
 class DoganPort {
-    public:
-        DoganPort(ResourceType r, std::vector<std::vector<DoganVertex>> v) : resource(r), vertices(v) {};
-        const std::vector<std::vector<DoganVertex>> getVertices(void) const;
-        const ResourceType getResource(void) const;
-    private:
-        ResourceType resource;
-        std::vector<std::vector<DoganVertex>> vertices;
+public:
+  DoganPort(ResourceType r, std::vector<std::vector<DoganVertex>> v)
+      : resource(r), vertices(v){};
+  const std::vector<std::vector<DoganVertex>> getVertices(void) const;
+  const ResourceType getResource(void) const;
+
+private:
+  ResourceType resource;
+  std::vector<std::vector<DoganVertex>> vertices;
 };
 
-std::ostream &operator<< (std::ostream &os, DoganPort const &dp);
+std::ostream &operator<<(std::ostream &os, DoganPort const &dp);

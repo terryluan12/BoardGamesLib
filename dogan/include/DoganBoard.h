@@ -12,27 +12,28 @@
 #include <random>
 
 class DoganBoard : public BoardInterface<100> {
-    public:
-        DoganBoard(DoganConfig config);
-        ~DoganBoard(void) {};
-        DoganCell &operator [](const Coordinate2D i) override;
-        void addCity(Coordinate2D c, Direction d, DoganPlayer p);
-        const DoganBank getBank(void) const;
-        const std::map<Coordinate2D, std::shared_ptr<DoganCell>> getBoard(void) const;
-        const std::vector<DoganPort> getPorts(void) const;
-        size_t getBoardSize(void) const override;
-        void setBoardSize(size_t bs) override;
-        Coordinate2D getRobberLocation(void) const;
-        bool hasTile(const Coordinate2D c) const;
-    private:
-        size_t boardSize;
-        Coordinate2D robberLocation;
-        std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
-        std::map<Coordinate2D, DoganBuilding<BuildingType::VILLAGE>> villages; 
-        std::map<Coordinate2D, DoganBuilding<BuildingType::CITY>> cities;
-        std::map<Coordinate2D, DoganRoad> roads;
-        std::vector<DoganPort> ports;
-        std::mt19937 rengine;
+public:
+  DoganBoard(DoganConfig config);
+  ~DoganBoard(void){};
+  DoganCell &operator[](const Coordinate2D i) override;
+  void addCity(Coordinate2D c, Direction d, DoganPlayer p);
+  const DoganBank getBank(void) const;
+  const std::map<Coordinate2D, std::shared_ptr<DoganCell>> getBoard(void) const;
+  const std::vector<DoganPort> getPorts(void) const;
+  size_t getBoardSize(void) const override;
+  void setBoardSize(size_t bs) override;
+  Coordinate2D getRobberLocation(void) const;
+  bool hasTile(const Coordinate2D c) const;
+
+private:
+  size_t boardSize;
+  Coordinate2D robberLocation;
+  std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
+  std::map<Coordinate2D, DoganBuilding<BuildingType::VILLAGE>> villages;
+  std::map<Coordinate2D, DoganBuilding<BuildingType::CITY>> cities;
+  std::map<Coordinate2D, DoganRoad> roads;
+  std::vector<DoganPort> ports;
+  std::mt19937 rengine;
 };
 
-std::ostream &operator<< (std::ostream &os, DoganBoard const &db);
+std::ostream &operator<<(std::ostream &os, DoganBoard const &db);
