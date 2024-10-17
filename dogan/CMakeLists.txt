@@ -7,15 +7,13 @@ project(dogan
 # Set compilation flags
 add_compile_options(-Wall)
 
-add_subdirectory(src)
+add_subdirectory(libs)
 
 option(BUILD_EXECUTABLE "Build the executable" ON)
 
 if(BUILD_EXECUTABLE)
     add_executable(dogan src/main.cpp)
     target_link_libraries(dogan PUBLIC DoganGame DoganConfig)
-else()
-    add_library(dogan DoganGame)
 endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
