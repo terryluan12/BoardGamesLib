@@ -20,8 +20,25 @@ FetchContent_Declare(
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
 
 include_directories(src)
 
 add_subdirectory(src)
 add_subdirectory(dogan)
+
+
+option(BUILD_EXECUTABLE "Build the executable" ON)
+option(BUILD_UNITTESTS "Build tests" ON)
+if(BUILD_EXECUTABLE)
+    add_executable(Dogan dogan/src/main.cpp)
+    target_link_libraries(Dogan PUBLIC DoganGame DoganConfig)
+    target_include_directories(Dogan PUBLIC dogan/include PRIVATE dogan/libs)
+endif()
+
+if(BUILD_UNITTESTS)
+    enable_testing()
+    add_executable(DoganTests dogan/libs/DoganBank.test.cpp)
+    target_link_libraries(DoganTests gtest_main DoganBank)
+    gtest_add_tests(TARGET DoganTests)
+endif()

@@ -38,13 +38,11 @@ std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {
   os << "Player " << p.getName() << ": \n  VP: " << p.getVictoryPoints()
      << "\n  Resource Cards:\n";
   for (size_t i = 0; i < 5; ++i) {
-    ResourceType rt = static_cast<ResourceType>(i);
-    os << "    " << rt << ": " << p.getInventory().getResourceCount(rt) << "\n";
+    os << "    " << static_cast<ResourceType>(i) << ": " << p.getInventory().getResourceCount()[i] << "\n";
   }
   os << "  Development Cards:\n";
   for (size_t i = 0; i < 5; ++i) {
-    DevelopmentType dt = static_cast<DevelopmentType>(i);
-    os << "    " << dt << ": " << p.getInventory().getDevelopmentCount(dt)
+    os << "    " << static_cast<DevelopmentType>(i) << ": " << p.getInventory().getDevelopmentCount()[i]
        << "\n";
   }
   os << "\n";

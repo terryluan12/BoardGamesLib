@@ -11,15 +11,3 @@ include_directories(include)
 include_directories(libs)
 
 add_subdirectory(libs)
-
-option(BUILD_EXECUTABLE "Build the executable" ON)
-
-if(BUILD_EXECUTABLE)
-    add_executable(dogan src/main.cpp)
-    target_link_libraries(dogan PUBLIC DoganGame DoganConfig)
-endif()
-
-# Now simply link against gtest or gtest_main as needed. Eg
-# target_link_libraries(example gtest_main)
-# add_test(NAME example_test COMMAND example)
-

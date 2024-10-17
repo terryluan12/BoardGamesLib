@@ -21,14 +21,14 @@ void DoganBank::addResources(const std::array<size_t, 5> r) {
     resources[i] += r[i];
   }
 }
-size_t DoganBank::getResourceCount(const ResourceType r) const {
-  return resources[static_cast<int>(r)];
-}
-const std::array<size_t, 5> DoganBank::getTotalResources(void) const {
+const std::array<size_t, 5> DoganBank::getResourceCount(void) const {
   return resources;
 }
 void DoganBank::setResources(const std::array<size_t, 5> r) { resources = r; }
 void DoganBank::removeResource(const ResourceType r, const int n) {
+  if (resources[static_cast<int>(r)] < n) {
+    throw std::invalid_argument("Not enough resources to remove");
+  }
   resources[static_cast<int>(r)] -= n;
 }
 void DoganBank::removeResources(const std::array<size_t, 5> r) {
@@ -51,9 +51,15 @@ void DoganBank::addDevelopment(const DevelopmentType d) {
   developments.push_back(d);
   developmentCount[static_cast<int>(d)] += 1;
 }
-size_t DoganBank::getDevelopmentCount(const DevelopmentType d) const {
-  return developmentCount[static_cast<int>(d)];
+
+const std::array<size_t, 5> DoganBank::getDevelopmentCount(void) const {
+  return developmentCount;
 }
+
+const std::vector<DevelopmentType> DoganBank::getDevelopments(void) const {
+  return developments;
+}
+
 void DoganBank::setDevelopments(const std::vector<DevelopmentType> d) {
   for (auto dev : d) {
     developments.push_back(dev);
@@ -61,7 +67,11 @@ void DoganBank::setDevelopments(const std::vector<DevelopmentType> d) {
   }
 }
 DevelopmentType DoganBank::popDevelopment(void) {
+  if(developments.empty()) {
+    throw std::invalid_argument("No developments to pop");
+  }
   DevelopmentType dt = developments.back();
+  developments.pop_back();
   developmentCount[static_cast<int>(dt)] -= 1;
   return dt;
 }
@@ -69,15 +79,17 @@ DevelopmentType DoganBank::popDevelopment(void) {
 std::ostream &operator<<(std::ostream &os, DoganBank const &d) {
   os << "Bank:\n"
      << "  Resource Cards:\n";
-  for (size_t i = 0; i < 5; i++) {
-    ResourceType rt = static_cast<ResourceType>(i);
-    os << "    " << static_cast<ResourceType>(rt) << ": "
-       << d.getResourceCount(rt) << "\n";
+  
+  for (auto &resource : d.getResourceCount()) {
+    os << "    " << resource << ": " << d.getResourceCount()[resource] << "\n";
   }
   os << "  Development Cards:\n";
-  for (size_t i = 0; i < 5; i++) {
-    DevelopmentType dt = static_cast<DevelopmentType>(i);
-    os << "    " << dt << ": " << d.getDevelopmentCount(dt) << "\n";
+    for(size_t i = 0; i < 5; i++) {
+      os << "    " << static_cast<DevelopmentType>(i) << ": " << d.getDevelopmentCount()[i] << "\n";
+    }
+  os << "  Development Order:\n";
+  for(auto dev : d.getDevelopments()) {
+    os << "    " << dev << "\n";
   }
   return os;
 }
