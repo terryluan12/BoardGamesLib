@@ -24,8 +24,6 @@ public:
 
 private:
   std::unordered_map<Direction, std::shared_ptr<class DoganCell>> adjacentCells;
-  std::unordered_map<Direction, std::shared_ptr<class DoganEdge>> edges;
-  std::unordered_map<Direction, std::shared_ptr<class DoganVertex>> vertices;
   static std::unordered_set<Coordinate2D> allCoordinates;
   bool containsRobber;
   Coordinate2D coordinate;

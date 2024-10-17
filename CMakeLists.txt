@@ -38,7 +38,9 @@ endif()
 
 if(BUILD_UNITTESTS)
     enable_testing()
-    add_executable(DoganTests dogan/libs/DoganBank.test.cpp)
-    target_link_libraries(DoganTests gtest_main DoganBank)
-    gtest_add_tests(TARGET DoganTests)
+    add_executable(DoganTests 
+                  dogan/libs/DoganBank.test.cpp 
+                  dogan/libs/DoganCell.test.cpp)
+    target_link_libraries(DoganTests gtest_main DoganBank DoganCell)
+    gtest_add_tests(TARGET DoganTests DoganCell)
 endif()
