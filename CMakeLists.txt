@@ -23,6 +23,8 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 include_directories(src)
+include_directories(include)
+include_directories(dogan/libs)
 include_directories(dogan/include)
 
 add_subdirectory(src)
@@ -41,9 +43,11 @@ if(BUILD_UNITTESTS)
     enable_testing()
     add_executable(DoganTests 
                   dogan/libs/DoganBank.test.cpp 
-                  dogan/libs/DoganCell.test.cpp)
+                  dogan/libs/DoganCell.test.cpp
+                  dogan/libs/DoganGame.test.cpp)
     target_link_libraries(DoganTests gtest_main 
                   DoganBank 
-                  DoganCell)
+                  DoganCell
+                  DoganGame)
     gtest_add_tests(TARGET DoganTests )
 endif()

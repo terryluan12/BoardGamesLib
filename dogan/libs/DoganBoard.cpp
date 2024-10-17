@@ -15,8 +15,12 @@ DoganBoard::DoganBoard(DoganConfig config) {
   // create all tiles
   size_t i = 0;
   for (const auto &c : config.getTileLocations()) {
+    if (this->cells.find(c) != this->cells.end()) {
+      throw std::invalid_argument("Error: Cell already exists");
+    }
     this->cells[c] = std::make_shared<DoganCell>(
         DoganCell(false, c, numbers[i], resources[i]));
+        
     ++i;
   }
   cells[config.getRobberLocation()]->setRobber(true);

@@ -2,7 +2,7 @@
 add_library(Coordinate INTERFACE)
 target_include_directories(Coordinate INTERFACE .)
 
-add_library(HexagonalDirection HexagonalDirection.cpp HexagonalDirection.h)
+add_library(HexagonalDirection HexagonalDirection.cpp)
 target_link_libraries(HexagonalDirection PUBLIC Coordinate)
 
 add_library(Common INTERFACE)

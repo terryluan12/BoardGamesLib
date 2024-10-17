@@ -1,5 +1,6 @@
 #include "DoganGame.h"
 #include "DoganExceptions.h"
+#include <iostream>
 
 DoganGame::DoganGame(DoganConfig config)
     : config(config), rengine(std::random_device{}()), die(1, 6),
@@ -10,9 +11,13 @@ DoganGame::DoganGame(DoganConfig config)
 }
 
 void DoganGame::addPlayer(std::string pn, int pid) {
+  if(players.find(pid) != players.end()) {
+    std::cerr << players.at(pid);
+    throw SamePlayerException("Cannot add same player twice");
+  }
   DoganPlayer p = DoganPlayer(pn, pid);
   p.setAvailableStructures(config.getTotalStructureCount());
-  this->players.push_back(p);
+  this->players.emplace(pid, p);
 };
 
 void DoganGame::purchaseDevelopmentCard(DoganPlayer p,
@@ -31,7 +36,7 @@ void DoganGame::buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
   os << dg.board;
   for (auto &p : dg.players) {
-    os << p;
+    os << p.second;
   }
   os << dg.bank;
   return os;

@@ -19,3 +19,8 @@ Fix CellInterface to have more members
 Decide if it's better to always do checks for if DoganVertex is a valid tile on the board
 Do checks if village exists when building city
 Actually add Google Tests
+Add general Vertex Class and extend Dogan Vertex
+Add General Player class and extend Dogan Player
+Add more custom exceptions
+Move everything to Dogan namespace
+Optimize CMakeFiles

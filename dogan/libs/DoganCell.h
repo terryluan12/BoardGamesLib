@@ -19,7 +19,6 @@ public:
   void setRobber(bool robber);
 
 private:
-  static std::unordered_set<Coordinate2D> allCoordinates;
   bool containsRobber;
   Coordinate2D coordinate;
   int number;

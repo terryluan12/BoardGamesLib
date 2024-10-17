@@ -7,7 +7,7 @@
 
 class DoganGame {
 public:
-  DoganGame(DoganConfig config);
+  DoganGame(DoganConfig config= DoganConfig());
   friend std::ostream &operator<<(std::ostream &os, DoganGame const &dg);
   void addPlayer(std::string pn, int pid);
   void purchaseDevelopmentCard(DoganPlayer p, std::array<size_t, 5> c);
@@ -20,5 +20,5 @@ private:
   std::uniform_int_distribution<pip> die;
   DoganBank bank;
   DoganBoard board;
-  std::vector<DoganPlayer> players;
+  std::map<int, DoganPlayer> players;
 };

@@ -1,14 +1,8 @@
 #include "DoganCell.h"
 #include <sstream>
 
-std::unordered_set<Coordinate2D> DoganCell::allCoordinates;
-
 DoganCell::DoganCell(bool cr, Coordinate2D c, int n, ResourceType t)
     : containsRobber(cr), coordinate(c), number(n), type(t) {
-  auto [_, didInsert] = allCoordinates.insert(c);
-  if (!didInsert) {
-    throw std::invalid_argument("Error: Cell already exists");
-  }
 }
 
 Coordinate2D DoganCell::getCoordinate(void) const { return coordinate; }
