@@ -2,8 +2,6 @@
 
 #include "CellInterface.h"
 #include "Coordinate.h"
-#include "DoganEdge.h"
-#include "DoganVertex.h"
 #include "enums.h"
 #include <memory>
 #include <unordered_map>

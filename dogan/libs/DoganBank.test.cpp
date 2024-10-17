@@ -1,14 +1,13 @@
 #include "DoganBank.h"
+#include "DoganExceptions.h"
 #include <gtest/gtest.h>
 
 class BankFixture : public ::testing::Test {
 protected:
   void SetUp() override {
-    dBank = DoganBank();
-    pBank = DoganBank({10, 11, 12, 13, 14}, {DevelopmentType::BUILDROAD, DevelopmentType::MONOPOLY, DevelopmentType::SOLDIER, DevelopmentType::TAKETWO, DevelopmentType::VICPOINT});
   }
-  DoganBank dBank;
-  DoganBank pBank;
+  DoganBank dBank{};
+  DoganBank pBank{{10, 11, 12, 13, 14}, {DevelopmentType::BUILDROAD, DevelopmentType::MONOPOLY, DevelopmentType::SOLDIER, DevelopmentType::TAKETWO, DevelopmentType::VICPOINT}};
 };
 
 TEST_F(BankFixture, DefaultConstructor) {
@@ -79,5 +78,5 @@ TEST_F(BankFixture, PopDevelopment) {
   
   EXPECT_THROW({
     pBank.popDevelopment();
-    }, std::invalid_argument);
+    }, InsufficientDevelopmentsException) << "Should throw an error when popping from an empty bank";
 }

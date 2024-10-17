@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Coordinate.h"
-#include "DoganCell.h"
 #include "enums.h"
 
 class DoganVertex {

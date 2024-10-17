@@ -18,11 +18,10 @@ public:
   DoganBank getInventory(void) const;
 
   // Other Functions
-  const std::array<size_t, 10> getFullCount(void) const;
   std::string getName(void) const;
   int getPlayerID(void) const;
-  void giveDevelopment(DevelopmentType dt);
-  void buildStructure(StructureType st);
+  void purchaseDevelopment(DevelopmentType d, std::array<size_t, 5> c);
+  void buildStructure(StructureType s, std::array<size_t, 5> c);
 
 private:
   std::string name;
@@ -34,6 +33,8 @@ private:
   std::vector<DoganBuilding<StructureType::VILLAGE>> villages;
   std::vector<DoganBuilding<StructureType::CITY>> cities;
   int victoryPoints;
+  void addDevelopment(DevelopmentType d);
+  void buildStructure(StructureType s);
 };
 
 std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);

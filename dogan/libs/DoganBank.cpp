@@ -1,4 +1,5 @@
 #include "DoganBank.h"
+#include "DoganExceptions.h"
 #include <iostream>
 
 DoganBank::DoganBank(void)
@@ -66,9 +67,10 @@ void DoganBank::setDevelopments(const std::vector<DevelopmentType> d) {
     developmentCount[static_cast<int>(dev)] += 1;
   }
 }
+
 DevelopmentType DoganBank::popDevelopment(void) {
   if(developments.empty()) {
-    throw std::invalid_argument("No developments to pop");
+    throw InsufficientDevelopmentsException("Error: No developments left");
   }
   DevelopmentType dt = developments.back();
   developments.pop_back();

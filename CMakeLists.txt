@@ -23,10 +23,10 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 include_directories(src)
+include_directories(dogan/include)
 
 add_subdirectory(src)
 add_subdirectory(dogan)
-
 
 option(BUILD_EXECUTABLE "Build the executable" ON)
 option(BUILD_UNITTESTS "Build tests" ON)
@@ -36,11 +36,14 @@ if(BUILD_EXECUTABLE)
     target_include_directories(Dogan PUBLIC dogan/include PRIVATE dogan/libs)
 endif()
 
+
 if(BUILD_UNITTESTS)
     enable_testing()
     add_executable(DoganTests 
                   dogan/libs/DoganBank.test.cpp 
                   dogan/libs/DoganCell.test.cpp)
-    target_link_libraries(DoganTests gtest_main DoganBank DoganCell)
-    gtest_add_tests(TARGET DoganTests DoganCell)
+    target_link_libraries(DoganTests gtest_main 
+                  DoganBank 
+                  DoganCell)
+    gtest_add_tests(TARGET DoganTests )
 endif()

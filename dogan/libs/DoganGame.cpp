@@ -16,25 +16,16 @@ void DoganGame::addPlayer(std::string pn, int pid) {
   this->players.push_back(p);
 };
 
-void DoganGame::givePlayerDevCard(DoganPlayer p, std::array<size_t, 5> c) {
-  if (p.getInventory().canAfford(c)) {
-    p.getInventory().removeResources(c);
-    p.giveDevelopment(bank.popDevelopment());
-  } else {
-    throw InsufficientResourcesException(
-        "Error: Player does not have enough resources to purchase development "
-        "card");
-  }
+void DoganGame::purchaseDevelopmentCard(DoganPlayer p, std::array<size_t, 5> c) {
+  DevelopmentType dt = bank.popDevelopment();
+  p.purchaseDevelopment(dt, c);
+  bank.addResources(c);
 }
+
 void DoganGame::buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
                                StructureType st, std::array<size_t, 5> c) {
-  if (p.getInventory().canAfford(c)) {
+    p.buildStructure(st, c);
     board.buildStructure(t, d, p.getPlayerID(), st);
-    p.buildStructure(st);
-  } else {
-    throw InsufficientResourcesException(
-        "Error: Player does not have enough resources to build city");
-  }
 }
 
 void DoganGame::printBoard(void) {

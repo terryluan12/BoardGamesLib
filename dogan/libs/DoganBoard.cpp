@@ -4,14 +4,6 @@
 #include <memory>
 #include <sstream>
 
-DoganCell &DoganBoard::operator[](const Coordinate2D coordinates) {
-  auto it = this->cells.find(coordinates);
-  if (it == this->cells.end()) {
-    throw std::out_of_range("Error: Coordinate not found");
-  }
-  return *(it->second);
-}
-
 DoganBoard::DoganBoard(DoganConfig config) {
   rengine.seed(std::random_device{}());
 
@@ -70,11 +62,6 @@ Coordinate2D DoganBoard::getRobberLocation(void) const {
 
 size_t DoganBoard::getBoardSize(void) const { return boardSize; }
 
-const std::map<Coordinate2D, std::shared_ptr<DoganCell>>
-DoganBoard::getBoard(void) const {
-  return cells;
-}
-
 const std::vector<DoganPort> DoganBoard::getPorts(void) const { return ports; }
 
 bool DoganBoard::hasTile(const Coordinate2D c) const {
@@ -92,7 +79,7 @@ void DoganBoard::setBoardSize(size_t bs) {
 }
 
 std::ostream &operator<<(std::ostream &os, DoganBoard const &db) {
-  for (const auto &c : db.getBoard()) {
+  for (const auto &c : db.cells) {
     os << *(c.second);
   }
   size_t i = 1;
