@@ -28,17 +28,6 @@ DoganBoard::DoganBoard(DoganConfig config) {
         DoganCell(false, c, numbers[i], resources[i]));
     ++i;
   }
-  for (auto &[coord, cell] : this->cells) {
-    // populate cell neighbours
-    for (const auto &direction : HexagonalDirection::getAllDirections()) {
-      auto adjEntry =
-          this->cells.find(coord + HexagonalDirection::toCoordinate(direction));
-      if (adjEntry != this->cells.end()) {
-        auto adjCell = adjEntry->second;
-        cell->addAdjacentCell(direction, adjCell);
-      }
-    }
-  }
   cells[config.getRobberLocation()]->setRobber(true);
 }
 
@@ -49,9 +38,18 @@ void DoganBoard::buildStructure(Coordinate2D c, Direction d, int pid,
     throw std::invalid_argument("Error: Invalid Coordinate");
   }
   if (st == StructureType::ROAD) {
+    
     DoganRoad dr = DoganRoad(pid);
     DoganEdge de = DoganEdge(d, c);
-    dr.addEdge(de, *(it->second));
+    if (this->roads.find(c) != this->roads.end()) {
+      throw std::invalid_argument("Error: Road already exists");
+    }
+    dr.addEdge(de);
+    DoganEdge corrEdge = de.getCorrespondingEdge();
+    if(this->cells.find(corrEdge.getCoordinate()) != this->cells.end()) {
+      dr.addEdge(de.getCorrespondingEdge());
+    }
+
     this->roads[c] = dr;
   } else if (st == StructureType::VILLAGE) {
     DoganBuilding db = DoganBuilding<StructureType::VILLAGE>(pid);

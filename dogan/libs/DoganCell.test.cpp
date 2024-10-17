@@ -18,10 +18,3 @@ TEST_F(CellFixture, CheckDoubleCell) {
     DoganCell newCell = DoganCell(false, (100, 100), 5, ResourceType::BRICK);
   }, std::invalid_argument);
 }
-
-TEST_F(CellFixture, CheckAdjacentCell) {
-  nCell.addAdjacentCell(Direction::NORTH, std::make_shared<DoganCell>(rCell));
-  EXPECT_TRUE(nCell.hasAdjacentCell(Direction::NORTH));
-  EXPECT_FALSE(nCell.hasAdjacentCell(Direction::SOUTH));
-  EXPECT_EQ(nCell.getAdjacentCell(Direction::NORTH)->getCoordinate(), rCell.getCoordinate());
-}

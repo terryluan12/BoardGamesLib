@@ -8,7 +8,8 @@
 class DoganEdge {
 public:
   DoganEdge(Direction d, Coordinate2D c);
-  std::vector<DoganEdge> getCorrespondingEdge(class DoganCell &dc);
+  DoganEdge getCorrespondingEdge(void);
+  Coordinate2D getCoordinate(void);
   Direction getDirection(void);
 
 private:

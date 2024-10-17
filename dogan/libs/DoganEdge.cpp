@@ -9,14 +9,16 @@ DoganEdge::DoganEdge(Direction d, Coordinate2D c)
   }
 }
 
-std::vector<DoganEdge> DoganEdge::getCorrespondingEdge(DoganCell &dc) {
-  std::vector<DoganEdge> corrEdge;
-  if (dc.hasAdjacentCell(direction)) {
-    auto dc1 = dc.getAdjacentCell(direction);
-    corrEdge.emplace_back(HexagonalDirection::getOppositeDirection(direction),
-                          dc1->getCoordinate());
-  }
-  return corrEdge;
+Coordinate2D DoganEdge::getCoordinate(void) {
+  return coordinate;
 }
+
+
+DoganEdge DoganEdge::getCorrespondingEdge(void) {
+  const Direction oppositeDirection = HexagonalDirection::getOppositeDirection(direction);
+  const Coordinate2D oppositeCoordinate =
+      HexagonalDirection::toCoordinate(direction);
+  return DoganEdge(oppositeDirection, oppositeCoordinate);
+};
 
 Direction DoganEdge::getDirection(void) { return direction; }

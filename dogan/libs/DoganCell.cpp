@@ -11,24 +11,6 @@ DoganCell::DoganCell(bool cr, Coordinate2D c, int n, ResourceType t)
   }
 }
 
-void DoganCell::addAdjacentCell(const Direction d,
-                                std::shared_ptr<DoganCell> ac) {
-  adjacentCells[d] = ac;
-};
-
-std::shared_ptr<DoganCell> DoganCell::getAdjacentCell(Direction d) {
-  auto it = adjacentCells.find(d);
-  if (it == adjacentCells.end()) {
-    throw std::out_of_range("Error: Adjacent Cell not found");
-  }
-  return it->second;
-}
-
-bool DoganCell::hasAdjacentCell(Direction d) const {
-  auto it = this->adjacentCells.find(d);
-  return it != this->adjacentCells.end();
-}
-
 Coordinate2D DoganCell::getCoordinate(void) const { return coordinate; }
 
 int DoganCell::getNumber(void) const { return this->number; }
