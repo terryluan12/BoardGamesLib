@@ -68,7 +68,7 @@ void DoganBank::setDevelopments(const std::vector<DevelopmentType> d) {
 }
 
 DevelopmentType DoganBank::popDevelopment(void) {
-  if(developments.empty()) {
+  if (developments.empty()) {
     throw InsufficientDevelopmentsException("Error: No developments left");
   }
   DevelopmentType dt = developments.back();
@@ -80,16 +80,18 @@ DevelopmentType DoganBank::popDevelopment(void) {
 std::ostream &operator<<(std::ostream &os, DoganBank const &d) {
   os << "Bank:\n"
      << "  Resource Cards:\n";
-  
+
   for (size_t i = 0; i < 5; i++) {
-    os << "    " << static_cast<ResourceType>(i) << ": " << d.getResourceCount()[i] << "\n";
+    os << "    " << static_cast<ResourceType>(i) << ": "
+       << d.getResourceCount()[i] << "\n";
   }
   os << "  Development Cards:\n";
-    for(size_t i = 0; i < 5; i++) {
-      os << "    " << static_cast<DevelopmentType>(i) << ": " << d.getDevelopmentCount()[i] << "\n";
-    }
+  for (size_t i = 0; i < 5; i++) {
+    os << "    " << static_cast<DevelopmentType>(i) << ": "
+       << d.getDevelopmentCount()[i] << "\n";
+  }
   os << "  Development Order:\n";
-  for(auto dev : d.getDevelopments()) {
+  for (auto dev : d.getDevelopments()) {
     os << "    " << dev << "\n";
   }
   return os;

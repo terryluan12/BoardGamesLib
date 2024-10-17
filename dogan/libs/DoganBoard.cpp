@@ -29,7 +29,7 @@ void DoganBoard::buildStructure(Coordinate2D c, Direction d, int pid,
     throw std::invalid_argument("Error: Invalid Coordinate");
   }
   if (st == StructureType::ROAD) {
-    
+
     DoganRoad dr = DoganRoad(pid);
     DoganEdge de = DoganEdge(d, c);
     if (this->roads.find(c) != this->roads.end()) {
@@ -37,7 +37,7 @@ void DoganBoard::buildStructure(Coordinate2D c, Direction d, int pid,
     }
     dr.addEdge(de);
     DoganEdge corrEdge = de.getCorrespondingEdge();
-    if(this->cells.find(corrEdge.getCoordinate()) != this->cells.end()) {
+    if (this->cells.find(corrEdge.getCoordinate()) != this->cells.end()) {
       dr.addEdge(de.getCorrespondingEdge());
     }
 

@@ -15,7 +15,8 @@ void DoganGame::addPlayer(std::string pn, int pid) {
   this->players.push_back(p);
 };
 
-void DoganGame::purchaseDevelopmentCard(DoganPlayer p, std::array<size_t, 5> c) {
+void DoganGame::purchaseDevelopmentCard(DoganPlayer p,
+                                        std::array<size_t, 5> c) {
   DevelopmentType dt = bank.popDevelopment();
   p.purchaseDevelopment(dt, c);
   bank.addResources(c);
@@ -23,15 +24,15 @@ void DoganGame::purchaseDevelopmentCard(DoganPlayer p, std::array<size_t, 5> c) 
 
 void DoganGame::buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
                                StructureType st, std::array<size_t, 5> c) {
-    p.buildStructure(st, c);
-    board.buildStructure(t, d, p.getPlayerID(), st);
+  p.buildStructure(st, c);
+  board.buildStructure(t, d, p.getPlayerID(), st);
 }
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
   os << dg.board;
-    for (auto &p : dg.players) {
-      os << p;
-    }
-    os << dg.bank;
+  for (auto &p : dg.players) {
+    os << p;
+  }
+  os << dg.bank;
   return os;
 }

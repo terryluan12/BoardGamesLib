@@ -9,13 +9,11 @@ DoganEdge::DoganEdge(Direction d, Coordinate2D c)
   }
 }
 
-Coordinate2D DoganEdge::getCoordinate(void) {
-  return coordinate;
-}
-
+Coordinate2D DoganEdge::getCoordinate(void) { return coordinate; }
 
 DoganEdge DoganEdge::getCorrespondingEdge(void) {
-  const Direction oppositeDirection = HexagonalDirection::getOppositeDirection(direction);
+  const Direction oppositeDirection =
+      HexagonalDirection::getOppositeDirection(direction);
   const Coordinate2D oppositeCoordinate =
       HexagonalDirection::toCoordinate(direction);
   return DoganEdge(oppositeDirection, oppositeCoordinate);
