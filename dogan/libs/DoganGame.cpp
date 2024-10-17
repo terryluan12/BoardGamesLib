@@ -1,6 +1,5 @@
 #include "DoganGame.h"
 #include "DoganExceptions.h"
-#include <iostream>
 
 DoganGame::DoganGame(DoganConfig config)
     : config(config), rengine(std::random_device{}()), die(1, 6),
@@ -28,10 +27,11 @@ void DoganGame::buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
     board.buildStructure(t, d, p.getPlayerID(), st);
 }
 
-void DoganGame::printBoard(void) {
-  std::cout << this->board;
-  for (auto &p : this->players) {
-    std::cout << p;
-  }
-  std::cout << this->bank;
+std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
+  os << dg.board;
+    for (auto &p : dg.players) {
+      os << p;
+    }
+    os << dg.bank;
+  return os;
 }

@@ -9,6 +9,7 @@ class DoganPlayer {
 public:
   DoganPlayer(std::string n, int pid)
       : name(n), playerID(pid), victoryPoints(0){};
+  friend std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);
 
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
@@ -36,5 +37,3 @@ private:
   void addDevelopment(DevelopmentType d);
   void buildStructure(StructureType s);
 };
-
-std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);

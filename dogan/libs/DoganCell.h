@@ -11,6 +11,7 @@
 class DoganCell : public CellInterface {
 public:
   DoganCell(bool cr, Coordinate2D c, int n, ResourceType t);
+  friend std::ostream &operator<<(std::ostream &os, DoganCell const &dc);
   Coordinate2D getCoordinate(void) const;
   ResourceType getResource(void) const;
   int getNumber(void) const;
@@ -24,5 +25,3 @@ private:
   int number;
   ResourceType type;
 };
-
-std::ostream &operator<<(std::ostream &os, DoganCell const &dc);

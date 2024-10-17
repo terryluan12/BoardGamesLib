@@ -8,8 +8,8 @@
 class DoganGame {
 public:
   DoganGame(DoganConfig config);
+  friend std::ostream &operator<<(std::ostream &os, DoganGame const &dg);
   void addPlayer(std::string pn, int pid);
-  void printBoard(void);
   void purchaseDevelopmentCard(DoganPlayer p, std::array<size_t, 5> c);
   void buildStructure(Coordinate2D t, Direction d, DoganPlayer p,
                       StructureType st, std::array<size_t, 5> c);

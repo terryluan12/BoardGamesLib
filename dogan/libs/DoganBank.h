@@ -8,6 +8,7 @@ class DoganBank {
 public:
   DoganBank(void);
   DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d);
+  friend std::ostream &operator<<(std::ostream &os, DoganBank const &d);
 
   // Resource Functions
   void addResource(const ResourceType r, const size_t n);
@@ -33,5 +34,3 @@ private:
   std::vector<DevelopmentType> developments;
   std::array<size_t, 5> developmentCount;
 };
-
-std::ostream &operator<<(std::ostream &os, DoganBank const &d);

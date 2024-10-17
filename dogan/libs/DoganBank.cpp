@@ -1,6 +1,5 @@
 #include "DoganBank.h"
 #include "DoganExceptions.h"
-#include <iostream>
 
 DoganBank::DoganBank(void)
     : resources({0, 0, 0, 0, 0}), developments({}),
