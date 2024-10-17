@@ -13,7 +13,7 @@ DoganBank::DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d)
 }
 
 // Resource Functions
-void DoganBank::addResource(const ResourceType r, const int n) {
+void DoganBank::addResource(const ResourceType r, const size_t n) {
   resources[static_cast<int>(r)] += n;
 }
 void DoganBank::addResources(const std::array<size_t, 5> r) {
@@ -25,8 +25,8 @@ const std::array<size_t, 5> DoganBank::getResourceCount(void) const {
   return resources;
 }
 void DoganBank::setResources(const std::array<size_t, 5> r) { resources = r; }
-void DoganBank::removeResource(const ResourceType r, const int n) {
-  if (resources[static_cast<int>(r)] < n) {
+void DoganBank::removeResource(const ResourceType r, const size_t n) {
+  if (resources[static_cast<size_t>(r)] < n) {
     throw std::invalid_argument("Not enough resources to remove");
   }
   resources[static_cast<int>(r)] -= n;
@@ -80,8 +80,8 @@ std::ostream &operator<<(std::ostream &os, DoganBank const &d) {
   os << "Bank:\n"
      << "  Resource Cards:\n";
   
-  for (auto &resource : d.getResourceCount()) {
-    os << "    " << resource << ": " << d.getResourceCount()[resource] << "\n";
+  for (size_t i = 0; i < 5; i++) {
+    os << "    " << static_cast<ResourceType>(i) << ": " << d.getResourceCount()[i] << "\n";
   }
   os << "  Development Cards:\n";
     for(size_t i = 0; i < 5; i++) {

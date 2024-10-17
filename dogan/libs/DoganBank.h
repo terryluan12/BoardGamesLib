@@ -10,11 +10,11 @@ public:
   DoganBank(std::array<size_t, 5> r, std::vector<DevelopmentType> d);
 
   // Resource Functions
-  void addResource(const ResourceType r, const int n);
+  void addResource(const ResourceType r, const size_t n);
   void addResources(const std::array<size_t, 5> r);
   const std::array<size_t, 5> getResourceCount(void) const;
   void setResources(const std::array<size_t, 5> r);
-  void removeResource(const ResourceType r, const int n);
+  void removeResource(const ResourceType r, const size_t n);
   void removeResources(const std::array<size_t, 5> r);
   bool canAfford(const std::array<size_t, 5> r);
 
