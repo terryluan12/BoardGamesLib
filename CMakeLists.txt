@@ -26,6 +26,8 @@ include_directories(src)
 include_directories(include)
 include_directories(dogan/libs)
 include_directories(dogan/include)
+include_directories(dogan/libs/GraphElements)
+include_directories(dogan/libs/Structures)
 
 add_subdirectory(src)
 add_subdirectory(dogan)

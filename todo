@@ -24,3 +24,4 @@ Add General Player class and extend Dogan Player
 Add more custom exceptions
 Move everything to Dogan namespace
 Optimize CMakeFiles
+Make the cities/villages/roads into pointers so they can be referencing the same things

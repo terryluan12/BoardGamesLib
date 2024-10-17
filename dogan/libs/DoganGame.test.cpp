@@ -25,3 +25,9 @@ TEST_F(GameFixture, AddExistingPlayersTest) {
         nGame.addPlayer("", 0);
     }, SamePlayerException);
 }
+
+TEST_F(GameFixture, StartPhaseTest) {
+    iGame.buildStructure(0, 0, {1, 1}, "N", {0, 0, 0, 0, 0});
+    iGame.giveResources(0, {1, 0, 0, 0, 0});
+    iGame.buildStructure(0, 2, {1, 1}, "NE", {0, 0, 0, 0, 0});
+}

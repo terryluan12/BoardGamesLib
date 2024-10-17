@@ -1,15 +1,19 @@
 #pragma once
 
 #include "DoganBank.h"
+#include "DoganBuilding.h"
+#include "DoganRoad.h"
 #include "DoganStructure.h"
 #include "enums.h"
 #include <array>
+#include <memory>
 
 class DoganPlayer {
 public:
   DoganPlayer(std::string n, int pid)
       : name(n), playerID(pid), victoryPoints(0){};
   friend std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);
+
 
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
@@ -22,8 +26,7 @@ public:
   std::string getName(void) const;
   int getPlayerID(void) const;
   void purchaseDevelopment(DevelopmentType d, std::array<size_t, 5> c);
-  void buildStructure(StructureType s, std::array<size_t, 5> c);
-
+  void buildStructure(std::shared_ptr<DoganStructure> s, std::array<size_t, 5> c);
 private:
   std::string name;
   int playerID;
@@ -31,9 +34,10 @@ private:
   std::array<size_t, 3> availableStructures;
   std::array<size_t, 5> resources;
   std::array<size_t, 5> developments;
-  std::vector<DoganBuilding<StructureType::VILLAGE>> villages;
-  std::vector<DoganBuilding<StructureType::CITY>> cities;
+  std::vector<std::shared_ptr<DoganBuilding>> villages;
+  std::vector<std::shared_ptr<DoganBuilding>> cities;
+  std::vector<std::shared_ptr<DoganRoad>> roads;
   int victoryPoints;
   void addDevelopment(DevelopmentType d);
-  void buildStructure(StructureType s);
+  void buildStructure(std::shared_ptr<DoganStructure> s);
 };

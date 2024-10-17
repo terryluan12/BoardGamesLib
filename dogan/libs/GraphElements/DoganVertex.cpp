@@ -1,8 +1,8 @@
 #include "DoganVertex.h"
 #include <stdexcept>
 
-DoganVertex::DoganVertex(Direction d, Coordinate2D c)
-    : direction(d), coordinate(c) {
+DoganVertex::DoganVertex(Coordinate2D c, Direction d)
+    : DoganGraphElement(c, d) {
   if (d == Direction::EAST || d == Direction::WEST) {
     throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
                                 "are invalid directions for edges");
@@ -19,17 +19,8 @@ std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
   Direction dc2Dir = HexagonalDirection::getOppositeDirection(d2);
 
   corrVertices.emplace_back(DoganVertex(
-      d1, this->coordinate + HexagonalDirection::toCoordinate(dc1Dir)));
+      this->coordinate + HexagonalDirection::toCoordinate(dc1Dir), d1));
   corrVertices.emplace_back(DoganVertex(
-      d2, this->coordinate + HexagonalDirection::toCoordinate(dc2Dir)));
+      this->coordinate + HexagonalDirection::toCoordinate(dc2Dir), d2));
   return corrVertices;
-}
-
-Coordinate2D DoganVertex::getCoordinate(void) const { return coordinate; }
-
-Direction DoganVertex::getDirection(void) const { return direction; }
-
-std::ostream &operator<<(std::ostream &os, DoganVertex const &dv) {
-  os << "Vertex" << dv.getCoordinate() << ": " << dv.getDirection();
-  return os;
 }

@@ -47,3 +47,30 @@ public:
 private:
   std::string message;
 };
+
+class NoSuchStructureException : std::exception {
+public:
+  NoSuchStructureException(std::string m) : message(m){};
+  const char *what() const noexcept override { return message.c_str(); }
+
+private:
+  std::string message;
+};
+
+class InvalidTypeException : std::exception {
+public:
+  InvalidTypeException(std::string m) : message(m){};
+  const char *what() const noexcept override { return message.c_str(); }
+
+private:
+  std::string message;
+};
+
+class CoordinateNotFoundException : std::exception {
+public:
+  CoordinateNotFoundException(std::string m) : message(m){};
+  const char *what() const noexcept override { return message.c_str(); }
+
+private:
+  std::string message;
+};

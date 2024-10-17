@@ -1,9 +1,12 @@
+add_subdirectory(GraphElements)
+add_subdirectory(Structures)
+
 add_library(DoganBank DoganBank.cpp DoganBank.h)
 target_link_libraries(DoganBank PUBLIC enums)
 target_link_libraries(DoganBank PRIVATE DoganExceptions)
 
 add_library(DoganBoard DoganBoard.cpp DoganBoard.h)
-target_link_libraries(DoganBoard PUBLIC BoardInterface DoganBank DoganCell DoganConfig DoganPlayer DoganPort DoganStructure)
+target_link_libraries(DoganBoard PUBLIC BoardInterface DoganBank DoganCell DoganConfig DoganPlayer DoganPort DoganBuilding DoganRoad DoganStructure)
 target_link_libraries(DoganBoard PRIVATE Common DoganCell)
 
 add_library(DoganCell DoganCell.cpp DoganCell.h)
@@ -12,24 +15,16 @@ target_link_libraries(DoganCell PUBLIC CellInterface Coordinate enums)
 add_library(DoganConfig DoganConfig.cpp DoganConfigBuilder.cpp config.enum.h)
 target_link_libraries(DoganConfig PRIVATE DoganPort DoganVertex Common enums)
 
-add_library(DoganEdge DoganEdge.cpp DoganEdge.h)
-target_link_libraries(DoganEdge PUBLIC Coordinate enums)
-
 add_library(DoganGame DoganGame.cpp)
 target_link_libraries(DoganGame PRIVATE DoganBank DoganBoard DoganPlayer DoganExceptions)
 
 add_library(DoganPlayer DoganPlayer.cpp DoganPlayer.h)
-target_link_libraries(DoganPlayer PUBLIC DoganBank DoganStructure)
+target_link_libraries(DoganPlayer PUBLIC DoganBank DoganBuilding DoganRoad DoganStructure)
 target_link_libraries(DoganPlayer PRIVATE DoganExceptions)
 
 add_library(DoganPort DoganPort.cpp DoganPort.h)
 target_link_libraries(DoganPort PUBLIC DoganVertex enums)
 
-add_library(DoganStructure DoganStructure.cpp DoganStructure.tpp DoganStructure.h)
-target_link_libraries(DoganStructure PUBLIC DoganCell DoganEdge DoganVertex)
-
-add_library(DoganVertex DoganVertex.cpp DoganVertex.h)
-target_link_libraries(DoganVertex PUBLIC Coordinate enums)
-
 add_library(enums enums.cpp enums.h)
 target_link_libraries(enums PUBLIC HexagonalDirection Common)
+

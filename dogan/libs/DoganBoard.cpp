@@ -26,36 +26,43 @@ DoganBoard::DoganBoard(DoganConfig config) {
   cells[config.getRobberLocation()]->setRobber(true);
 }
 
-void DoganBoard::buildStructure(Coordinate2D c, Direction d, int pid,
-                                StructureType st) {
-  auto it = cells.find(c);
-  if (it == cells.end()) {
-    throw std::invalid_argument("Error: Invalid Coordinate");
+void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, std::array<size_t, 5> c) {
+  for(auto& el: ds->getGraphElements()) {
+    if (this->cells.find(el.getCoordinate()) == this->cells.end()) {
+      throw CoordinateNotFoundException("Error: Invalid Coordinate");
+    }
   }
-  if (st == StructureType::ROAD) {
 
-    DoganRoad dr = DoganRoad(pid);
-    DoganEdge de = DoganEdge(d, c);
-    if (this->roads.find(c) != this->roads.end()) {
-      throw std::invalid_argument("Error: Road already exists");
-    }
-    dr.addEdge(de);
-    DoganEdge corrEdge = de.getCorrespondingEdge();
-    if (this->cells.find(corrEdge.getCoordinate()) != this->cells.end()) {
-      dr.addEdge(de.getCorrespondingEdge());
-    }
-
-    this->roads[c] = dr;
-  } else if (st == StructureType::VILLAGE) {
-    DoganBuilding db = DoganBuilding<StructureType::VILLAGE>(pid);
-    DoganVertex dv = DoganVertex(d, c);
-    db.addVertex(dv);
-    this->villages[c] = db;
-  } else {
-    DoganBuilding db = DoganBuilding<StructureType::CITY>(pid);
-    DoganVertex dv = DoganVertex(d, c);
-    db.addVertex(dv);
-    this->cities[c] = db;
+  switch(ds->getStructureType()) {
+    case(StructureType::VILLAGE):
+      for(auto& el: ds->getGraphElements()) {
+        if (this->villages.find(el.getCoordinate()) != this->villages.end()) {
+          throw std::invalid_argument("Error: Village already exists");
+        }
+      }
+      for(auto& el: ds->getGraphElements()) {
+      villages.insert(std::make_pair(el.getCoordinate(), std::dynamic_pointer_cast<DoganBuilding>(ds)));
+      }
+      break;
+    case(StructureType::CITY):
+      for(auto& el: ds->getGraphElements()) {
+        if (this->cities.find(el.getCoordinate()) != this->cities.end()) {
+          throw std::invalid_argument("Error: City already exists");
+        }
+      }
+      for(auto& el: ds->getGraphElements()) {
+      cities.insert(std::make_pair(el.getCoordinate(), std::dynamic_pointer_cast<DoganBuilding>(ds)));
+      }
+      break;
+    case(StructureType::ROAD):
+      for(auto& el: ds->getGraphElements()) {
+        if (this->roads.find(el.getCoordinate()) != this->roads.end()) {
+          throw std::invalid_argument("Error: Road already exists");
+        }
+      }
+      for(auto& el: ds->getGraphElements()) {
+      roads.insert(std::make_pair(el.getCoordinate(), std::dynamic_pointer_cast<DoganRoad>(ds)));
+      }
   }
 }
 
@@ -85,10 +92,10 @@ std::ostream &operator<<(std::ostream &os, DoganBoard const &db) {
   for (const auto &c : db.cells) {
     os << *(c.second);
   }
-  size_t i = 1;
-  for (auto &pl : db.getPorts()) {
-    os << pl;
-    ++i;
-  }
+  // size_t i = 1;
+  // for (auto &pl : db.getPorts()) {
+  //   os << pl;
+  //   ++i;
+  // }
   return os;
 }

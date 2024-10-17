@@ -1,4 +1,5 @@
 #include "HexagonalDirection.h"
+#include "Exceptions.h"
 
 using Direction = HexagonalDirection::Direction;
 
@@ -20,7 +21,7 @@ const Direction HexagonalDirection::fromString(std::string d) {
   else if (d == "NW")
     return Direction::NORTHWEST;
   else
-    throw std::invalid_argument("Error: Invalid Direction");
+    throw NoSuchDirection("Error: Invalid Direction");
 }
 
 const Coordinate2D HexagonalDirection::toCoordinate(Direction d) {
