@@ -31,7 +31,7 @@ private:
   std::array<int, N> coordinates;
 };
 
-#include "../src/Coordinate.tpp"
+#include "Coordinate.tpp"
 
 using Coordinate2D = Coordinate<2>;
 using Coordinate3D = Coordinate<3>;

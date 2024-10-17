@@ -1,3 +1,4 @@
+#include "Coordinate.h"
 #include <memory>
 #include <stdexcept>
 #include <ostream>
