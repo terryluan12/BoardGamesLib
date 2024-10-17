@@ -10,7 +10,8 @@ DoganGame::DoganGame(DoganConfig config)
   bank = DoganBank(resourceCount, developments);
 }
 
-void DoganGame::addPlayer(DoganPlayer p) {
+void DoganGame::addPlayer(std::string pn, int pid) {
+  DoganPlayer p = DoganPlayer(pn, pid);
   p.setAvailableStructures(config.getTotalStructureCount());
   this->players.push_back(p);
 };

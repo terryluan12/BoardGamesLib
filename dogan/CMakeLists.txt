@@ -7,6 +7,9 @@ project(dogan
 # Set compilation flags
 add_compile_options(-Wall)
 
+include_directories(include)
+include_directories(libs)
+
 add_subdirectory(libs)
 
 option(BUILD_EXECUTABLE "Build the executable" ON)

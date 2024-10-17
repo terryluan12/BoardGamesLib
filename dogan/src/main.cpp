@@ -4,7 +4,6 @@
 int main(int argc, char *argv[]) {
   DoganConfig config = DoganConfigBuilder().build();
   DoganGame *game = new DoganGame(config);
-  DoganPlayer *player = new DoganPlayer("Dogan", 0);
-  game->addPlayer(*player);
+  game->addPlayer("Dogan", 0);
   game->printBoard();
 }
