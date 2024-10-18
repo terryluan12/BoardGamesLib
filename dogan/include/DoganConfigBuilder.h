@@ -24,8 +24,8 @@ public:
   DoganConfigBuilder &setNumberLocations(std::vector<int> numberLocations);
   DoganConfigBuilder &
   setPortLocations(std::vector<std::vector<std::pair<PublicCoordinate2D, std::string>>> portLocations);
-  DoganConfigBuilder &setResources(std::vector<ResourceType> resourceLocations);
-  DoganConfigBuilder &setPortResources(std::vector<ResourceType> portResources);
+  DoganConfigBuilder &setResources(std::vector<int> resourceLocations);
+  DoganConfigBuilder &setPortResources(std::vector<int> portResources);
   DoganConfig build();
 
 private:

@@ -108,14 +108,22 @@ DoganConfigBuilder &DoganConfigBuilder::setPortLocations(
 }
 
 DoganConfigBuilder &
-DoganConfigBuilder::setResources(std::vector<ResourceType> resources) {
-  config.setResources(resources);
+DoganConfigBuilder::setResources(std::vector<int> resources) {
+  std::vector<ResourceType> r;
+  for(int resource : resources) {
+    r.emplace_back(static_cast<ResourceType>(resource));
+  }
+  config.setResources(r);
   return *this;
 }
 
 DoganConfigBuilder &
-DoganConfigBuilder::setPortResources(std::vector<ResourceType> portResources) {
-  config.setPortResources(portResources);
+DoganConfigBuilder::setPortResources(std::vector<int> portResources) {
+  std::vector<ResourceType> pr;
+  for(int resource : portResources) {
+    pr.emplace_back(static_cast<ResourceType>(resource));
+  }
+  config.setPortResources(pr);
   return *this;
 }
 

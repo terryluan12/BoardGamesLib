@@ -16,11 +16,13 @@ protected:
 
 
     DoganConfig config1 = DoganConfigBuilder().build();
-    std::array<int, 2> numberConfig{2, 2};
+    std::array<int, 2> generalConfig{2, 2};
     std::vector<int> numberLocations{2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12};
     DoganConfig config2 = DoganConfigBuilder()
-                          .setNumberConfig(numberConfig)
+                          .setNumberConfig(generalConfig)
                           .setNumberLocations(numberLocations)
+                          .setResourceConfig(generalConfig)
+                          .setResources({4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
                           .build();
     nGame = DoganGame(config1);
     iGame = DoganGame(config2);
@@ -126,7 +128,7 @@ TEST_F(GameFixture, DistributeResourcesTest) {
   int rolledDice = 2;
   iGame.distributeResources(rolledDice);
   std::array<int, 5> actual = iGame.getResourceCount(playerID1);
-  std::array<int, 5> expected{1, 0, 0, 0, 0};
+  std::array<int, 5> expected{0, 0, 0, 0, 1};
   EXPECT_EQ(actual, expected);
 }
 

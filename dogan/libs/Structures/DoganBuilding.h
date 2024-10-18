@@ -8,7 +8,7 @@
 
 class DoganBuilding : public DoganStructure {
 public:
-  DoganBuilding(int pid, StructureType t, Coordinate2D c, Direction d);
+  DoganBuilding(int pid, StructureType t, DoganVertex dv);
   int getWorth(void);
 
 private:

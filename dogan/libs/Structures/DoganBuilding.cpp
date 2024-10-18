@@ -1,14 +1,12 @@
 #include "DoganBuilding.h"
-#include "DoganVertex.h"
 #include <cassert>
 
-DoganBuilding::DoganBuilding(int pid, StructureType t, Coordinate2D c,
-                             Direction d)
+DoganBuilding::DoganBuilding(int pid, StructureType t, DoganVertex dv)
     : DoganStructure(pid, t) {
   if (t == StructureType::ROAD) {
     throw InvalidTypeException("Error: Invalid Building Type");
   }
-  graphElements.push_back(std::make_shared<DoganVertex>(DoganVertex(c, d)));
+  graphElements.push_back(std::make_shared<DoganVertex>(dv));
   addCorrespondingVertices();
 };
 int DoganBuilding::getWorth() {

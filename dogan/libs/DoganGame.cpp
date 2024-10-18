@@ -97,15 +97,16 @@ void DoganGame::buildStructure(int playerID, size_t structType,
 
   std::shared_ptr<DoganStructure> element;
 
+
   switch (st) {
   case StructureType::VILLAGE:
   case StructureType::CITY:
     element = std::make_shared<DoganBuilding>(
-        DoganBuilding(playerID, st, tileLocation, d));
+        DoganBuilding(playerID, st, DoganVertex(tileLocation, d)));
     break;
   case StructureType::ROAD:
     element =
-        std::make_shared<DoganRoad>(DoganRoad(playerID, st, tileLocation, d));
+        std::make_shared<DoganRoad>(DoganRoad(playerID, st, DoganEdge(tileLocation, d)));
     break;
   }
   board.buildStructure(element, cost);
