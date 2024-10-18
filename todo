@@ -23,3 +23,4 @@ Add General Player class and extend Dogan Player
 Add more custom exceptions
 Move everything to Dogan namespace
 Optimize CMakeFiles
+Extend BuildSameStructureTwice to test if players have the same amount of buildings after failure

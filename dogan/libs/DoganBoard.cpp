@@ -56,7 +56,7 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
     fde = std::dynamic_pointer_cast<DoganEdge>(ds->getGraphElements()[0]);
 
     if (this->roads.find(*fde) != this->roads.end()) {
-      throw std::invalid_argument("Error: Road already exists");
+      throw SameStructureException("Error: Road already exists");
     }
 
     for (auto el : ds->getGraphElements()) {

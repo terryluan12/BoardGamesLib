@@ -23,7 +23,10 @@ TEST_F(GameFixture, AddExistingPlayersTest) {
   nGame.addPlayer("DoganPlayer", 0);
   EXPECT_THROW({ nGame.addPlayer("", 0); }, SamePlayerException);
 }
-TEST_F(GameFixture, BuildSameStructureTwice) {
+
+TEST_F(GameFixture, BuildExistingStructuresTest) {
+
+    // Buildings
   iGame.buildStructure(0, 0, {1, 1}, "NW", {0, 0, 0, 0, 0});
   EXPECT_THROW(
       {
@@ -32,9 +35,23 @@ TEST_F(GameFixture, BuildSameStructureTwice) {
       SameStructureException);
   EXPECT_THROW(
       {
-        iGame.buildStructure(0, 0, {1, 0}, "SE", {0, 0, 0, 0, 0});
+        iGame.buildStructure(1, 0, {1, 0}, "SE", {0, 0, 0, 0, 0});
       },
       SameStructureException);
+
+    // Roads
+    iGame.buildStructure(0, 2, {1, 0}, "SE", {0, 0, 0, 0, 0});
+    EXPECT_THROW(
+        {
+          iGame.buildStructure(0, 2, {1, 0}, "SE", {0, 0, 0, 0, 0});
+        },
+        SameStructureException);
+    
+    EXPECT_THROW(
+        {
+          iGame.buildStructure(1, 2, {1, 1}, "NW", {0, 0, 0, 0, 0});
+        },
+        SameStructureException);
 }
 
 TEST_F(GameFixture, StartPhaseTest) {
