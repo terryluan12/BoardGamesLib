@@ -11,7 +11,7 @@ class DoganConfigBuilder {
 public:
   DoganConfigBuilder &setBoardSize(size_t boardSize);
   DoganConfigBuilder &setRobberLocation(PublicCoordinate2D robberLocations);
-  DoganConfigBuilder &setTotalStructureCount(std::array<size_t, 3> totalPlayerStructureCount);
+  DoganConfigBuilder &setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount);
   DoganConfigBuilder &setTileLocations(std::vector<PublicCoordinate2D> tileLocations);
   DoganConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
   DoganConfigBuilder &setDevelopmentCount(std::array<size_t, 5> developmentCount);

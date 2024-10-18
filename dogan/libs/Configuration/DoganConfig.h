@@ -47,7 +47,7 @@ public:
 
   // Getters
   size_t getBoardSize(void) const;
-  std::array<size_t, 3> getTotalStructureCount(void) const;
+  std::array<int, 3> getTotalStructureCount(void) const;
 
   Coordinate2D getRobberLocation(void) const;
   const std::vector<Coordinate2D> getTileLocations(void) const;
@@ -56,7 +56,7 @@ public:
 
   // Setters
   void setBoardSize(size_t s);
-  void setTotalStructureCount(std::array<size_t, 3> tsc);
+  void setTotalStructureCount(std::array<int, 3> tsc);
 
   void setResourceCount(std::array<size_t, 5> rc);
   void setDevelopmentCount(std::array<size_t, 5> dc);
@@ -77,7 +77,7 @@ public:
 
 private:
   size_t boardSize;
-  std::array<size_t, 3> totalStructureCount; // {Villages, Cities, Roads}
+  std::array<int, 3> totalStructureCount; // {Villages, Cities, Roads}
 
   // Initial Counts
   std::array<size_t, 5> initialResourceCount;

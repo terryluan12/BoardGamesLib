@@ -9,6 +9,7 @@
 class DoganBuilding : public DoganStructure {
 public:
   DoganBuilding(int pid, StructureType t, Coordinate2D c, Direction d);
+  int getWorth(void);
 
 private:
   void addCorrespondingVertices(void);

@@ -25,3 +25,6 @@ Move everything to Dogan namespace
 Optimize CMakeFiles
 Add checking to see if a DoganPort is valid
 Move vertex up to DoganGame?? (when creating ports/buildings etc. so you construct it in DoganGame. Would probably be faster)
+Move ResourceType down to Bank. 
+Deal with if Bank is bankrupt
+Figure out sizeDifferences in getDevelopments

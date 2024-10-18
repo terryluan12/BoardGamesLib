@@ -13,7 +13,7 @@ protected:
 };
 
 TEST_F(BankFixture, DefaultConstructor) {
-  std::array<size_t, 5> expected = {0, 0, 0, 0, 0};
+  std::array<int, 5> expected = {0, 0, 0, 0, 0};
   EXPECT_EQ(dBank.getResourceCount(), expected)
       << "Default resources should be 0";
   EXPECT_EQ(dBank.getDevelopmentCount(), expected)
@@ -21,7 +21,7 @@ TEST_F(BankFixture, DefaultConstructor) {
 }
 
 TEST_F(BankFixture, AddResource) {
-  std::array<size_t, 5> expected = {5, 5, 5, 5, 5};
+  std::array<int, 5> expected = {5, 5, 5, 5, 5};
   dBank.addResources({5, 5, 5, 5, 5});
   EXPECT_EQ(dBank.getResourceCount(), expected)
       << "Resources should be added correctly";
@@ -37,7 +37,7 @@ TEST_F(BankFixture, AddResource) {
 }
 
 TEST_F(BankFixture, RemoveResource) {
-  std::array<size_t, 5> expected = {5, 6, 7, 8, 9};
+  std::array<int, 5> expected = {5, 6, 7, 8, 9};
   pBank.removeResources({5, 5, 5, 5, 5});
   EXPECT_EQ(pBank.getResourceCount(), expected)
       << "Resources should be removed correctly";
@@ -87,7 +87,7 @@ TEST_F(BankFixture, PopDevelopment) {
   EXPECT_EQ(pBank.popDevelopment(), expected)
       << "Should pop the last development";
 
-  std::array<size_t, 5> newExpected{0, 0, 0, 0, 0};
+  std::array<int, 5> newExpected{0, 0, 0, 0, 0};
   EXPECT_EQ(pBank.getDevelopmentCount(), newExpected)
       << "Should have no developments left";
 

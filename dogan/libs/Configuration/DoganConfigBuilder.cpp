@@ -14,7 +14,7 @@ DoganConfigBuilder &DoganConfigBuilder::setRobberLocation(PublicCoordinate2D rob
 }
 
 DoganConfigBuilder &
-DoganConfigBuilder::setTotalStructureCount(std::array<size_t, 3> totalPlayerStructureCount) {
+DoganConfigBuilder::setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount) {
   config.setTotalStructureCount(totalPlayerStructureCount);
   return *this;
 }

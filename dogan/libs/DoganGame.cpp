@@ -8,7 +8,10 @@
 DoganGame::DoganGame(DoganConfig config)
     : config(config), rengine(std::random_device{}()), die(1, 6),
       board(DoganBoard(config)) {
-  std::array<size_t, 5> resourceCount = config.getResourceCount();
+  std::array<int, 5> resourceCount{};
+  for (size_t i = 0; i < 5; i++) {
+    resourceCount[i] = config.getResourceCount()[i];
+  }
   std::vector<DevelopmentType> developments = config.getDevelopments(rengine);
   bank = DoganBank(resourceCount, developments);
 }
@@ -23,7 +26,7 @@ void DoganGame::addPlayer(std::string pn, int pid) {
 };
 
 void DoganGame::purchaseDevelopmentCard(int playerID,
-                                        std::array<size_t, 5> cost) {
+                                        std::array<int, 5> cost) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
@@ -37,8 +40,8 @@ void DoganGame::purchaseDevelopmentCard(int playerID,
 }
 
 
-void DoganGame::tradeResources(int playerID1, std::array<size_t, 5> resources1,
-                               int playerID2, std::array<size_t, 5> resources2) {
+void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
+                               int playerID2, std::array<int, 5> resources2) {
   auto pe1 = players.find(playerID1), pe2 = players.find(playerID2);
   if(pe1 == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID1) + " invalid");
@@ -57,13 +60,13 @@ void DoganGame::tradeResources(int playerID1, std::array<size_t, 5> resources1,
   p1.addResources(resources2);
   }
 
-const std::array<size_t, 5> DoganGame::getResourceCount(int playerID) {
+const std::array<int, 5> DoganGame::getResourceCount(int playerID) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
   return pe->second.getResourceCount();
 }
-const std::array<size_t, 5> DoganGame::getDevelopmentCount(int playerID) {
+const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
@@ -73,7 +76,7 @@ const std::array<size_t, 5> DoganGame::getDevelopmentCount(int playerID) {
 
 void DoganGame::buildStructure(int playerID, size_t structType,
                                Coordinate2D tileLocation, std::string dir,
-                               std::array<size_t, 5> cost) {
+                               std::array<int, 5> cost) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
@@ -85,6 +88,12 @@ void DoganGame::buildStructure(int playerID, size_t structType,
 
   Direction d = AxialHexDirection::fromString(dir);
   StructureType st = DoganStructureType::fromInt(structType);
+
+  if(!board.hasTile(tileLocation))
+    throw CoordinateNotFoundException("Error: Invalid Coordinate");
+
+  if (board.hasStructure(tileLocation, d, st))
+    throw SameStructureException("Error: Structure already exists");
 
   std::shared_ptr<DoganStructure> element;
 
@@ -104,7 +113,7 @@ void DoganGame::buildStructure(int playerID, size_t structType,
   bank.removeResources(cost);
 }
 
-void DoganGame::giveResources(int playerID, std::array<size_t, 5> r) {
+void DoganGame::giveResources(int playerID, std::array<int, 5> r) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
@@ -115,6 +124,39 @@ bool DoganGame::hasStructure(Coordinate2D coord, std::string dir, int structureT
   StructureType st = DoganStructureType::fromInt(structureType);
   return board.hasStructure(coord, AxialHexDirection::fromString(dir), st);
 }
+
+int DoganGame::rollDice(void) {
+  return die(rengine) + die(rengine);
+}
+
+
+void DoganGame::distributeResources(int numberRolled) {
+  auto buildings = board.getResourceDistribution(numberRolled);
+  for(auto [pid, resources] : buildings) {
+
+    auto player = players.find(pid);
+    if(player == players.end())
+      throw PlayerNotFoundException("Player ID " + std::to_string(pid) + " invalid");
+    
+    for(size_t i = 0; i < resources.size(); i++) {
+      if(bank.canAfford(i, resources[i])) {
+        bank.removeResource(static_cast<ResourceType>(i), resources[i]);
+        player->second.addResource(i, resources[i]);
+      }
+      else {
+        throw InsufficientResourcesException("Bank does not have enough resources to distribute");
+      }
+    }
+  }
+}
+
+void DoganGame::moveRobber(Coordinate2D tileLocation) {
+  if(!board.hasTile(tileLocation))
+    throw CoordinateNotFoundException("Error: Invalid Coordinate");
+
+  board.moveRobber(tileLocation);
+}
+
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
   os << dg.board;

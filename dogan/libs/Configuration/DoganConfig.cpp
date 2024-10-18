@@ -222,7 +222,7 @@ std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
 
 size_t DoganConfig::getBoardSize(void) const { return boardSize; }
 
-std::array<size_t, 3> DoganConfig::getTotalStructureCount(void) const {
+std::array<int, 3> DoganConfig::getTotalStructureCount(void) const {
   return totalStructureCount;
 }
 
@@ -245,7 +245,7 @@ const std::array<size_t, 5> DoganConfig::getDevelopmentCount(void) const {
 
 void DoganConfig::setBoardSize(size_t s) { boardSize = s; }
 
-void DoganConfig::setTotalStructureCount(std::array<size_t, 3> tsc) {
+void DoganConfig::setTotalStructureCount(std::array<int, 3> tsc) {
   totalStructureCount = tsc;
 }
 

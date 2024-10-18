@@ -13,6 +13,8 @@ DoganStructure::getGraphElements(void) {
   return graphElements;
 }
 
+int DoganStructure::getPlayerID(void) { return playerID; }
+
 void DoganStructure::setGraphElements(
     std::vector<std::shared_ptr<DoganGraphElement>> ge) {
   graphElements = ge;

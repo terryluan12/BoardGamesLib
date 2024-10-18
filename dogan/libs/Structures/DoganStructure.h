@@ -12,6 +12,7 @@ public:
   void setPlayerID(int pid);
   void setStructureType(StructureType t);
   std::vector<std::shared_ptr<DoganGraphElement>> getGraphElements(void);
+  int getPlayerID(void);
   void setGraphElements(std::vector<std::shared_ptr<DoganGraphElement>> ge);
   virtual ~DoganStructure(void){};
 

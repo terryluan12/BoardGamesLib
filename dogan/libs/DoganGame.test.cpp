@@ -3,6 +3,7 @@
 #include "DoganStructureType.h"
 #include "DoganExceptions.h"
 #include <gtest/gtest.h>
+#include "config.enum.h"
 
 class GameFixture : public ::testing::Test {
 protected:
@@ -15,7 +16,12 @@ protected:
 
 
     DoganConfig config1 = DoganConfigBuilder().build();
-    DoganConfig config2 = DoganConfigBuilder().build();
+    std::array<int, 2> numberConfig{2, 2};
+    std::vector<int> numberLocations{2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12};
+    DoganConfig config2 = DoganConfigBuilder()
+                          .setNumberConfig(numberConfig)
+                          .setNumberLocations(numberLocations)
+                          .build();
     nGame = DoganGame(config1);
     iGame = DoganGame(config2);
     iGame.addPlayer("Dogan1", playerID1);
@@ -78,8 +84,8 @@ TEST_F(GameFixture, TradeTest) {
   iGame.giveResources(1, {4, 4, 4, 4, 4});
   iGame.tradeResources(0, {0, 1, 2, 3, 4}, 1, {0, 0, 0 , 0, 0});
 
-  std::array<size_t, 5> expected1 = {4, 3, 2, 1, 0};
-  std::array<size_t, 5> expected2 = {4, 5, 6, 7, 8};
+  std::array<int, 5> expected1 = {4, 3, 2, 1, 0};
+  std::array<int, 5> expected2 = {4, 5, 6, 7, 8};
 
   EXPECT_EQ((iGame.getResourceCount(0)), expected1);
   EXPECT_EQ((iGame.getResourceCount(1)), expected2);
@@ -113,6 +119,15 @@ TEST_F(GameFixture, BuildExistingStructuresTest) {
           iGame.buildStructure(playerID2, roadInt, {1, 1}, "NW", {0, 0, 0, 0, 0});
         },
         SameStructureException);
+}
+
+TEST_F(GameFixture, DistributeResourcesTest) {
+  iGame.buildStructure(playerID1, villageInt, {0, 0}, "N", {0, 0, 0, 0, 0});
+  int rolledDice = 2;
+  iGame.distributeResources(rolledDice);
+  std::array<int, 5> actual = iGame.getResourceCount(playerID1);
+  std::array<int, 5> expected{1, 0, 0, 0, 0};
+  EXPECT_EQ(actual, expected);
 }
 
 

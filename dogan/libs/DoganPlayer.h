@@ -17,28 +17,29 @@ public:
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
 
-  void setAvailableStructures(const std::array<size_t, 3> as);
-  void addResources(std::array<size_t, 5> r);
-  void removeResources(std::array<size_t, 5> r);
-  bool canAfford(const std::array<size_t, 5> r);
+  void setAvailableStructures(const std::array<int, 3> as);
+  void addResources(std::array<int, 5> r);
+  void removeResources(std::array<int, 5> r);
+  void addResource(int r, int n);
+  bool canAfford(const std::array<int, 5> r);
 
   // Other Functions
   std::string getName(void) const;
-  std::array<size_t, 5> getResourceCount(void);
-  std::array<size_t, 5> getDevelopmentCount(void);
+  std::array<int, 5> getResourceCount(void);
+  std::array<int, 5> getDevelopmentCount(void);
   int getPlayerID(void) const;
   void giveDevelopment(DevelopmentType d);
   void buildStructure(std::shared_ptr<DoganStructure> s,
-                      std::array<size_t, 5> c);
+                      std::array<int, 5> c);
 
   // void useDevelopmentCard(DevelopmentType dt, )
 private:
   std::string name;
   int playerID;
   DoganBank inventory;
-  std::array<size_t, 3> availableStructures;
-  std::array<size_t, 5> resources;
-  std::array<size_t, 5> developments;
+  std::array<int, 3> availableStructures;
+  std::array<int, 5> resources;
+  std::array<int, 5> developments;
   std::vector<std::shared_ptr<DoganBuilding>> buildings;
   std::vector<std::shared_ptr<DoganRoad>> roads;
   int victoryPoints;
