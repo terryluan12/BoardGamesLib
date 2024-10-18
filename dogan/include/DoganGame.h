@@ -10,7 +10,12 @@ public:
   DoganGame(DoganConfig config = DoganConfig());
   friend std::ostream &operator<<(std::ostream &os, DoganGame const &dg);
   void addPlayer(std::string pn, int pid);
-  void purchaseDevelopmentCard(DoganPlayer p, std::array<size_t, 5> c);
+  void purchaseDevelopmentCard(int playerID, std::array<size_t, 5> c);
+  
+  void tradeResources(int playerID1, std::array<size_t, 5> resources1,
+                               int playerID2, std::array<size_t, 5> resources2);
+  const std::array<size_t, 5> getResourceCount(int playerID);
+  const std::array<size_t, 5> getDevelopmentCount(int playerID);
   void buildStructure(int playerID, size_t structType,
                       Coordinate2D tileLocation, std::string dir,
                       std::array<size_t, 5> cost);

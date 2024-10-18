@@ -1,7 +1,6 @@
 #include "DoganBoard.h"
 #include "enums.h"
 #include <memory>
-#include <sstream>
 
 DoganBoard::DoganBoard(DoganConfig config) {
   rengine.seed(std::random_device{}());

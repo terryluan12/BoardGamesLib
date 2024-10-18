@@ -1,5 +1,4 @@
 #include "DoganCell.h"
-#include <sstream>
 
 DoganCell::DoganCell(bool cr, Coordinate2D c, int n, ResourceType t)
     : containsRobber(cr), coordinate(c), number(n), type(t) {}

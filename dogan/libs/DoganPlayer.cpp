@@ -1,6 +1,9 @@
 #include "DoganPlayer.h"
 #include "DoganExceptions.h"
 
+DoganPlayer::DoganPlayer(std::string n, int pid)
+    : name(n), playerID(pid), inventory(), victoryPoints(0) {};
+
 // Victory Point Functions
 int DoganPlayer::getVictoryPoints(void) const { return victoryPoints; }
 void DoganPlayer::setVictoryPoints(const int vp) { victoryPoints = vp; }
@@ -9,29 +12,34 @@ void DoganPlayer::setAvailableStructures(const std::array<size_t, 3> as) {
   availableStructures = as;
 }
 
-DoganBank DoganPlayer::getInventory(void) const { return inventory; }
+
+void DoganPlayer::addResources(std::array<size_t, 5> r) {
+  inventory.addResources(r);
+}
+void DoganPlayer::removeResources(std::array<size_t, 5> r) {
+  inventory.removeResources(r);
+}
+bool DoganPlayer::canAfford(const std::array<size_t, 5> r) {
+  return inventory.canAfford(r);
+}
 
 std::string DoganPlayer::getName(void) const { return name; }
 
+std::array<size_t, 5> DoganPlayer::getResourceCount(void) {
+  return inventory.getResourceCount();
+}
+std::array<size_t, 5> DoganPlayer::getDevelopmentCount(void) {
+  return inventory.getResourceCount();
+}
+
 int DoganPlayer::getPlayerID(void) const { return playerID; }
 
-void DoganPlayer::purchaseDevelopment(DevelopmentType d,
-                                      std::array<size_t, 5> c) {
-  if (!inventory.canAfford(c)) {
-    throw InsufficientFundsException(
-        "Error: Player does not have enough resources to purchase development "
-        "card");
-  }
-  inventory.removeResources(c);
+void DoganPlayer::giveDevelopment(DevelopmentType d) {
   addDevelopment(d);
 }
 
 void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s,
                                  std::array<size_t, 5> c) {
-  if (!inventory.canAfford(c)) {
-    throw InsufficientFundsException(
-        "Error: Player does not have enough resources to build structure");
-  }
   if (availableStructures[static_cast<int>(s->getStructureType())] <= 0) {
     throw InsufficientStructuresException(
         "Error: Player does not have enough structures");
@@ -64,14 +72,14 @@ void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
 std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {
   os << "Player " << p.getName() << ": \n  VP: " << p.getVictoryPoints()
      << "\n  Resource Cards:\n";
-  for (size_t i = 0; i < 5; ++i) {
-    os << "    " << static_cast<ResourceType>(i) << ": "
-       << p.getInventory().getResourceCount()[i] << "\n";
-  }
+  // for (size_t i = 0; i < 5; ++i) {
+  //   os << "    " << static_cast<ResourceType>(i) << ": "
+  //      << p.getResources()[i] << "\n";
+  // }
   os << "  Development Cards:\n";
   for (size_t i = 0; i < 5; ++i) {
     os << "    " << static_cast<DevelopmentType>(i) << ": "
-       << p.getInventory().getDevelopmentCount()[i] << "\n";
+       << p.inventory.getDevelopmentCount()[i] << "\n";
   }
   os << "\n";
   return os;
