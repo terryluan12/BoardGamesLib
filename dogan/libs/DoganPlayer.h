@@ -14,7 +14,6 @@ public:
       : name(n), playerID(pid), victoryPoints(0){};
   friend std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);
 
-
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
 
@@ -26,7 +25,9 @@ public:
   std::string getName(void) const;
   int getPlayerID(void) const;
   void purchaseDevelopment(DevelopmentType d, std::array<size_t, 5> c);
-  void buildStructure(std::shared_ptr<DoganStructure> s, std::array<size_t, 5> c);
+  void buildStructure(std::shared_ptr<DoganStructure> s,
+                      std::array<size_t, 5> c);
+
 private:
   std::string name;
   int playerID;

@@ -26,7 +26,8 @@ void DoganPlayer::purchaseDevelopment(DevelopmentType d,
   addDevelopment(d);
 }
 
-void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s, std::array<size_t, 5> c) {
+void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s,
+                                 std::array<size_t, 5> c) {
   if (!inventory.canAfford(c)) {
     throw InsufficientFundsException(
         "Error: Player does not have enough resources to build structure");
@@ -49,17 +50,16 @@ void DoganPlayer::addDevelopment(DevelopmentType d) {
 }
 
 void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
-  switch(s->getStructureType()) {
-    case(StructureType::VILLAGE):
-    case(StructureType::CITY):
-      buildings.push_back(std::dynamic_pointer_cast<DoganBuilding>(s));
-      victoryPoints += 1;
-      break;
-    case(StructureType::ROAD):
-      roads.push_back(std::dynamic_pointer_cast<DoganRoad>(s));
+  switch (s->getStructureType()) {
+  case (StructureType::VILLAGE):
+  case (StructureType::CITY):
+    buildings.push_back(std::dynamic_pointer_cast<DoganBuilding>(s));
+    victoryPoints += 1;
+    break;
+  case (StructureType::ROAD):
+    roads.push_back(std::dynamic_pointer_cast<DoganRoad>(s));
   }
 }
-
 
 std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {
   os << "Player " << p.getName() << ": \n  VP: " << p.getVictoryPoints()

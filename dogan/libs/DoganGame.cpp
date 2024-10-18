@@ -1,6 +1,6 @@
 #include "DoganGame.h"
-#include "DoganExceptions.h"
 #include "DoganBuilding.h"
+#include "DoganExceptions.h"
 #include "DoganRoad.h"
 #include "enums.h"
 #include <memory>
@@ -14,7 +14,7 @@ DoganGame::DoganGame(DoganConfig config)
 }
 
 void DoganGame::addPlayer(std::string pn, int pid) {
-  if(players.find(pid) != players.end()) {
+  if (players.find(pid) != players.end()) {
     throw SamePlayerException("Cannot add same player twice");
   }
   DoganPlayer p = DoganPlayer(pn, pid);
@@ -29,26 +29,29 @@ void DoganGame::purchaseDevelopmentCard(DoganPlayer p,
   bank.addResources(c);
 }
 
-  void DoganGame::buildStructure(int playerID, size_t structType, Coordinate2D tileLocation,
-                        std::string dir, std::array<size_t, 5> cost) {
+void DoganGame::buildStructure(int playerID, size_t structType,
+                               Coordinate2D tileLocation, std::string dir,
+                               std::array<size_t, 5> cost) {
 
   Direction d = AxialHexDirection::fromString(dir);
 
-  if(structType >= DoganStructure::NUM_STRUCTURE_TYPES){
+  if (structType >= DoganStructure::NUM_STRUCTURE_TYPES) {
     throw NoSuchStructureException("Error: Invalid Structure Type.");
   }
   StructureType st = static_cast<StructureType>(structType);
 
   std::shared_ptr<DoganStructure> element;
 
-  switch(st) {
-    case StructureType::VILLAGE:
-    case StructureType::CITY:
-      element = std::make_shared<DoganBuilding>(DoganBuilding(playerID, st, tileLocation, d));
-      break;
-    case StructureType::ROAD:
-      element = std::make_shared<DoganRoad>(DoganRoad(playerID, st, tileLocation, d));
-      break;
+  switch (st) {
+  case StructureType::VILLAGE:
+  case StructureType::CITY:
+    element = std::make_shared<DoganBuilding>(
+        DoganBuilding(playerID, st, tileLocation, d));
+    break;
+  case StructureType::ROAD:
+    element =
+        std::make_shared<DoganRoad>(DoganRoad(playerID, st, tileLocation, d));
+    break;
   }
   board.buildStructure(element, cost);
   this->players.at(playerID).buildStructure(element, cost);
@@ -58,7 +61,6 @@ void DoganGame::purchaseDevelopmentCard(DoganPlayer p,
 void DoganGame::giveResources(int playerID, std::array<size_t, 5> r) {
   this->players.at(playerID).getInventory().addResources(r);
 }
-
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
   os << dg.board;

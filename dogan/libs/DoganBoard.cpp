@@ -18,54 +18,57 @@ DoganBoard::DoganBoard(DoganConfig config) {
     if (this->cells.find(c) != this->cells.end()) {
       throw std::invalid_argument("Error: Cell already exists");
     }
-    this->cells.insert(std::make_pair(c, 
-        DoganCell(false, c, numbers[i], resources[i])));
-        
+    this->cells.insert(
+        std::make_pair(c, DoganCell(false, c, numbers[i], resources[i])));
+
     ++i;
   }
   cells.at(config.getRobberLocation()).setRobber(true);
 }
 
-void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, std::array<size_t, 5> c) {
+void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
+                                std::array<size_t, 5> c) {
   DoganGraphElement dg = *ds->getGraphElements()[0];
   if (this->cells.find(dg.getCoordinate()) == this->cells.end()) {
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
   }
   std::shared_ptr<DoganVertex> fdv = nullptr;
-  std::shared_ptr<DoganEdge> fde = nullptr;   
-  switch(ds->getStructureType()) {
-    case(StructureType::VILLAGE):
-    case(StructureType::CITY):
-      fdv = std::dynamic_pointer_cast<DoganVertex>(ds->getGraphElements()[0]);
-      if (this->buildings.find(*fdv) != this->buildings.end()) {
-        throw SameStructureException("Error: Structure already exists");
-      }
+  std::shared_ptr<DoganEdge> fde = nullptr;
+  switch (ds->getStructureType()) {
+  case (StructureType::VILLAGE):
+  case (StructureType::CITY):
+    fdv = std::dynamic_pointer_cast<DoganVertex>(ds->getGraphElements()[0]);
+    if (this->buildings.find(*fdv) != this->buildings.end()) {
+      throw SameStructureException("Error: Structure already exists");
+    }
 
-      for(auto el: ds->getGraphElements()) {
-        auto dv = std::dynamic_pointer_cast<DoganVertex>(el);
-        if(this->cells.find(dv->getCoordinate()) == this->cells.end()) {
-          continue;
-        }
-        buildings.insert(std::make_pair(*dv, std::dynamic_pointer_cast<DoganBuilding>(ds)));
+    for (auto el : ds->getGraphElements()) {
+      auto dv = std::dynamic_pointer_cast<DoganVertex>(el);
+      if (this->cells.find(dv->getCoordinate()) == this->cells.end()) {
+        continue;
       }
+      buildings.insert(
+          std::make_pair(*dv, std::dynamic_pointer_cast<DoganBuilding>(ds)));
+    }
 
-      break;
-    case(StructureType::ROAD):
-      fde = std::dynamic_pointer_cast<DoganEdge>(ds->getGraphElements()[0]);
-      
-      if (this->roads.find(*fde) != this->roads.end()) {
-        throw std::invalid_argument("Error: Road already exists");
-      }
+    break;
+  case (StructureType::ROAD):
+    fde = std::dynamic_pointer_cast<DoganEdge>(ds->getGraphElements()[0]);
 
-      for(auto el: ds->getGraphElements()) {
-        auto de = std::dynamic_pointer_cast<DoganEdge>(el);
-        
-        if(this->cells.find(de->getCoordinate()) == this->cells.end()) {
-          continue;
-        }
-        roads.insert(std::make_pair(*de, std::dynamic_pointer_cast<DoganRoad>(ds)));
+    if (this->roads.find(*fde) != this->roads.end()) {
+      throw std::invalid_argument("Error: Road already exists");
+    }
+
+    for (auto el : ds->getGraphElements()) {
+      auto de = std::dynamic_pointer_cast<DoganEdge>(el);
+
+      if (this->cells.find(de->getCoordinate()) == this->cells.end()) {
+        continue;
       }
-      break;
+      roads.insert(
+          std::make_pair(*de, std::dynamic_pointer_cast<DoganRoad>(ds)));
+    }
+    break;
   }
 }
 
@@ -76,7 +79,6 @@ const std::vector<DoganPort> DoganBoard::getPorts(void) const { return ports; }
 Coordinate2D DoganBoard::getRobberLocation(void) const {
   return robberLocation;
 }
-
 
 bool DoganBoard::hasTile(const Coordinate2D c) const {
   return cells.find(c) != cells.end();

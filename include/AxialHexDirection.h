@@ -36,4 +36,5 @@ public:
 std::ostream &operator<<(std::ostream &os,
                          AxialHexDirection::Direction const &d);
 
-bool operator<(AxialHexDirection::Direction lhs, AxialHexDirection::Direction rhs);
+bool operator<(AxialHexDirection::Direction lhs,
+               AxialHexDirection::Direction rhs);

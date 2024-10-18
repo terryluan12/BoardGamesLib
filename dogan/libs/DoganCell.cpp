@@ -2,8 +2,7 @@
 #include <sstream>
 
 DoganCell::DoganCell(bool cr, Coordinate2D c, int n, ResourceType t)
-    : containsRobber(cr), coordinate(c), number(n), type(t) {
-}
+    : containsRobber(cr), coordinate(c), number(n), type(t) {}
 
 Coordinate2D DoganCell::getCoordinate(void) const { return coordinate; }
 

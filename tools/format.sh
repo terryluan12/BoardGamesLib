@@ -1,16 +1,15 @@
 #!/bin/bash
 
 # Check if the user provided a directory
-if [ -z "$1" ]; then
-    echo "Usage: $0 <directory>"
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <directory> [<directory> ...]"
     exit 1
 fi
 
 # Directory to format
-DIR=$1
+DIRS=$@
 
-# Find and format .h and .cpp files
-find "$DIR" -type f \( -name "*.h" -o -name "*.tpp" -o -name "*.cpp" \) -exec clang-format -i {} +
-find "$DIR" -type f -name "*.tpp" -exec clang-format -i {} +
+# Find and format .h, .tpp and .cpp files
+find $DIRS -type f \( -name "*.h" -o -name "*.tpp" -o -name "*.cpp" \) -exec clang-format -i {} +
 
-echo "Formatting completed for all .h, .tpp and .cpp files in $DIR."
+echo "Formatting completed for all .h, .tpp and .cpp files"

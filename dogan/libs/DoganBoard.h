@@ -3,8 +3,8 @@
 #include "BoardInterface.h"
 #include "Coordinate.h"
 #include "DoganBank.h"
-#include "DoganCell.h"
 #include "DoganBuilding.h"
+#include "DoganCell.h"
 #include "DoganConfig.h"
 #include "DoganPort.h"
 #include "DoganRoad.h"
@@ -15,7 +15,8 @@ class DoganBoard : public BoardInterface<100> {
 public:
   DoganBoard(DoganConfig config);
   ~DoganBoard(void){};
-  void buildStructure(std::shared_ptr<DoganStructure> ds, std::array<size_t, 5> c);
+  void buildStructure(std::shared_ptr<DoganStructure> ds,
+                      std::array<size_t, 5> c);
   size_t getBoardSize(void) const override;
   const std::vector<DoganPort> getPorts(void) const;
   Coordinate2D getRobberLocation(void) const;
