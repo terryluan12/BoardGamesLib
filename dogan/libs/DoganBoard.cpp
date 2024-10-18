@@ -18,12 +18,12 @@ DoganBoard::DoganBoard(DoganConfig config) {
     if (this->cells.find(c) != this->cells.end()) {
       throw std::invalid_argument("Error: Cell already exists");
     }
-    this->cells[c] = std::make_shared<DoganCell>(
-        DoganCell(false, c, numbers[i], resources[i]));
+    this->cells.insert(std::make_pair(c, 
+        DoganCell(false, c, numbers[i], resources[i])));
         
     ++i;
   }
-  cells[config.getRobberLocation()]->setRobber(true);
+  cells.at(config.getRobberLocation()).setRobber(true);
 }
 
 void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, std::array<size_t, 5> c) {
@@ -90,7 +90,7 @@ void DoganBoard::setBoardSize(size_t bs) {
 
 std::ostream &operator<<(std::ostream &os, DoganBoard const &db) {
   for (const auto &c : db.cells) {
-    os << *(c.second);
+    os << c.second;
   }
   // size_t i = 1;
   // for (auto &pl : db.getPorts()) {

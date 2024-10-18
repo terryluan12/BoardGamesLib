@@ -26,7 +26,7 @@ public:
 private:
   size_t boardSize;
   Coordinate2D robberLocation;
-  std::map<Coordinate2D, std::shared_ptr<DoganCell>> cells;
+  std::map<Coordinate2D, DoganCell> cells;
   std::map<Coordinate2D, std::shared_ptr<DoganBuilding>> villages;
   std::map<Coordinate2D, std::shared_ptr<DoganBuilding>> cities;
   std::map<Coordinate2D, std::shared_ptr<DoganRoad>> roads;
