@@ -3,7 +3,6 @@
 #include "DoganBuilding.h"
 #include "DoganRoad.h"
 #include "enums.h"
-#include <iostream>
 #include <memory>
 
 DoganGame::DoganGame(DoganConfig config)
@@ -33,7 +32,7 @@ void DoganGame::purchaseDevelopmentCard(DoganPlayer p,
   void DoganGame::buildStructure(int playerID, size_t structType, Coordinate2D tileLocation,
                         std::string dir, std::array<size_t, 5> cost) {
 
-  Direction d = HexagonalDirection::fromString(dir);
+  Direction d = AxialHexDirection::fromString(dir);
 
   if(structType >= DoganStructure::NUM_STRUCTURE_TYPES){
     throw NoSuchStructureException("Error: Invalid Structure Type.");

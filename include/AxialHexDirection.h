@@ -6,18 +6,18 @@
 #include <ostream>
 #include <utility>
 
-class HexagonalDirection {
+class AxialHexDirection {
 public:
   // Direction
   enum class Direction {
-    SOUTH,
-    NORTHEAST,
-    EAST,
-    SOUTHEAST,
-    NORTH,
-    SOUTHWEST,
-    WEST,
-    NORTHWEST
+    NORTH = 0,
+    NORTHEAST = 1,
+    EAST = 2,
+    SOUTHEAST = 3,
+    SOUTH = 4,
+    SOUTHWEST = 5,
+    WEST = 6,
+    NORTHWEST = 7
   };
 
   // static methods
@@ -34,4 +34,6 @@ public:
 };
 
 std::ostream &operator<<(std::ostream &os,
-                         HexagonalDirection::Direction const &d);
+                         AxialHexDirection::Direction const &d);
+
+bool operator<(AxialHexDirection::Direction lhs, AxialHexDirection::Direction rhs);

@@ -5,11 +5,6 @@ DoganConfigBuilder &DoganConfigBuilder::setBoardSize(size_t s) {
   return *this;
 }
 
-DoganConfigBuilder &DoganConfigBuilder::setParity(Parity p) {
-  config.setParity(p);
-  return *this;
-}
-
 DoganConfigBuilder &DoganConfigBuilder::setRobberLocation(Coordinate2D irl) {
   config.setRobberLocation(irl);
   return *this;

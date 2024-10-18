@@ -63,7 +63,7 @@ Coordinate<N> Coordinate<N>::operator+(Coordinate<N> const &c) const {
 template <size_t N>
 Coordinate<N> Coordinate<N>::operator-(Coordinate<N> const &c) const {
   std::array<int, N> resultingArray;
-  for (int i = 0; i < N; i++) {
+  for (size_t i = 0; i < N; i++) {
     resultingArray[i] = coordinates[i] - c.coordinates[i];
   }
   return Coordinate(resultingArray);

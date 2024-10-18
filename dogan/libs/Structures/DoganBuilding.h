@@ -9,8 +9,6 @@
 class DoganBuilding : public DoganStructure {
 public:
   DoganBuilding(int pid, StructureType t, Coordinate2D c, Direction d);
-
 private:
-  std::vector<DoganVertex> graphElements;
   void addCorrespondingVertices(void);
 };

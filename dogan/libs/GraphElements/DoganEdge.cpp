@@ -11,8 +11,8 @@ DoganEdge::DoganEdge(Coordinate2D c, Direction d)
 
 DoganEdge DoganEdge::getCorrespondingEdge(void) {
   const Direction oppositeDirection =
-      HexagonalDirection::getOppositeDirection(direction);
+      AxialHexDirection::getOppositeDirection(direction);
   const Coordinate2D oppositeCoordinate =
-      HexagonalDirection::toCoordinate(direction);
-  return DoganEdge(oppositeCoordinate, oppositeDirection);
+      AxialHexDirection::toCoordinate(direction);
+  return DoganEdge(this->coordinates + oppositeCoordinate, oppositeDirection);
 };

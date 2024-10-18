@@ -74,3 +74,14 @@ public:
 private:
   std::string message;
 };
+
+class SameStructureException : std::exception {
+public:
+  SameStructureException(std::string m) : message(m){};
+  const char *what() const noexcept override { return message.c_str(); }
+
+private:
+  std::string message;
+};
+
+

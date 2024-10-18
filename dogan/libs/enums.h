@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HexagonalDirection.h"
+#include "AxialHexDirection.h"
 #include "common.h"
 #include <ostream>
 
@@ -21,7 +21,7 @@ enum class DevelopmentType {
   OTHER = 5
 };
 
-using Direction = HexagonalDirection::Direction;
+using Direction = AxialHexDirection::Direction;
 
 std::ostream &operator<<(std::ostream &os, ResourceType const &d);
 std::ostream &operator<<(std::ostream &os, DevelopmentType const &d);

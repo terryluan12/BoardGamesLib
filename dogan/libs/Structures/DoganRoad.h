@@ -10,6 +10,5 @@ class DoganRoad : public DoganStructure {
         DoganRoad(int pid, StructureType t, Coordinate2D c, Direction d);
 
     private:
-        std::vector<DoganEdge> graphElements;
         void addCorrespondingEdge(void);
 };

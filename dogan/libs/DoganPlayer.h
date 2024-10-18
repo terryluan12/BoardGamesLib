@@ -34,8 +34,7 @@ private:
   std::array<size_t, 3> availableStructures;
   std::array<size_t, 5> resources;
   std::array<size_t, 5> developments;
-  std::vector<std::shared_ptr<DoganBuilding>> villages;
-  std::vector<std::shared_ptr<DoganBuilding>> cities;
+  std::vector<std::shared_ptr<DoganBuilding>> buildings;
   std::vector<std::shared_ptr<DoganRoad>> roads;
   int victoryPoints;
   void addDevelopment(DevelopmentType d);

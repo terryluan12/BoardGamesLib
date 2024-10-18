@@ -51,11 +51,8 @@ void DoganPlayer::addDevelopment(DevelopmentType d) {
 void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
   switch(s->getStructureType()) {
     case(StructureType::VILLAGE):
-      villages.push_back(std::dynamic_pointer_cast<DoganBuilding>(s));
-      victoryPoints += 1;
-      break;
     case(StructureType::CITY):
-      cities.push_back(std::dynamic_pointer_cast<DoganBuilding>(s));
+      buildings.push_back(std::dynamic_pointer_cast<DoganBuilding>(s));
       victoryPoints += 1;
       break;
     case(StructureType::ROAD):

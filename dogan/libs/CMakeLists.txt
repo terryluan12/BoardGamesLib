@@ -26,5 +26,5 @@ add_library(DoganPort DoganPort.cpp DoganPort.h)
 target_link_libraries(DoganPort PUBLIC DoganVertex enums)
 
 add_library(enums enums.cpp enums.h)
-target_link_libraries(enums PUBLIC HexagonalDirection Common)
+target_link_libraries(enums PUBLIC AxialHexDirection Common)
 

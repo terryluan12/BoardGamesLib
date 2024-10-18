@@ -1,9 +1,9 @@
-#include "HexagonalDirection.h"
+#include "AxialHexDirection.h"
 #include "Exceptions.h"
 
-using Direction = HexagonalDirection::Direction;
+using Direction = AxialHexDirection::Direction;
 
-const Direction HexagonalDirection::fromString(std::string d) {
+const Direction AxialHexDirection::fromString(std::string d) {
   if (d == "N")
     return Direction::NORTH;
   else if (d == "NE")
@@ -24,30 +24,26 @@ const Direction HexagonalDirection::fromString(std::string d) {
     throw NoSuchDirection("Error: Invalid Direction");
 }
 
-const Coordinate2D HexagonalDirection::toCoordinate(Direction d) {
+const Coordinate2D AxialHexDirection::toCoordinate(Direction d) {
   switch (d) {
-  case Direction::NORTH:
-    return {0, 1};
   case Direction::NORTHEAST:
-    return {1, 1};
+    return {0, -1};
   case Direction::EAST:
     return {1, 0};
   case Direction::SOUTHEAST:
-    return {1, -1};
-  case Direction::SOUTH:
-    return {0, -1};
+    return {0, 1};
   case Direction::SOUTHWEST:
     return {-1, -1};
   case Direction::WEST:
     return {-1, 0};
   case Direction::NORTHWEST:
-    return {-1, 1};
+    return {0, 1};
   default:
     throw std::invalid_argument("Error: Invalid Direction");
   }
 }
 
-Direction HexagonalDirection::getOppositeDirection(Direction d) {
+Direction AxialHexDirection::getOppositeDirection(Direction d) {
   switch (d) {
   case Direction::NORTH:
     return Direction::SOUTH;
@@ -71,7 +67,7 @@ Direction HexagonalDirection::getOppositeDirection(Direction d) {
 }
 
 std::pair<Direction, Direction>
-HexagonalDirection::getComplementaryDirections(Direction d) {
+AxialHexDirection::getComplementaryDirections(Direction d) {
   switch (d) {
   case Direction::NORTH:
     return std::make_pair(Direction::SOUTHEAST, Direction::SOUTHWEST);
@@ -91,17 +87,17 @@ HexagonalDirection::getComplementaryDirections(Direction d) {
   }
 }
 
-const std::array<Direction, 6> HexagonalDirection::getEdgeDirections(void) {
+const std::array<Direction, 6> AxialHexDirection::getEdgeDirections(void) {
   return {Direction::NORTHEAST, Direction::EAST, Direction::SOUTHEAST,
           Direction::SOUTHWEST, Direction::WEST, Direction::NORTHWEST};
 }
 
-const std::array<Direction, 6> HexagonalDirection::getVertexDirections(void) {
+const std::array<Direction, 6> AxialHexDirection::getVertexDirections(void) {
   return {Direction::NORTH, Direction::NORTHEAST, Direction::SOUTHEAST,
           Direction::SOUTH, Direction::SOUTHWEST, Direction::NORTHWEST};
 }
 
-const std::array<Direction, 8> HexagonalDirection::getAllDirections(void) {
+const std::array<Direction, 8> AxialHexDirection::getAllDirections(void) {
   return {Direction::NORTH,     Direction::NORTHEAST, Direction::EAST,
           Direction::SOUTHEAST, Direction::SOUTH,     Direction::SOUTHWEST,
           Direction::WEST,      Direction::NORTHWEST};
@@ -136,4 +132,9 @@ std::ostream &operator<<(std::ostream &os, Direction const &d) {
   }
 
   return os;
+}
+
+
+bool operator<(AxialHexDirection::Direction lhs, AxialHexDirection::Direction rhs) {
+  return static_cast<int>(lhs) < static_cast<int>(rhs);
 }

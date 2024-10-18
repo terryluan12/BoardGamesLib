@@ -2,8 +2,8 @@
 add_library(Coordinate INTERFACE)
 target_include_directories(Coordinate INTERFACE .)
 
-add_library(HexagonalDirection HexagonalDirection.cpp)
-target_link_libraries(HexagonalDirection PUBLIC Coordinate)
+add_library(AxialHexDirection AxialHexDirection.cpp)
+target_link_libraries(AxialHexDirection PUBLIC Coordinate)
 
 add_library(Common INTERFACE)
 target_include_directories(Common INTERFACE .)

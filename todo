@@ -13,7 +13,6 @@ Figure out a way to bring the getBoard function to the parent BoardInterface (st
 Decide if I want to return a shared_ptr in [] operator
 Add CppDoc
 Set int to size_t where relevant
-Remove iostream where necessary, and throw specific error where relevant
 Figure out a better way to implement DoganPort other than std::vector<std::vector<DoganVertex>> 
 Fix CellInterface to have more members
 Decide if it's better to always do checks for if DoganVertex is a valid tile on the board
@@ -24,4 +23,3 @@ Add General Player class and extend Dogan Player
 Add more custom exceptions
 Move everything to Dogan namespace
 Optimize CMakeFiles
-Make the cities/villages/roads into pointers so they can be referencing the same things
