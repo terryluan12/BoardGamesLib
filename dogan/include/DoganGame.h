@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DoganConfig.h"
 #include "DoganBank.h"
 #include "DoganBoard.h"
 #include "DoganPlayer.h"

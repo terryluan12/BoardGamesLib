@@ -213,22 +213,7 @@ std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
   std::vector<ResourceType> portConfiguration = getPortResources(rengine);
 
   for (size_t i = 0; i < portConfiguration.size(); i++) {
-    // portConfiguration is a vector of ResourceType
-    // initialPortLocations is a vector of all vertices that the port touches
-    // A DoganPort is created with a direction (portConfiguration[i]) and
-    // a vector of all possible representations of a vertex
-    std::vector<std::vector<DoganVertex>> portVertices;
-
-    for (size_t j = 0; j < initialPortLocations[i].size(); j++) {
-      // for vertex j get all equivalent vertex
-      // representations of vertex initialPortLocations[i][j]
-      std::vector<DoganVertex> portVertexRepresentations{
-          initialPortLocations[i][j].getCorrespondingVertices()};
-      portVertexRepresentations.push_back(initialPortLocations[i][j]);
-      portVertices.push_back(portVertexRepresentations);
-    }
-    // create the port and add it to the ports vector
-    ports.emplace_back(portConfiguration[i], portVertices);
+    ports.emplace_back(portConfiguration[i], initialPortLocations[i]);
   }
   return ports;
 }
@@ -296,22 +281,30 @@ void DoganConfig::setNumberLocations(std::vector<pip> nl) {
   initialNumberLocations = nl;
 }
 
-void DoganConfig::setPortLocations(std::vector<std::vector<DoganVertex>> pl) {
-  initialPortLocations = pl;
+void DoganConfig::setPortLocations(std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls) {
+    std::vector<std::vector<DoganVertex>> pvs;
+    for(auto portVertices : pls ) {
+      std::vector<DoganVertex> pv;
+      for(auto [coord, direction] : portVertices) {
+        pv.emplace_back(coord, direction);
+      }
+      pvs.push_back(pv);
+    }
+    initialPortLocations = pvs;
 }
 
 void DoganConfig::setRobberLocation(Coordinate2D irl) {
   initialRobberLocation = irl;
 }
 
-void DoganConfig::setTileLocations(const std::vector<Coordinate2D> &tl) {
+void DoganConfig::setTileLocations(std::vector<Coordinate2D> tl) {
   initialTileLocations = tl;
 }
 
-void DoganConfig::setResources(const std::vector<ResourceType> &r) {
+void DoganConfig::setResources(std::vector<ResourceType> r) {
   initialResources = r;
 }
 
-void DoganConfig::setPortResources(const std::vector<ResourceType> &pr) {
+void DoganConfig::setPortResources(std::vector<ResourceType> pr) {
   initialPortResources = pr;
 }

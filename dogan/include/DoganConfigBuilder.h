@@ -4,25 +4,28 @@
 #include <array>
 #include <vector>
 
+using PublicCoordinate2D = std::array<int, 2>;
+using PublicConfiguration = std::array<int, 2>;
+
 class DoganConfigBuilder {
 public:
-  DoganConfigBuilder &setBoardSize(size_t s);
-  DoganConfigBuilder &setRobberLocation(Coordinate2D irl);
-  DoganConfigBuilder &setTotalStructureCount(std::array<size_t, 3> tsc);
-  DoganConfigBuilder &setTileLocations(const std::vector<Coordinate2D> &tl);
-  DoganConfigBuilder &setResourceCount(std::array<size_t, 5> rc);
-  DoganConfigBuilder &setDevelopmentCount(std::array<size_t, 5> dc);
-  DoganConfigBuilder &setDevelopmentConfig(Configuration dc);
-  DoganConfigBuilder &setNumberConfig(Configuration nc);
-  DoganConfigBuilder &setPortResourceConfig(Configuration prc);
-  DoganConfigBuilder &setResourceConfig(Configuration rc);
+  DoganConfigBuilder &setBoardSize(size_t boardSize);
+  DoganConfigBuilder &setRobberLocation(PublicCoordinate2D robberLocations);
+  DoganConfigBuilder &setTotalStructureCount(std::array<size_t, 3> totalPlayerStructureCount);
+  DoganConfigBuilder &setTileLocations(std::vector<PublicCoordinate2D> tileLocations);
+  DoganConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
+  DoganConfigBuilder &setDevelopmentCount(std::array<size_t, 5> developmentCount);
+  DoganConfigBuilder &setDevelopmentConfig(PublicConfiguration developmentConfig);
+  DoganConfigBuilder &setNumberConfig(PublicConfiguration numberConfig);
+  DoganConfigBuilder &setPortResourceConfig(PublicConfiguration portResourceConfig);
+  DoganConfigBuilder &setResourceConfig(PublicConfiguration resourceConfig);
   DoganConfigBuilder &
-  setDevelopmentLocations(const std::vector<DevelopmentType> &dl);
-  DoganConfigBuilder &setNumberLocations(const std::vector<int> &nl);
+  setDevelopmentLocations(std::vector<DevelopmentType> developmentConfigurations);
+  DoganConfigBuilder &setNumberLocations(std::vector<int> numberLocations);
   DoganConfigBuilder &
-  setPortLocations(const std::vector<std::vector<DoganVertex>> &pl);
-  DoganConfigBuilder &setResources(const std::vector<ResourceType> &r);
-  DoganConfigBuilder &setPortResources(const std::vector<ResourceType> &pr);
+  setPortLocations(std::vector<std::vector<std::pair<PublicCoordinate2D, std::string>>> portLocations);
+  DoganConfigBuilder &setResources(std::vector<ResourceType> resourceLocations);
+  DoganConfigBuilder &setPortResources(std::vector<ResourceType> portResources);
   DoganConfig build();
 
 private:

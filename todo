@@ -23,4 +23,5 @@ Add General Player class and extend Dogan Player
 Add more custom exceptions
 Move everything to Dogan namespace
 Optimize CMakeFiles
-Extend BuildSameStructureTwice to test if players have the same amount of buildings after failure
+Add checking to see if a DoganPort is valid
+Move vertex up to DoganGame?? (when creating ports/buildings etc. so you construct it in DoganGame. Would probably be faster)

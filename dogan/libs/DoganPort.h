@@ -6,8 +6,7 @@
 
 class DoganPort {
 public:
-  DoganPort(ResourceType r, std::vector<std::vector<DoganVertex>> v)
-      : resource(r), vertices(v){};
+  DoganPort(ResourceType r, std::vector<DoganVertex> v);
   friend std::ostream &operator<<(std::ostream &os, DoganPort const &dp);
   const std::vector<std::vector<DoganVertex>> getVertices(void) const;
   const ResourceType getResource(void) const;

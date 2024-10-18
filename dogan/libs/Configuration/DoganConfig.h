@@ -3,7 +3,7 @@
 #include "DoganPort.h"
 #include "DoganVertex.h"
 #include "common.h"
-#include "default.h"
+#include "defaultConfiguration.h"
 #include "enums.h"
 #include <algorithm>
 #include <ostream>
@@ -68,12 +68,12 @@ public:
 
   void setDevelopmentLocations(std::vector<DevelopmentType> dl);
   void setNumberLocations(std::vector<pip> nl);
-  void setPortLocations(std::vector<std::vector<DoganVertex>> pl);
+  void setPortLocations(std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls);
   void setRobberLocation(Coordinate2D irl);
-  void setTileLocations(const std::vector<Coordinate2D> &tl);
+  void setTileLocations(std::vector<Coordinate2D> tl);
 
-  void setResources(const std::vector<ResourceType> &r);
-  void setPortResources(const std::vector<ResourceType> &pr);
+  void setResources(std::vector<ResourceType> r);
+  void setPortResources(std::vector<ResourceType> pr);
 
 private:
   size_t boardSize;

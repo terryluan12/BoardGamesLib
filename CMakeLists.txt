@@ -25,18 +25,19 @@ include(GoogleTest)
 include_directories(src)
 include_directories(include)
 include_directories(dogan/libs)
-include_directories(dogan/include)
+include_directories(dogan/libs/Configuration)
 include_directories(dogan/libs/GraphElements)
 include_directories(dogan/libs/Structures)
 
 add_subdirectory(src)
 add_subdirectory(dogan)
 
+
 option(BUILD_EXECUTABLE "Build the executable" ON)
 option(BUILD_UNITTESTS "Build tests" ON)
 if(BUILD_EXECUTABLE)
     add_executable(Dogan dogan/src/main.cpp)
-    target_link_libraries(Dogan PUBLIC DoganGame DoganConfig)
+    target_link_libraries(Dogan PUBLIC DoganGame DoganConfigBuilder)
     target_include_directories(Dogan PUBLIC dogan/include PRIVATE dogan/libs)
 endif()
 
@@ -51,6 +52,7 @@ if(BUILD_UNITTESTS)
                   DoganBank 
                   DoganCell
                   DoganGame
-                  DoganStructureType)
+                  DoganStructureType
+                  DoganConfigBuilder)
     gtest_add_tests(TARGET DoganTests )
 endif()

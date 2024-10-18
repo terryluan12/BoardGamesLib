@@ -8,6 +8,16 @@ DoganVertex::DoganVertex(Coordinate2D c, Direction d)
   }
 }
 
+DoganVertex::DoganVertex(Coordinate2D c, std::string d)
+    : DoganGraphElement(c, AxialHexDirection::fromString(d)) {
+  Direction direction = AxialHexDirection::fromString(d);
+  if (direction == Direction::EAST || direction == Direction::WEST) {
+    throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
+                                "are invalid directions for edges");
+  }
+}
+
+
 std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
   std::vector<DoganVertex> corrVertices;
   auto [d1, d2] = AxialHexDirection::getComplementaryDirections(direction);

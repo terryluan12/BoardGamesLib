@@ -1,3 +1,4 @@
+add_subdirectory(Configuration)
 add_subdirectory(GraphElements)
 add_subdirectory(Structures)
 
@@ -11,12 +12,6 @@ target_link_libraries(DoganBoard PRIVATE Common DoganCell)
 
 add_library(DoganCell DoganCell.cpp DoganCell.h)
 target_link_libraries(DoganCell PUBLIC CellInterface Coordinate enums)
-
-add_library(DoganConfig DoganConfig.cpp DoganConfigBuilder.cpp config.enum.h)
-target_link_libraries(DoganConfig PRIVATE DoganPort DoganVertex Common enums)
-
-add_library(DoganGame DoganGame.cpp)
-target_link_libraries(DoganGame PRIVATE DoganBank DoganBoard DoganPlayer DoganExceptions)
 
 add_library(DoganPlayer DoganPlayer.cpp DoganPlayer.h)
 target_link_libraries(DoganPlayer PUBLIC DoganBank DoganBuilding DoganRoad DoganStructure)

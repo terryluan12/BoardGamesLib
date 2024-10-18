@@ -7,9 +7,17 @@ project(dogan
 # Set compilation flags
 add_compile_options(-Wall)
 
-include_directories(libs)
+include_directories(include)
 
 add_library(DoganExceptions INTERFACE)
-target_include_directories(DoganExceptions INTERFACE .)
+target_include_directories(DoganExceptions INTERFACE include)
+
+add_library(DoganConfigBuilder libs/Configuration/DoganConfigBuilder.cpp include/DoganConfigBuilder.h)
+target_link_libraries(DoganConfigBuilder PUBLIC DoganExceptions)
+target_link_libraries(DoganConfigBuilder PRIVATE DoganConfig Coordinate)
+
+add_library(DoganGame libs/DoganGame.cpp include/DoganGame.h)
+target_link_libraries(DoganGame PUBLIC DoganExceptions)
+target_link_libraries(DoganGame PRIVATE DoganBank DoganBoard DoganBuilding DoganPlayer DoganRoad DoganConfig)
 
 add_subdirectory(libs)
