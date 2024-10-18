@@ -50,6 +50,7 @@ if(BUILD_UNITTESTS)
     target_link_libraries(DoganTests gtest_main 
                   DoganBank 
                   DoganCell
-                  DoganGame)
+                  DoganGame
+                  DoganStructureType)
     gtest_add_tests(TARGET DoganTests )
 endif()

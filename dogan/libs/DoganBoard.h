@@ -21,6 +21,7 @@ public:
   const std::vector<DoganPort> getPorts(void) const;
   Coordinate2D getRobberLocation(void) const;
   bool hasTile(const Coordinate2D c) const;
+  bool hasStructure(const Coordinate2D c, const Direction d, StructureType st) const;
   void setBoardSize(size_t bs) override;
   friend std::ostream &operator<<(std::ostream &os, DoganBoard const &db);
 

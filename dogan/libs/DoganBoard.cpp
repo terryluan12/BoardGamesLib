@@ -61,7 +61,6 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
 
     for (auto el : ds->getGraphElements()) {
       auto de = std::dynamic_pointer_cast<DoganEdge>(el);
-
       if (this->cells.find(de->getCoordinate()) == this->cells.end()) {
         continue;
       }
@@ -78,6 +77,17 @@ const std::vector<DoganPort> DoganBoard::getPorts(void) const { return ports; }
 
 Coordinate2D DoganBoard::getRobberLocation(void) const {
   return robberLocation;
+}
+
+bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d, StructureType st) const {
+  if(st == StructureType::ROAD) {
+    DoganEdge de(c, d);
+    return roads.find(de) != roads.end();
+  }
+  else {
+    DoganVertex dv(c, d);
+    return buildings.find(dv) != buildings.end();
+  }
 }
 
 bool DoganBoard::hasTile(const Coordinate2D c) const {

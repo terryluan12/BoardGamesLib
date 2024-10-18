@@ -14,9 +14,7 @@ public:
   Coordinate(std::initializer_list<int> parameters);
 
   int operator[](const size_t ci) const;
-  inline bool operator==(const Coordinate &c) const {
-    return coordinates == c.coordinates;
-  };
+  bool operator==(const Coordinate &c) const;
   bool operator<(const Coordinate &c) const;
   Coordinate<N> operator+(Coordinate const &obj) const;
   Coordinate<N> operator-(Coordinate const &obj) const;

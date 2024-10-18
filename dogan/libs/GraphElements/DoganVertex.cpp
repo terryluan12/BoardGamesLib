@@ -17,9 +17,11 @@ std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
           : direction;
   Direction dc2Dir = AxialHexDirection::getOppositeDirection(d2);
 
+  Coordinate2D dc1 = this->coordinates + AxialHexDirection::toCoordinate(dc1Dir);
+  Coordinate2D dc2 = dc1 + AxialHexDirection::toCoordinate(dc2Dir);
+
+  corrVertices.emplace_back(DoganVertex(dc1, d1));
   corrVertices.emplace_back(DoganVertex(
-      this->coordinates - AxialHexDirection::toCoordinate(dc1Dir), d1));
-  corrVertices.emplace_back(DoganVertex(
-      this->coordinates + AxialHexDirection::toCoordinate(dc2Dir), d2));
+      dc1 + AxialHexDirection::toCoordinate(dc2Dir), d2));
   return corrVertices;
 }

@@ -34,11 +34,7 @@ void DoganGame::buildStructure(int playerID, size_t structType,
                                std::array<size_t, 5> cost) {
 
   Direction d = AxialHexDirection::fromString(dir);
-
-  if (structType >= DoganStructure::NUM_STRUCTURE_TYPES) {
-    throw NoSuchStructureException("Error: Invalid Structure Type.");
-  }
-  StructureType st = static_cast<StructureType>(structType);
+  StructureType st = DoganStructureType::fromInt(structType);
 
   std::shared_ptr<DoganStructure> element;
 
@@ -60,6 +56,10 @@ void DoganGame::buildStructure(int playerID, size_t structType,
 
 void DoganGame::giveResources(int playerID, std::array<size_t, 5> r) {
   this->players.at(playerID).getInventory().addResources(r);
+}
+bool DoganGame::hasStructure(Coordinate2D coord, std::string dir, int structureType) {
+  StructureType st = DoganStructureType::fromInt(structureType);
+  return board.hasStructure(coord, AxialHexDirection::fromString(dir), st);
 }
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {

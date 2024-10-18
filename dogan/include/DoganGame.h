@@ -15,7 +15,7 @@ public:
                       Coordinate2D tileLocation, std::string dir,
                       std::array<size_t, 5> cost);
   void giveResources(int playerID, std::array<size_t, 5> r);
-
+  bool hasStructure(Coordinate2D coord, std::string dir, int structureType);
 private:
   DoganConfig config;
   std::mt19937 rengine;

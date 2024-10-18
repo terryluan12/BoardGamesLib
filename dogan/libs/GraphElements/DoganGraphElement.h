@@ -15,9 +15,9 @@ public:
   };
   bool operator<(const DoganGraphElement &c) const {
     if (coordinates == c.coordinates) {
-      return coordinates < c.coordinates;
-    } else {
       return direction < c.direction;
+    } else {
+      return coordinates < c.coordinates;
     }
   }
 

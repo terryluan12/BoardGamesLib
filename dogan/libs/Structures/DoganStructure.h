@@ -1,12 +1,12 @@
 #pragma once
 
 #include "DoganGraphElement.h"
+#include "DoganStructureType.h"
 #include <memory>
 #include <vector>
 
 class DoganStructure {
 public:
-  enum class StructureType { VILLAGE = 0, CITY = 1, ROAD = 2 };
   static const std::size_t NUM_STRUCTURE_TYPES;
   StructureType getStructureType(void);
   void setPlayerID(int pid);
@@ -21,5 +21,3 @@ protected:
   int playerID;
   StructureType type;
 };
-
-using StructureType = DoganStructure::StructureType;

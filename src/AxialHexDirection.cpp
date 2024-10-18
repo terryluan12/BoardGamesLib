@@ -27,17 +27,17 @@ const Direction AxialHexDirection::fromString(std::string d) {
 const Coordinate2D AxialHexDirection::toCoordinate(Direction d) {
   switch (d) {
   case Direction::NORTHEAST:
-    return {0, -1};
+    return {1, -1};
   case Direction::EAST:
     return {1, 0};
   case Direction::SOUTHEAST:
     return {0, 1};
   case Direction::SOUTHWEST:
-    return {-1, -1};
+    return {-1, 1};
   case Direction::WEST:
     return {-1, 0};
   case Direction::NORTHWEST:
-    return {0, 1};
+    return {0, -1};
   default:
     throw std::invalid_argument("Error: Invalid Direction");
   }
