@@ -21,7 +21,8 @@ public:
   void setAvailableStructures(const std::array<int, 3> as);
   void addResources(std::array<int, 5> r);
   void removeResources(std::array<int, 5> r);
-  void addResource(int r, int n);
+  void removeResource(const ResourceType r, const int n);
+  void addResource(const ResourceType r, int n);
   bool canAfford(const std::array<int, 5> r);
 
   // Other Functions

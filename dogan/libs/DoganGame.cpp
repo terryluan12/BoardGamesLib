@@ -147,7 +147,7 @@ void DoganGame::distributeResources(int numberRolled) {
     for(size_t i = 0; i < resources.size(); i++) {
       if(bank.canAfford(i, resources[i])) {
         bank.removeResource(static_cast<ResourceType>(i), resources[i]);
-        players.at(pid).addResource(i, resources[i]);
+        players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
       }
       else {
         throw InsufficientResourcesException("Bank does not have enough resources to distribute");
@@ -171,19 +171,25 @@ int DoganGame::getVictoryPoints(int playerID) {
 }
 
 
-void DoganGame::useDevelopmentCard(int playerID, DevelopmentType developmentType, std::pair<int, int> coords, Direction direction, std::pair<ResourceType, ResourceType> resources) {
+void DoganGame::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
   auto player = players.find(playerID);
   if(player == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+  if (player->second.getDevelopmentCount()[static_cast<int>(DevelopmentType::MONOPOLY)] == 0)
+    throw InsufficientDevelopmentsException("Error: Player does not have a monopoly card");
+  if(resource == ResourceType::OTHER)
+    throw InvalidTypeException("Error: Resource type must be set");
 
-  switch(developmentType) {
-    case DevelopmentType::VICPOINT:
-      break;
-    default:
-      throw InvalidTypeException("Error: Invalid Development Type");
+  int resourceIndex = static_cast<int>(resource);
+    
+  for(auto &[pid, p] : players) {
+    if(pid == playerID)
+      continue;
+    int stolenCount = p.getResourceCount()[resourceIndex];
+    players.at(playerID).addResource(resource, stolenCount);
+    p.removeResource(resource, stolenCount);
   }
 }
-
 
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {

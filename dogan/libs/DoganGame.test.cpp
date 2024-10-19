@@ -158,11 +158,26 @@ TEST_F(GameFixture, UseDevelopmentCardVictoryTest) {
   for(int i = 0; i < 5; i++) {
     iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
   }
-  iGame.useDevelopmentCard(playerID1, DevelopmentType::VICPOINT);
-
   EXPECT_EQ(iGame.getVictoryPoints(playerID1), 1);
   
 }
+TEST_F(GameFixture, UseDevelopmentCardMonopolyTest) {
+  for(int i = 0; i < 5; i++) {
+    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+  }
+  iGame.giveResources(playerID2, {5, 4, 3, 2, 1});
+  iGame.giveResources(playerID3, {5, 4, 3, 2, 1});
+  ASSERT_EQ(iGame.getResourceCount(playerID1), (std::array<int, 5>{0, 0, 0, 0, 0}));
+  ASSERT_EQ(iGame.getResourceCount(playerID2), (std::array<int, 5>{5, 4, 3, 2, 1}));
+  ASSERT_EQ(iGame.getResourceCount(playerID3), (std::array<int, 5>{5, 4, 3, 2, 1}));
+  iGame.useMonopolyDevelopmentCard(playerID1, ResourceType::WOOD);
+  
+  EXPECT_EQ(iGame.getResourceCount(playerID1), (std::array<int, 5>{10, 0, 0, 0, 0}));
+  EXPECT_EQ(iGame.getResourceCount(playerID2), (std::array<int, 5>{0, 4, 3, 2, 1}));
+  EXPECT_EQ(iGame.getResourceCount(playerID3), (std::array<int, 5>{0, 4, 3, 2, 1}));
+
+}
+
 
 
 TEST_F(GameFixture, CircularEconomyTest) {

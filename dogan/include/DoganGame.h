@@ -28,9 +28,8 @@ public:
 
   int getVictoryPoints(int playerID);
 
-  void useDevelopmentCard(int playerID, DevelopmentType developmentType, 
-                            std::pair<int, int> coords={0,0}, Direction direction=Direction::NORTH, 
-                            std::pair<ResourceType, ResourceType> resources={ResourceType::OTHER, ResourceType::OTHER});
+  void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
+  
 private:
   DoganConfig config;
   std::mt19937 rengine;
