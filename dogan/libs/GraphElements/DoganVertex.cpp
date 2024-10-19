@@ -17,7 +17,6 @@ DoganVertex::DoganVertex(Coordinate2D c, std::string d)
   }
 }
 
-
 std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
   std::vector<DoganVertex> corrVertices;
   auto [d1, d2] = AxialHexDirection::getComplementaryDirections(direction);
@@ -27,10 +26,11 @@ std::vector<DoganVertex> DoganVertex::getCorrespondingVertices(void) {
           : direction;
   Direction dc2Dir = AxialHexDirection::getOppositeDirection(d2);
 
-  Coordinate2D dc1 = this->coordinates + AxialHexDirection::toCoordinate(dc1Dir);
+  Coordinate2D dc1 =
+      this->coordinates + AxialHexDirection::toCoordinate(dc1Dir);
 
   corrVertices.emplace_back(DoganVertex(dc1, d1));
-  corrVertices.emplace_back(DoganVertex(
-      dc1 + AxialHexDirection::toCoordinate(dc2Dir), d2));
+  corrVertices.emplace_back(
+      DoganVertex(dc1 + AxialHexDirection::toCoordinate(dc2Dir), d2));
   return corrVertices;
 }

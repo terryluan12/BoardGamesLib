@@ -8,7 +8,8 @@ DoganEdge::DoganEdge(Coordinate2D c, Direction d) : DoganGraphElement(c, d) {
   }
 }
 
-DoganEdge::DoganEdge(Coordinate2D c, std::string d) : DoganGraphElement(c, AxialHexDirection::fromString(d)) {
+DoganEdge::DoganEdge(Coordinate2D c, std::string d)
+    : DoganGraphElement(c, AxialHexDirection::fromString(d)) {
   Direction direction = AxialHexDirection::fromString(d);
   if (direction == Direction::NORTH || direction == Direction::SOUTH) {
     throw std::invalid_argument("Error: Direction::NORTH and Direction::SOUTH "

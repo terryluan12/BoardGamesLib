@@ -13,7 +13,6 @@ public:
   DoganPlayer(std::string n, int pid);
   friend std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);
 
-
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
   void addVictoryPoints(const int vp);
@@ -25,15 +24,14 @@ public:
 
   void increaseSoldierCount(void);
   int getSoldierCount(void);
-  
+
   // Other Functions
   std::string getName(void) const;
   std::array<int, 5> getResourceCount(void) const;
   std::array<int, 5> getDevelopmentCount(void) const;
   int getPlayerID(void) const;
   void giveDevelopment(DevelopmentType d);
-  void buildStructure(std::shared_ptr<DoganStructure> s,
-                      std::array<int, 5> c);
+  void buildStructure(std::shared_ptr<DoganStructure> s, std::array<int, 5> c);
 
 private:
   std::string name;

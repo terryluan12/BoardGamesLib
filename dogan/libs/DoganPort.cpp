@@ -1,11 +1,12 @@
 #include "DoganPort.h"
 
 DoganPort::DoganPort(ResourceType r, std::vector<DoganVertex> v) : resource(r) {
-  for(auto dv : v) {
+  for (auto dv : v) {
     std::vector<DoganVertex> allRepresentations{};
     allRepresentations.push_back(dv);
     auto corrVertices = dv.getCorrespondingVertices();
-    allRepresentations.insert(allRepresentations.end(), corrVertices.begin(), corrVertices.end());
+    allRepresentations.insert(allRepresentations.end(), corrVertices.begin(),
+                              corrVertices.end());
     vertices.push_back(v);
   }
 }

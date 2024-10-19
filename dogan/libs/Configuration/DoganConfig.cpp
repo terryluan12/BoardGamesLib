@@ -281,16 +281,17 @@ void DoganConfig::setNumberLocations(std::vector<pip> nl) {
   initialNumberLocations = nl;
 }
 
-void DoganConfig::setPortLocations(std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls) {
-    std::vector<std::vector<DoganVertex>> pvs;
-    for(auto portVertices : pls ) {
-      std::vector<DoganVertex> pv;
-      for(auto [coord, direction] : portVertices) {
-        pv.emplace_back(coord, direction);
-      }
-      pvs.push_back(pv);
+void DoganConfig::setPortLocations(
+    std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls) {
+  std::vector<std::vector<DoganVertex>> pvs;
+  for (auto portVertices : pls) {
+    std::vector<DoganVertex> pv;
+    for (auto [coord, direction] : portVertices) {
+      pv.emplace_back(coord, direction);
     }
-    initialPortLocations = pvs;
+    pvs.push_back(pv);
+  }
+  initialPortLocations = pvs;
 }
 
 void DoganConfig::setRobberLocation(Coordinate2D irl) {

@@ -10,13 +10,13 @@ DoganBuilding::DoganBuilding(int pid, StructureType t, DoganVertex dv)
   addCorrespondingVertices();
 };
 int DoganBuilding::getWorth() {
-  switch(this->type) {
-    case StructureType::VILLAGE:
-      return 1;
-    case StructureType::CITY:
-      return 2;
-    default:
-      throw InvalidTypeException("Error: Invalid Building Type");
+  switch (this->type) {
+  case StructureType::VILLAGE:
+    return 1;
+  case StructureType::CITY:
+    return 2;
+  default:
+    throw InvalidTypeException("Error: Invalid Building Type");
   }
 }
 

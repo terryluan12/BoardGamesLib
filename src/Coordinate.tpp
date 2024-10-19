@@ -41,10 +41,9 @@ template <size_t N> int Coordinate<N>::operator[](const size_t ci) const {
                           std::to_string(ci));
 }
 
-template <size_t N>
-bool Coordinate<N>::operator==(const Coordinate &c) const {
-  for(size_t i = 0; i < N; i++) {
-    if(c.coordinates[i] != this->coordinates[i]) {
+template <size_t N> bool Coordinate<N>::operator==(const Coordinate &c) const {
+  for (size_t i = 0; i < N; i++) {
+    if (c.coordinates[i] != this->coordinates[i]) {
       return false;
     }
   }
@@ -54,8 +53,10 @@ bool Coordinate<N>::operator==(const Coordinate &c) const {
 template <size_t N>
 bool Coordinate<N>::operator<(const Coordinate<N> &c) const {
   for (size_t i = 0; i < N; i++) {
-    if (this->coordinates[i] < c.coordinates[i]) return true;
-    if (this->coordinates[i] > c.coordinates[i]) return false;
+    if (this->coordinates[i] < c.coordinates[i])
+      return true;
+    if (this->coordinates[i] > c.coordinates[i])
+      return false;
   }
   return false;
 }

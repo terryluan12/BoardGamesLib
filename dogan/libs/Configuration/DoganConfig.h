@@ -68,7 +68,8 @@ public:
 
   void setDevelopmentLocations(std::vector<DevelopmentType> dl);
   void setNumberLocations(std::vector<pip> nl);
-  void setPortLocations(std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls);
+  void setPortLocations(
+      std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls);
   void setRobberLocation(Coordinate2D irl);
   void setTileLocations(std::vector<Coordinate2D> tl);
 

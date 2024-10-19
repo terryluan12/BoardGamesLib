@@ -17,11 +17,12 @@ DoganBoard::DoganBoard(DoganConfig config) {
     if (this->hasTile(c)) {
       throw std::invalid_argument("Error: Cell already exists");
     }
-    std::shared_ptr<DoganCell> dc = std::make_shared<DoganCell>(DoganCell(false, c, numberOrder[i], resources[i]));
-    this->cells.insert(
-        std::make_pair(c, dc));
-    if(numbers.find(numberOrder[i]) == numbers.end()) {
-      this->numbers.emplace(numberOrder[i], std::vector<std::shared_ptr<DoganCell>>{});
+    std::shared_ptr<DoganCell> dc = std::make_shared<DoganCell>(
+        DoganCell(false, c, numberOrder[i], resources[i]));
+    this->cells.insert(std::make_pair(c, dc));
+    if (numbers.find(numberOrder[i]) == numbers.end()) {
+      this->numbers.emplace(numberOrder[i],
+                            std::vector<std::shared_ptr<DoganCell>>{});
     }
     this->numbers.at(numberOrder[i]).push_back(dc);
 
@@ -44,12 +45,15 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
       if (this->cells.find(dv->getCoordinate()) == this->cells.end()) {
         continue;
       }
-      if(buildings.find(dv->getCoordinate()) == buildings.end()) {
+      if (buildings.find(dv->getCoordinate()) == buildings.end()) {
         auto coordinate = dv->getCoordinate();
-        buildings.emplace(coordinate, std::map<Direction, std::shared_ptr<DoganBuilding>>());
+        buildings.emplace(
+            coordinate, std::map<Direction, std::shared_ptr<DoganBuilding>>());
       }
-      buildings.at(dv->getCoordinate()).emplace( 
-          std::make_pair(dv->getDirection(), std::dynamic_pointer_cast<DoganBuilding>(ds)));
+      buildings.at(dv->getCoordinate())
+          .emplace(
+              std::make_pair(dv->getDirection(),
+                             std::dynamic_pointer_cast<DoganBuilding>(ds)));
     }
 
     break;
@@ -61,11 +65,13 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
       if (this->cells.find(de->getCoordinate()) == this->cells.end()) {
         continue;
       }
-      if(roads.find(de->getCoordinate()) == roads.end()) {
-        roads.emplace(de->getCoordinate(), std::map<Direction, std::shared_ptr<DoganRoad>>());
+      if (roads.find(de->getCoordinate()) == roads.end()) {
+        roads.emplace(de->getCoordinate(),
+                      std::map<Direction, std::shared_ptr<DoganRoad>>());
       }
-      roads.at(de->getCoordinate()).emplace(
-          std::make_pair(de->getDirection(), std::dynamic_pointer_cast<DoganRoad>(ds)));
+      roads.at(de->getCoordinate())
+          .emplace(std::make_pair(de->getDirection(),
+                                  std::dynamic_pointer_cast<DoganRoad>(ds)));
     }
     break;
   }
@@ -81,13 +87,12 @@ Coordinate2D DoganBoard::getRobberLocation(void) const {
 
 DoganBuilding DoganBoard::getBuilding(Coordinate2D c, Direction d) const {
   DoganVertex dv(c, d);
-  const auto &map = buildings.find(c); 
-  if(map == buildings.end() || map->second.find(d) == map->second.end()) {
+  const auto &map = buildings.find(c);
+  if (map == buildings.end() || map->second.find(d) == map->second.end()) {
     throw NoSuchStructureException("Error: No Building at given location");
   }
   return *(map->second.at(d));
 }
-
 
 void DoganBoard::moveRobber(Coordinate2D nl) {
   cells.at(robberLocation)->setRobber(false);
@@ -95,35 +100,34 @@ void DoganBoard::moveRobber(Coordinate2D nl) {
   robberLocation = nl;
 }
 
-bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d, StructureType st) const {
-  if(st == StructureType::ROAD) {
+bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d,
+                              StructureType st) const {
+  if (st == StructureType::ROAD) {
     DoganEdge de(c, d);
     const auto &map = roads.find(c);
-    if(map == roads.end()) {
+    if (map == roads.end()) {
       return false;
     }
     return map->second.find(d) != map->second.end();
-    
-  }
-  else {
+
+  } else {
     DoganVertex dv(c, d);
-    const auto &map = buildings.find(c); 
-    if(map == buildings.end()) {
+    const auto &map = buildings.find(c);
+    if (map == buildings.end()) {
       return false;
     }
     const auto &building = map->second.find(d);
-    if(building == map->second.end()) {
+    if (building == map->second.end()) {
       return false;
     }
     return building->second->getStructureType() == st;
   }
 }
 
-
 bool DoganBoard::hasBuilding(const Coordinate2D c, const Direction d) const {
   DoganVertex dv(c, d);
-  const auto &map = buildings.find(c); 
-  if(map == buildings.end()) {
+  const auto &map = buildings.find(c);
+  if (map == buildings.end()) {
     return false;
   }
   return map->second.find(d) != map->second.end();
@@ -143,22 +147,25 @@ void DoganBoard::setBoardSize(size_t bs) {
   }
 }
 
-std::map<int, std::array<size_t, 5>> DoganBoard::getResourceDistribution(int numberRolled) {
+std::map<int, std::array<size_t, 5>>
+DoganBoard::getResourceDistribution(int numberRolled) {
   std::map<int, std::array<size_t, 5>> playerDistribution;
-  for(auto& cell : this->numbers.at(numberRolled)) {
-    if(this->buildings.find(cell->getCoordinate()) == this->buildings.end()) {
+  for (auto &cell : this->numbers.at(numberRolled)) {
+    if (this->buildings.find(cell->getCoordinate()) == this->buildings.end()) {
       continue;
     }
-    for(auto &[direction, building] : this->buildings.at(cell->getCoordinate())) {
-      if(cell->getCoordinate() == robberLocation) {
+    for (auto &[direction, building] :
+         this->buildings.at(cell->getCoordinate())) {
+      if (cell->getCoordinate() == robberLocation) {
         continue;
       }
       int pid = building->getPlayerID();
-      if(playerDistribution.find(pid) == playerDistribution.end()) {
+      if (playerDistribution.find(pid) == playerDistribution.end()) {
         std::array<size_t, 5> resources{0, 0, 0, 0, 0};
         playerDistribution.emplace(pid, resources);
       }
-      playerDistribution.at(pid)[static_cast<int>(cell->getResource())] += building->getWorth();
+      playerDistribution.at(pid)[static_cast<int>(cell->getResource())] +=
+          building->getWorth();
     }
   }
   return playerDistribution;
