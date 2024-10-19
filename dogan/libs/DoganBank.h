@@ -18,7 +18,7 @@ public:
   void removeResource(const ResourceType r, const int n);
   void removeResources(const std::array<int, 5> r);
   bool canAfford(const std::array<int, 5> r);
-  bool canAfford(int r, int n);
+  bool canAfford(ResourceType r, int n);
 
   // Development Functions
   void addDevelopment(const DevelopmentType d);

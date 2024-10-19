@@ -211,7 +211,23 @@ TEST_F(GameFixture, useRoadDevelopmentCardTest) {
   EXPECT_EQ(iGame.hasStructure({1, 1}, Direction::NORTHWEST, StructureType::ROAD), true);
   EXPECT_EQ(iGame.hasStructure({1, 0}, Direction::SOUTHEAST, StructureType::ROAD), true);
   EXPECT_EQ(iGame.hasStructure({1, 0}, Direction::NORTHWEST, StructureType::ROAD), true);
+}
 
+TEST_F(GameFixture, useTakeTwoDevelopmentCardTest) {
+  for(int i = 0; i < 5; i++) {
+    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+  }
+  std::array<ResourceType, 2> resources1{ResourceType::BRICK, ResourceType::SHEEP};
+  std::array<ResourceType, 2> resources2{ResourceType::WOOD, ResourceType::WOOD};
+
+  EXPECT_EQ(iGame.getResourceCount(playerID1), (std::array<int, 5>{0, 0, 0, 0, 0}));
+
+  iGame.useTakeTwoDevelopmentCard(playerID1, resources1);
+  EXPECT_EQ(iGame.getResourceCount(playerID1), (std::array<int, 5>{0, 1, 0, 1, 0}));
+  iGame.useTakeTwoDevelopmentCard(playerID1, resources2);
+
+  EXPECT_EQ(iGame.getResourceCount(playerID1), (std::array<int, 5>{2, 1, 0, 1, 0}));
+  
 }
 
 TEST_F(GameFixture, CircularEconomyTest) {

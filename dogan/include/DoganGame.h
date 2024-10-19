@@ -30,6 +30,7 @@ public:
   void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
   void useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation, Direction d);
   void useRoadDevelopmentCard(int playerID, std::array<Coordinate2D, 2> tileLocations, std::array<Direction, 2> directions);
+  void useTakeTwoDevelopmentCard(int playerID, std::array<ResourceType, 2> resources);
   void stealResource(int playerID, int stolenPlayerID);
   void useRobber(int playerID, Coordinate2D tileLocation, Direction direction);
   

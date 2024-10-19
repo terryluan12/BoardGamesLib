@@ -141,7 +141,7 @@ void DoganGame::distributeResources(int numberRolled) {
       throw PlayerNotFoundException("Player ID " + std::to_string(pid) + " invalid");
     
     for(size_t i = 0; i < resources.size(); i++) {
-      if(bank.canAfford(i, resources[i])) {
+      if(bank.canAfford(static_cast<ResourceType>(i), resources[i])) {
         bank.removeResource(static_cast<ResourceType>(i), resources[i]);
         players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
       }
@@ -213,7 +213,26 @@ void DoganGame::useRoadDevelopmentCard(int playerID, std::array<Coordinate2D, 2>
     buildStructure(playerID, StructureType::ROAD, tileLocations[i], directions[i], {0, 0, 0, 0, 0});
   }
 }
+void DoganGame::useTakeTwoDevelopmentCard(int playerID, std::array<ResourceType, 2> resources) {
+  auto player = players.find(playerID);
+  if(player == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+  if(player->second.getDevelopmentCount()[static_cast<int>(DevelopmentType::TAKETWO)] == 0)
+    throw InsufficientDevelopmentsException("Error: Player does not have a road building card");
 
+  if(resources[0] == ResourceType::OTHER || resources[1] == ResourceType::OTHER)
+    throw InvalidTypeException("Error: Resource type must be set");
+
+  if(!bank.canAfford(resources[0], 2) || !bank.canAfford(resources[1], 2)) {
+    throw InsufficientResourcesException("Error: Bank does not have enough resources to distribute");
+  }
+
+  for(int i = 0; i < 2; i++) {
+    players.at(playerID).addResource(resources[i], 1);
+    bank.removeResource(resources[i], 1);
+  }
+  
+}
 
 void DoganGame::useRobber(int playerID, Coordinate2D tileLocation, Direction direction) {
     if(!board.hasBuilding(tileLocation, direction))

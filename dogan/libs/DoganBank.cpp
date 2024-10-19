@@ -46,8 +46,8 @@ bool DoganBank::canAfford(const std::array<int, 5> r) {
   return true;
 }
 
-bool DoganBank::canAfford(int r, int n) {
-  return resources[r] > n;
+bool DoganBank::canAfford(ResourceType r, int n) {
+  return resources[static_cast<int>(r)] > n;
 }
 
 // Development Functions

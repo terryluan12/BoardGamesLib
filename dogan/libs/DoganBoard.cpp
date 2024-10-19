@@ -150,6 +150,9 @@ std::map<int, std::array<size_t, 5>> DoganBoard::getResourceDistribution(int num
       continue;
     }
     for(auto &[direction, building] : this->buildings.at(cell->getCoordinate())) {
+      if(cell->getCoordinate() == robberLocation) {
+        continue;
+      }
       int pid = building->getPlayerID();
       if(playerDistribution.find(pid) == playerDistribution.end()) {
         std::array<size_t, 5> resources{0, 0, 0, 0, 0};
