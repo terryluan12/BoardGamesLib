@@ -17,11 +17,11 @@ public:
                                int playerID2, std::array<int, 5> resources2);
   const std::array<int, 5> getResourceCount(int playerID) const;
   const std::array<int, 5> getDevelopmentCount(int playerID) const;
-  void buildStructure(int playerID, size_t structType,
-                      Coordinate2D tileLocation, std::string dir,
+  void buildStructure(int playerID, StructureType structType,
+                      Coordinate2D tileLocation, Direction direction,
                       std::array<int, 5> cost);
   void giveResources(int playerID, std::array<int, 5> resources);
-  bool hasStructure(Coordinate2D coord, std::string dir, int structureType);
+  bool hasStructure(Coordinate2D coord, Direction direction, StructureType structureType);
   int rollDice(void);
   void distributeResources(int numberRolled);
 
@@ -29,6 +29,7 @@ public:
 
   void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
   void useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation, Direction d);
+  void useRoadDevelopmentCard(int playerID, std::array<Coordinate2D, 2> tileLocations, std::array<Direction, 2> directions);
   void stealResource(int playerID, int stolenPlayerID);
   void useRobber(int playerID, Coordinate2D tileLocation, Direction direction);
   

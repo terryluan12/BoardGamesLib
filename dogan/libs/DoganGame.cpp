@@ -79,8 +79,8 @@ const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
 }
 
 
-void DoganGame::buildStructure(int playerID, size_t structType,
-                               Coordinate2D tileLocation, std::string dir,
+void DoganGame::buildStructure(int playerID, StructureType structType,
+                               Coordinate2D tileLocation, Direction direction,
                                std::array<int, 5> cost) {
   auto pe = players.find(playerID);
   if(pe == players.end())
@@ -91,27 +91,24 @@ void DoganGame::buildStructure(int playerID, size_t structType,
         "Error: Player does not have enough resources to build structure");
   DoganPlayer &p = players.at(playerID);
 
-  Direction d = AxialHexDirection::fromString(dir);
-  StructureType st = DoganStructureType::fromInt(structType);
-
   if(!board.hasTile(tileLocation))
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
 
-  if (board.hasStructure(tileLocation, d, st))
+  if (board.hasStructure(tileLocation, direction, structType))
     throw SameStructureException("Error: Structure already exists");
 
   std::shared_ptr<DoganStructure> element;
 
 
-  switch (st) {
+  switch (structType) {
   case StructureType::VILLAGE:
   case StructureType::CITY:
     element = std::make_shared<DoganBuilding>(
-        DoganBuilding(playerID, st, DoganVertex(tileLocation, d)));
+        DoganBuilding(playerID, structType, DoganVertex(tileLocation, direction)));
     break;
   case StructureType::ROAD:
     element =
-        std::make_shared<DoganRoad>(DoganRoad(playerID, st, DoganEdge(tileLocation, d)));
+        std::make_shared<DoganRoad>(DoganRoad(playerID, structType, DoganEdge(tileLocation, direction)));
     break;
   }
   board.buildStructure(element, cost);
@@ -126,9 +123,8 @@ void DoganGame::giveResources(int playerID, std::array<int, 5> resources) {
   players.at(playerID).addResources(resources);
 }
 
-bool DoganGame::hasStructure(Coordinate2D coord, std::string dir, int structureType) {
-  StructureType st = DoganStructureType::fromInt(structureType);
-  return board.hasStructure(coord, AxialHexDirection::fromString(dir), st);
+bool DoganGame::hasStructure(Coordinate2D coord, Direction direction, StructureType structureType) {
+  return board.hasStructure(coord, direction, structureType);
 }
 
 int DoganGame::rollDice(void) {
@@ -185,6 +181,12 @@ void DoganGame::useMonopolyDevelopmentCard(int playerID, ResourceType resource) 
 }
 
 void DoganGame::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation, Direction direction) {
+  auto player = players.find(playerID);
+  if(player == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+  if(player->second.getDevelopmentCount()[static_cast<int>(DevelopmentType::SOLDIER)] == 0)
+    throw InsufficientDevelopmentsException("Error: Player does not have a road building card");
+
   players.at(playerID).increaseSoldierCount();
   int soldierCount = players.at(playerID).getSoldierCount();
   if(soldierCount >= 3 && soldierCount > mostSoldiers.second) {
@@ -195,6 +197,23 @@ void DoganGame::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocatio
 
   useRobber(playerID, tileLocation, direction);
 }
+
+void DoganGame::useRoadDevelopmentCard(int playerID, std::array<Coordinate2D, 2> tileLocations, std::array<Direction, 2> directions) {
+  auto player = players.find(playerID);
+  if(player == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+  if(player->second.getDevelopmentCount()[static_cast<int>(DevelopmentType::BUILDROAD)] == 0)
+    throw InsufficientDevelopmentsException("Error: Player does not have a road building card");
+
+  for(int i = 0; i < 2; i++) {
+    if(board.hasStructure(tileLocations[i], directions[i], StructureType::ROAD))
+      throw SameStructureException("Error: Road already exists");
+  }
+  for(int i = 0; i < 2; i++) {
+    buildStructure(playerID, StructureType::ROAD, tileLocations[i], directions[i], {0, 0, 0, 0, 0});
+  }
+}
+
 
 void DoganGame::useRobber(int playerID, Coordinate2D tileLocation, Direction direction) {
     if(!board.hasBuilding(tileLocation, direction))
