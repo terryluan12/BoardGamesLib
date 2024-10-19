@@ -47,12 +47,14 @@ if(BUILD_UNITTESTS)
     add_executable(DoganTests 
                   dogan/libs/DoganBank.test.cpp 
                   dogan/libs/DoganCell.test.cpp
-                  dogan/libs/DoganGame.test.cpp)
+                  dogan/libs/DoganGame.test.cpp
+                  dogan/libs/DoganBoard.test.cpp)
     target_link_libraries(DoganTests gtest_main 
                   DoganBank 
                   DoganCell
                   DoganGame
                   DoganStructureType
-                  DoganConfigBuilder)
+                  DoganConfigBuilder
+                  DoganBoard)
     gtest_add_tests(TARGET DoganTests )
 endif()

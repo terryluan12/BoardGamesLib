@@ -9,6 +9,13 @@ DoganBuilding::DoganBuilding(int pid, StructureType t, DoganVertex dv)
   graphElements.push_back(std::make_shared<DoganVertex>(dv));
   addCorrespondingVertices();
 };
+void DoganBuilding::upgradeToCity(void) {
+  if (this->type == StructureType::CITY) {
+    throw InvalidTypeException("Error: Already a City");
+  }
+  this->type = StructureType::CITY;
+}
+
 int DoganBuilding::getWorth() {
   switch (this->type) {
   case StructureType::VILLAGE:

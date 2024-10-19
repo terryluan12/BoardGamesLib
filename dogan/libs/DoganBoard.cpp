@@ -37,12 +37,25 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
   std::shared_ptr<DoganVertex> fdv = nullptr;
   std::shared_ptr<DoganEdge> fde = nullptr;
   switch (ds->getStructureType()) {
+  case (StructureType::CITY): {
+    if(!this->hasStructure(dg.getCoordinate(), dg.getDirection(), StructureType::VILLAGE)){
+      throw NoVillageException("Error: Must build city on village");
+    }
+    for(auto el : ds->getGraphElements()) {
+      auto dv = std::dynamic_pointer_cast<DoganVertex>(el);
+      if(this->cells.find(dv->getCoordinate()) == this->cells.end()){
+        continue;
+      }
+      buildings.at(dv->getCoordinate()).at(dv->getDirection())->upgradeToCity();
+    }
+    break;
+  }
   case (StructureType::VILLAGE):
-  case (StructureType::CITY):
     fdv = std::dynamic_pointer_cast<DoganVertex>(ds->getGraphElements()[0]);
     for (auto el : ds->getGraphElements()) {
       auto dv = std::dynamic_pointer_cast<DoganVertex>(el);
       if (this->cells.find(dv->getCoordinate()) == this->cells.end()) {
+        // If cell is outside map (e.g. the cell is on the edge of the map)
         continue;
       }
       if (buildings.find(dv->getCoordinate()) == buildings.end()) {

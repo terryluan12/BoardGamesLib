@@ -101,3 +101,12 @@ public:
 private:
   std::string message;
 };
+
+class NoVillageException : std::exception {
+public:
+  NoVillageException(std::string m) : message(m){};
+  const char *what() const noexcept override { return message.c_str(); }
+
+private:
+  std::string message;
+};
