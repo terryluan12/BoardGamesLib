@@ -20,7 +20,7 @@ public:
   void setAvailableStructures(const std::array<int, 3> as);
   void addResources(std::array<int, 5> r);
   void addResource(const ResourceType r, int n);
-  bool canAfford(const std::array<int, 5> r);
+  bool canAfford(const std::array<int, 5> r) const;
 
   void increaseSoldierCount(void);
   int getSoldierCount(void);

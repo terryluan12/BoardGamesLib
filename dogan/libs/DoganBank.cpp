@@ -29,7 +29,7 @@ const std::array<int, 5> DoganBank::getResourceCount(void) const {
 }
 void DoganBank::setResources(const std::array<int, 5> r) { resources = r; }
 
-bool DoganBank::canAfford(const std::array<int, 5> r) {
+bool DoganBank::canAfford(const std::array<int, 5> r) const {
   for (size_t i = 0; i < 5; i++) {
     if (resources[i] < r[i]) {
       return false;
@@ -38,7 +38,7 @@ bool DoganBank::canAfford(const std::array<int, 5> r) {
   return true;
 }
 
-bool DoganBank::canAfford(ResourceType r, int n) {
+bool DoganBank::canAfford(ResourceType r, int n) const {
   return resources[static_cast<int>(r)] > n;
 }
 

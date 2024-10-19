@@ -19,7 +19,7 @@ void DoganPlayer::addResources(std::array<int, 5> r) {
 void DoganPlayer::addResource(const ResourceType r, int n) {
   inventory.addResource(r, n);
 }
-bool DoganPlayer::canAfford(const std::array<int, 5> r) {
+bool DoganPlayer::canAfford(const std::array<int, 5> r) const {
   return inventory.canAfford(r);
 }
 

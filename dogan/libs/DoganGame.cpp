@@ -4,6 +4,7 @@
 #include "DoganRoad.h"
 #include "enums.h"
 #include <memory>
+#include <sstream>
 
 DoganGame::DoganGame(DoganConfig config)
     : config(config), rengine(std::random_device{}()), die(1, 6),
@@ -26,28 +27,18 @@ void DoganGame::addPlayer(std::string pn, int pid) {
 };
 
 void DoganGame::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
-  const auto pe = players.find(playerID);
-  if (pe == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  DoganPlayer &p = players.at(playerID);
-  if (!p.canAfford(cost))
-    throw InsufficientResourcesException(p.getName() +
-                                         " can't afford this trade");
+  checkPlayerExists(playerID);
+  checkPlayerCanAfford(playerID, cost);
+
   DevelopmentType dt = bank.popDevelopment();
-  p.giveDevelopment(dt);
+  players.at(playerID).giveDevelopment(dt);
   bank.addResources(cost);
 }
 
 void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
                                int playerID2, std::array<int, 5> resources2) {
-  auto pe1 = players.find(playerID1), pe2 = players.find(playerID2);
-  if (pe1 == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID1) +
-                                  " invalid");
-  if (pe2 == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID2) +
-                                  " invalid");
+  checkPlayerExists(playerID1);
+  checkPlayerExists(playerID2);
 
   std::array<int, 5> resourceDifference;
   std::array<int, 5> negativeResourceDifference;
@@ -55,57 +46,37 @@ void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
     resourceDifference[i] = resources1[i] - resources2[i];
     negativeResourceDifference[i] = -resourceDifference[i];
   }
-  DoganPlayer &p1 = players.at(playerID1), &p2 = players.at(playerID2);
-  if (!p1.canAfford(resourceDifference))
-    throw InsufficientResourcesException(p1.getName() +
-                                         " can't afford this trade");
-  if (!p2.canAfford(negativeResourceDifference))
-    throw InsufficientResourcesException(p2.getName() +
-                                         " can't afford this trade");
+  checkPlayerCanAfford(playerID1, resourceDifference);
+  checkPlayerCanAfford(playerID2, negativeResourceDifference);
 
-  p2.addResources(resourceDifference);
-  p1.addResources(negativeResourceDifference);
+  players.at(playerID2).addResources(resourceDifference);
+  players.at(playerID1).addResources(negativeResourceDifference);
 }
 
 const std::array<int, 5> DoganGame::getResourceCount(int playerID) const {
   if (playerID == -1) {
     return bank.getResourceCount();
   }
-  auto pe = players.find(playerID);
-  if (pe == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
+  checkPlayerExists(playerID);
   return players.at(playerID).getResourceCount();
 }
 const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
   if (playerID == -1) {
     return bank.getDevelopmentCount();
   }
-  auto pe = players.find(playerID);
-  if (pe == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
+  checkPlayerExists(playerID);
   return players.at(playerID).getDevelopmentCount();
 }
 
 void DoganGame::buildStructure(int playerID, StructureType structType,
                                Coordinate2D tileLocation, Direction direction,
                                std::array<int, 5> cost) {
-  auto pe = players.find(playerID);
-  if (pe == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  if (!pe->second.canAfford(cost))
-    throw InsufficientFundsException(
-        "Error: Player does not have enough resources to build structure");
-  DoganPlayer &p = players.at(playerID);
-  if (!board.hasTile(tileLocation))
-    throw CoordinateNotFoundException("Error: Invalid Coordinate");
-
-  if (board.hasStructure(tileLocation, direction, structType))
-    throw SameStructureException("Error: Structure already exists");
-
   std::shared_ptr<DoganStructure> element;
+  checkPlayerExists(playerID);
+  checkPlayerCanAfford(playerID, cost);
+  checkCoordinateValid(tileLocation);
+  checkStructureExists(tileLocation, direction, structType);
+
 
   switch (structType) {
   case StructureType::VILLAGE:
@@ -119,15 +90,12 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
     break;
   }
   board.buildStructure(element, cost);
-  p.buildStructure(element, cost);
+  players.at(playerID).buildStructure(element, cost);
   bank.addResources(cost);
 }
 
 void DoganGame::giveResources(int playerID, std::array<int, 5> resources) {
-  auto pe = players.find(playerID);
-  if (pe == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
+  checkPlayerExists(playerID);
   players.at(playerID).addResources(resources);
 }
 
@@ -141,45 +109,25 @@ int DoganGame::rollDice(void) { return die(rengine) + die(rengine); }
 void DoganGame::distributeResources(int numberRolled) {
   auto buildings = board.getResourceDistribution(numberRolled);
   for (auto [pid, resources] : buildings) {
-
-    auto player = players.find(pid);
-    if (player == players.end())
-      throw PlayerNotFoundException("Player ID " + std::to_string(pid) +
-                                    " invalid");
-
+    checkPlayerExists(pid);
     for (size_t i = 0; i < resources.size(); i++) {
-      if (bank.canAfford(static_cast<ResourceType>(i), resources[i])) {
-        bank.addResource(static_cast<ResourceType>(i), -1 * resources[i]);
-        players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
-      } else {
-        throw InsufficientResourcesException(
-            "Bank does not have enough resources to distribute");
-      }
+      checkBankCanAfford(static_cast<ResourceType>(i), resources[i]);
+      bank.addResource(static_cast<ResourceType>(i), -1 * resources[i]);
+      players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
     }
   }
 }
 
-int DoganGame::getVictoryPoints(int playerID) {
-  auto player = players.find(playerID);
-  if (player == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
+int DoganGame::getVictoryPoints(int playerID) const {
+  checkPlayerExists(playerID);
   return players.at(playerID).getVictoryPoints();
 }
 
 void DoganGame::useMonopolyDevelopmentCard(int playerID,
                                            ResourceType resource) {
-  auto player = players.find(playerID);
-  if (player == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  if (player->second
-          .getDevelopmentCount()[static_cast<int>(DevelopmentType::MONOPOLY)] ==
-      0)
-    throw InsufficientDevelopmentsException(
-        "Error: Player does not have a monopoly card");
-  if (resource == ResourceType::OTHER)
-    throw InvalidTypeException("Error: Resource type must be set");
+  checkPlayerExists(playerID);
+  checkPlayerHasDevelopmentCard(playerID, DevelopmentType::MONOPOLY);
+  checkResourceType(resource);
 
   int resourceIndex = static_cast<int>(resource);
 
@@ -195,15 +143,9 @@ void DoganGame::useMonopolyDevelopmentCard(int playerID,
 void DoganGame::useSoldierDevelopmentCard(int playerID,
                                           Coordinate2D tileLocation,
                                           Direction direction) {
-  auto player = players.find(playerID);
-  if (player == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  if (player->second
-          .getDevelopmentCount()[static_cast<int>(DevelopmentType::SOLDIER)] ==
-      0)
-    throw InsufficientDevelopmentsException(
-        "Error: Player does not have a road building card");
+  checkPlayerHasDevelopmentCard(playerID, DevelopmentType::SOLDIER);
+
+  useRobber(playerID, tileLocation, direction);
 
   players.at(playerID).increaseSoldierCount();
   int soldierCount = players.at(playerID).getSoldierCount();
@@ -213,20 +155,13 @@ void DoganGame::useSoldierDevelopmentCard(int playerID,
     players.at(playerID).addVictoryPoints(2);
   }
 
-  useRobber(playerID, tileLocation, direction);
 }
 
 void DoganGame::useRoadDevelopmentCard(
     int playerID, std::array<Coordinate2D, 2> tileLocations,
     std::array<Direction, 2> directions) {
-  auto player = players.find(playerID);
-  if (player == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  if (player->second.getDevelopmentCount()[static_cast<int>(
-          DevelopmentType::BUILDROAD)] == 0)
-    throw InsufficientDevelopmentsException(
-        "Error: Player does not have a road building card");
+  checkPlayerExists(playerID);
+  checkPlayerHasDevelopmentCard(playerID, DevelopmentType::BUILDROAD);
 
   for (int i = 0; i < 2; i++) {
     if (board.hasStructure(tileLocations[i], directions[i],
@@ -240,23 +175,17 @@ void DoganGame::useRoadDevelopmentCard(
 }
 void DoganGame::useTakeTwoDevelopmentCard(
     int playerID, std::array<ResourceType, 2> resources) {
-  auto player = players.find(playerID);
-  if (player == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  if (player->second
-          .getDevelopmentCount()[static_cast<int>(DevelopmentType::TAKETWO)] ==
-      0)
-    throw InsufficientDevelopmentsException(
-        "Error: Player does not have a road building card");
+  checkPlayerExists(playerID);
+  checkPlayerHasDevelopmentCard(playerID, DevelopmentType::TAKETWO);
+  checkResourceType(resources[0]);
+  checkResourceType(resources[1]);
 
-  if (resources[0] == ResourceType::OTHER ||
-      resources[1] == ResourceType::OTHER)
-    throw InvalidTypeException("Error: Resource type must be set");
-
-  if (!bank.canAfford(resources[0], 2) || !bank.canAfford(resources[1], 2)) {
-    throw InsufficientResourcesException(
-        "Error: Bank does not have enough resources to distribute");
+  if(resources[0] == resources[1]) {
+    checkBankCanAfford(resources[0], 2);
+  }
+  else {
+    checkBankCanAfford(resources[0], 1);
+    checkBankCanAfford(resources[1], 1);
   }
 
   for (int i = 0; i < 2; i++) {
@@ -267,6 +196,8 @@ void DoganGame::useTakeTwoDevelopmentCard(
 
 void DoganGame::useRobber(int playerID, Coordinate2D tileLocation,
                           Direction direction) {
+  checkPlayerExists(playerID);
+  checkCoordinateValid(tileLocation);
   if (!board.hasBuilding(tileLocation, direction))
     throw NoSuchStructureException("Error: No Building at given location");
 
@@ -277,15 +208,8 @@ void DoganGame::useRobber(int playerID, Coordinate2D tileLocation,
 }
 
 void DoganGame::stealResource(int playerID, int stolenPlayerID) {
-  auto player = players.find(playerID);
-  if (player == players.end())
-    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
-                                  " invalid");
-  auto stolenPlayer = players.find(stolenPlayerID);
-  if (stolenPlayer == players.end())
-    throw PlayerNotFoundException("Player ID " +
-                                  std::to_string(stolenPlayerID) + " invalid");
-
+  checkPlayerExists(playerID);
+  checkPlayerExists(stolenPlayerID);
   auto resourceCount = players.at(stolenPlayerID).getResourceCount();
   std::vector<int> availableIndices = {};
 
@@ -306,6 +230,41 @@ void DoganGame::stealResource(int playerID, int stolenPlayerID) {
 
   players.at(stolenPlayerID).addResource(resourceStolen, -1);
   players.at(playerID).addResource(resourceStolen, 1);
+}
+
+void DoganGame::checkPlayerExists(int playerID) const {
+  if (players.find(playerID) == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
+                                  " invalid");
+}
+void DoganGame::checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const {
+  if (!players.at(playerID).canAfford(cost))
+    throw InsufficientFundsException(
+        "Error: Player does not have enough resources to build structure");
+}
+void DoganGame::checkBankCanAfford(ResourceType resourceType, int num) const {
+  if (!bank.canAfford(resourceType, num))
+    throw InsufficientFundsException(
+        "Error: Bank does not have enough resources to build structure");
+}
+void DoganGame::checkPlayerHasDevelopmentCard(int playerID, DevelopmentType devType) const {
+  std::stringstream oss;
+  oss << "Error: Player does not have " << devType << " card";
+  if (players.at(playerID).getDevelopmentCount()[static_cast<int>(devType)] == 0)
+    throw InsufficientDevelopmentsException(
+        oss.str());
+}
+void DoganGame::checkCoordinateValid(Coordinate2D coord) const {
+  if (!board.hasTile(coord))
+    throw CoordinateNotFoundException("Error: Invalid Coordinate");
+}
+void DoganGame::checkStructureExists(Coordinate2D coord, Direction direction, StructureType structureType) const {
+  if (board.hasStructure(coord, direction, structureType))
+    throw SameStructureException("Error: Structure already exists");
+}
+void DoganGame::checkResourceType(ResourceType resourceType) const {
+  if (resourceType == ResourceType::OTHER)
+    throw InvalidTypeException("Error: Resource type must be set");
 }
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {

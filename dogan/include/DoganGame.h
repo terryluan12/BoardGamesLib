@@ -9,7 +9,6 @@
 class DoganGame {
 public:
   DoganGame(DoganConfig config = DoganConfig());
-  friend std::ostream &operator<<(std::ostream &os, DoganGame const &dg);
   void addPlayer(std::string pn, int pid);
   void purchaseDevelopmentCard(int playerID, std::array<int, 5> c);
 
@@ -26,8 +25,9 @@ public:
   int rollDice(void);
   void distributeResources(int numberRolled);
 
-  int getVictoryPoints(int playerID);
+  int getVictoryPoints(int playerID) const;
 
+  // Development Cards
   void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
   void useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
                                  Direction d);
@@ -36,8 +36,9 @@ public:
                               std::array<Direction, 2> directions);
   void useTakeTwoDevelopmentCard(int playerID,
                                  std::array<ResourceType, 2> resources);
-  void stealResource(int playerID, int stolenPlayerID);
   void useRobber(int playerID, Coordinate2D tileLocation, Direction direction);
+
+  friend std::ostream &operator<<(std::ostream &os, DoganGame const &dg);
 
 private:
   DoganConfig config;
@@ -48,4 +49,13 @@ private:
   std::map<int, DoganPlayer> players;
   std::pair<int, int> mostSoldiers;
   std::pair<int, int> longestRoad;
+
+  void stealResource(int playerID, int stolenPlayerID);
+  void checkPlayerExists(int playerID) const;
+  void checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const;
+  void checkBankCanAfford(ResourceType resourceType, int num) const;
+  void checkPlayerHasDevelopmentCard(int playerID, DevelopmentType devType) const;
+  void checkCoordinateValid(Coordinate2D coord) const;
+  void checkStructureExists(Coordinate2D coord, Direction direction, StructureType structureType) const;
+  void checkResourceType(ResourceType resourceType) const;
 };

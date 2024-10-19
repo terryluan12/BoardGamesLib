@@ -175,6 +175,13 @@ TEST_F(MidGameFixture, TradeSuccessTest) {
   ASSERT_EQ((game.getResourceCount(playerID2)),
             (std::array<int, 5>{1, 2, 3, 4, 5}));
 
+  game.tradeResources(playerID1, {0, 0, 0, 0, 0}, playerID2, {0, 0, 0, 0, 0});
+
+  ASSERT_EQ((game.getResourceCount(playerID1)),
+            (std::array<int, 5>{4, 4, 4, 4, 4}));
+  ASSERT_EQ((game.getResourceCount(playerID2)),
+            (std::array<int, 5>{1, 2, 3, 4, 5}));
+
   game.tradeResources(playerID1, {0, 1, 2, 3, 4}, playerID2, {0, 0, 0, 0, 0});
 
   std::array<int, 5> expected1 = {4, 3, 2, 1, 0};
@@ -195,9 +202,10 @@ TEST_F(MidGameFixture, TradeDebtTest) {
         game.tradeResources(playerID1, {5, 0, 0, 0, 0}, playerID2,
                             {0, 0, 0, 0, 0});
       },
-      InsufficientResourcesException);
+      InsufficientFundsException);
 }
 
+// Structures
 TEST_F(GameFixture, BuildExistingStructuresTest) {
 
   // Buildings
