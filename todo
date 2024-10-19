@@ -26,3 +26,4 @@ Optimize CMakeFiles
 Add checking to see if a DoganPort is valid
 Deal with if Bank is bankrupt
 Figure out sizeDifferences in getDevelopments
+Seed/Mock the rengine to have the same result everytime

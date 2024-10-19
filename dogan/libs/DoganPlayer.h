@@ -25,6 +25,9 @@ public:
   void addResource(const ResourceType r, int n);
   bool canAfford(const std::array<int, 5> r);
 
+  void increaseSoldierCount(void);
+  int getSoldierCount(void);
+  
   // Other Functions
   std::string getName(void) const;
   std::array<int, 5> getResourceCount(void) const;
@@ -44,6 +47,7 @@ private:
   std::vector<std::shared_ptr<DoganBuilding>> buildings;
   std::vector<std::shared_ptr<DoganRoad>> roads;
   int victoryPoints;
+  int soldierCount;
   void addDevelopment(DevelopmentType d);
   void buildStructure(std::shared_ptr<DoganStructure> s);
 };

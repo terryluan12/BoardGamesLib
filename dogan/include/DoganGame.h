@@ -24,11 +24,13 @@ public:
   bool hasStructure(Coordinate2D coord, std::string dir, int structureType);
   int rollDice(void);
   void distributeResources(int numberRolled);
-  void moveRobber(Coordinate2D tileLocation);
 
   int getVictoryPoints(int playerID);
 
   void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
+  void useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation, Direction d);
+  void stealResource(int playerID, int stolenPlayerID);
+  void useRobber(int playerID, Coordinate2D tileLocation, Direction direction);
   
 private:
   DoganConfig config;
@@ -37,4 +39,6 @@ private:
   DoganBank bank;
   DoganBoard board;
   std::map<int, DoganPlayer> players;
+  std::pair<int, int> mostSoldiers;
+  std::pair<int, int> longestRoad;
 };

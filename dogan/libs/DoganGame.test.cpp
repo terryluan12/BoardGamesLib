@@ -178,6 +178,30 @@ TEST_F(GameFixture, UseDevelopmentCardMonopolyTest) {
 
 }
 
+TEST_F(GameFixture, useSoldierDevelopmentCardTest) {
+  for(int i = 0; i < 5; i++) {
+    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+  }
+  iGame.buildStructure(playerID2, villageInt, {1, 1}, "NW", {0, 0, 0, 0, 0});
+  iGame.giveResources(playerID2, {0, 1, 2, 3, 4});
+  EXPECT_EQ(iGame.getResourceCount(playerID1), (std::array<int, 5>{0, 0, 0, 0, 0}));
+  EXPECT_EQ(iGame.getResourceCount(playerID2), (std::array<int, 5>{0, 1, 2, 3, 4}));
+
+  iGame.useSoldierDevelopmentCard(playerID1, {1, 1}, Direction::NORTHWEST);
+  
+  int totalSum = 0;
+  for(int i = 0; i < 5; i++) {
+    totalSum += iGame.getResourceCount(playerID1)[i];
+  }
+  EXPECT_EQ(totalSum, 1);
+
+  totalSum = 0;
+  for(int i = 0; i < 5; i++) {
+    totalSum += i - iGame.getResourceCount(playerID2)[i];
+  }
+  EXPECT_EQ(totalSum, 1);
+}
+
 
 
 TEST_F(GameFixture, CircularEconomyTest) {

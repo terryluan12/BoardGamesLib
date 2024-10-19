@@ -156,13 +156,6 @@ void DoganGame::distributeResources(int numberRolled) {
   }
 }
 
-void DoganGame::moveRobber(Coordinate2D tileLocation) {
-  if(!board.hasTile(tileLocation))
-    throw CoordinateNotFoundException("Error: Invalid Coordinate");
-
-  board.moveRobber(tileLocation);
-}
-
 int DoganGame::getVictoryPoints(int playerID) {
   auto player = players.find(playerID);
   if(player == players.end())
@@ -190,6 +183,56 @@ void DoganGame::useMonopolyDevelopmentCard(int playerID, ResourceType resource) 
     p.removeResource(resource, stolenCount);
   }
 }
+
+void DoganGame::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation, Direction direction) {
+  players.at(playerID).increaseSoldierCount();
+  int soldierCount = players.at(playerID).getSoldierCount();
+  if(soldierCount >= 3 && soldierCount > mostSoldiers.second) {
+    players.at(mostSoldiers.first).addVictoryPoints(-2);
+    mostSoldiers = {playerID, soldierCount};
+    players.at(playerID).addVictoryPoints(2);
+  }
+
+  useRobber(playerID, tileLocation, direction);
+}
+
+void DoganGame::useRobber(int playerID, Coordinate2D tileLocation, Direction direction) {
+    if(!board.hasBuilding(tileLocation, direction))
+      throw NoSuchStructureException("Error: No Building at given location");
+
+    board.moveRobber(tileLocation);
+
+    int stolenPID = board.getBuilding(tileLocation, direction).getPlayerID();
+    stealResource(playerID, stolenPID);
+}
+
+void DoganGame::stealResource(int playerID, int stolenPlayerID) {
+  auto player = players.find(playerID);
+  if(player == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+  auto stolenPlayer = players.find(stolenPlayerID);
+  if(stolenPlayer == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(stolenPlayerID) + " invalid");
+    
+  auto resourceCount = players.at(stolenPlayerID).getResourceCount();
+  std::vector<int> availableIndices = {};
+
+  for(int i = 0; i < 5; i++) {
+    if(resourceCount[i] == 0) {
+      continue;
+    }
+    availableIndices.push_back(i);
+  }
+  if(availableIndices.size() == 0) {
+    throw InsufficientResourcesException("Error: Player does not have enough resources to steal");
+  }
+  std::uniform_int_distribution<std::size_t> randomPicker(0, availableIndices.size() - 1);
+  ResourceType resourceStolen = static_cast<ResourceType>(availableIndices[randomPicker(rengine)]);
+
+  players.at(stolenPlayerID).removeResource(resourceStolen, 1);
+  players.at(playerID).addResource(resourceStolen, 1);
+}
+
 
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {

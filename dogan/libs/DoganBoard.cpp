@@ -79,6 +79,16 @@ Coordinate2D DoganBoard::getRobberLocation(void) const {
   return robberLocation;
 }
 
+DoganBuilding DoganBoard::getBuilding(Coordinate2D c, Direction d) const {
+  DoganVertex dv(c, d);
+  const auto &map = buildings.find(c); 
+  if(map == buildings.end() || map->second.find(d) == map->second.end()) {
+    throw NoSuchStructureException("Error: No Building at given location");
+  }
+  return *(map->second.at(d));
+}
+
+
 void DoganBoard::moveRobber(Coordinate2D nl) {
   cells.at(robberLocation)->setRobber(false);
   cells.at(nl)->setRobber(true);
@@ -101,8 +111,22 @@ bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d, Structure
     if(map == buildings.end()) {
       return false;
     }
-    return map->second.find(d) != map->second.end();
+    const auto &building = map->second.find(d);
+    if(building == map->second.end()) {
+      return false;
+    }
+    return building->second->getStructureType() == st;
   }
+}
+
+
+bool DoganBoard::hasBuilding(const Coordinate2D c, const Direction d) const {
+  DoganVertex dv(c, d);
+  const auto &map = buildings.find(c); 
+  if(map == buildings.end()) {
+    return false;
+  }
+  return map->second.find(d) != map->second.end();
 }
 
 bool DoganBoard::hasTile(const Coordinate2D c) const {
