@@ -27,13 +27,12 @@ void DoganGame::addPlayer(std::string pn, int pid) {
 
 void DoganGame::purchaseDevelopmentCard(int playerID,
                                         std::array<int, 5> cost) {
-  auto pe = players.find(playerID);
+  const auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
-  DoganPlayer &p = pe->second;
+  DoganPlayer &p = players.at(playerID);
   if(!p.canAfford(cost))
     throw InsufficientResourcesException(p.getName() + " can't afford this trade");
-
   DevelopmentType dt = bank.popDevelopment();
   p.giveDevelopment(dt);
   bank.addResources(cost);
@@ -48,7 +47,7 @@ void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
   if(pe2 == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID2) + " invalid");
 
-  DoganPlayer &p1 = pe1->second, &p2 = pe2->second;
+  DoganPlayer &p1 = players.at(playerID1), &p2 = players.at(playerID2);
   if(!p1.canAfford(resources1))
     throw InsufficientResourcesException(p1.getName() + " can't afford this trade");
   if(!p2.canAfford(resources2))
@@ -60,17 +59,23 @@ void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
   p1.addResources(resources2);
   }
 
-const std::array<int, 5> DoganGame::getResourceCount(int playerID) {
+const std::array<int, 5> DoganGame::getResourceCount(int playerID) const {
+  if(playerID == -1) {
+    return bank.getResourceCount();
+  }
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
-  return pe->second.getResourceCount();
+  return players.at(playerID).getResourceCount();
 }
-const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) {
+const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
+  if(playerID == -1) {
+    return bank.getDevelopmentCount();
+  }
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
-  return pe->second.getDevelopmentCount();
+  return players.at(playerID).getDevelopmentCount();
 }
 
 
@@ -84,7 +89,7 @@ void DoganGame::buildStructure(int playerID, size_t structType,
   if (!pe->second.canAfford(cost)) 
     throw InsufficientFundsException(
         "Error: Player does not have enough resources to build structure");
-  DoganPlayer &p = pe->second;
+  DoganPlayer &p = players.at(playerID);
 
   Direction d = AxialHexDirection::fromString(dir);
   StructureType st = DoganStructureType::fromInt(structType);
@@ -111,14 +116,14 @@ void DoganGame::buildStructure(int playerID, size_t structType,
   }
   board.buildStructure(element, cost);
   p.buildStructure(element, cost);
-  bank.removeResources(cost);
+  bank.addResources(cost);
 }
 
 void DoganGame::giveResources(int playerID, std::array<int, 5> r) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
-  pe->second.addResources(r);
+  players.at(playerID).addResources(r);
 }
 
 bool DoganGame::hasStructure(Coordinate2D coord, std::string dir, int structureType) {
@@ -142,7 +147,7 @@ void DoganGame::distributeResources(int numberRolled) {
     for(size_t i = 0; i < resources.size(); i++) {
       if(bank.canAfford(i, resources[i])) {
         bank.removeResource(static_cast<ResourceType>(i), resources[i]);
-        player->second.addResource(i, resources[i]);
+        players.at(pid).addResource(i, resources[i]);
       }
       else {
         throw InsufficientResourcesException("Bank does not have enough resources to distribute");

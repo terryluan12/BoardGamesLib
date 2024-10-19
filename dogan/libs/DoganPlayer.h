@@ -25,8 +25,8 @@ public:
 
   // Other Functions
   std::string getName(void) const;
-  std::array<int, 5> getResourceCount(void);
-  std::array<int, 5> getDevelopmentCount(void);
+  std::array<int, 5> getResourceCount(void) const;
+  std::array<int, 5> getDevelopmentCount(void) const;
   int getPlayerID(void) const;
   void giveDevelopment(DevelopmentType d);
   void buildStructure(std::shared_ptr<DoganStructure> s,

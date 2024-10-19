@@ -15,8 +15,8 @@ public:
   
   void tradeResources(int playerID1, std::array<int, 5> resources1,
                                int playerID2, std::array<int, 5> resources2);
-  const std::array<int, 5> getResourceCount(int playerID);
-  const std::array<int, 5> getDevelopmentCount(int playerID);
+  const std::array<int, 5> getResourceCount(int playerID) const;
+  const std::array<int, 5> getDevelopmentCount(int playerID) const;
   void buildStructure(int playerID, size_t structType,
                       Coordinate2D tileLocation, std::string dir,
                       std::array<int, 5> cost);

@@ -28,11 +28,11 @@ bool DoganPlayer::canAfford(const std::array<int, 5> r) {
 
 std::string DoganPlayer::getName(void) const { return name; }
 
-std::array<int, 5> DoganPlayer::getResourceCount(void) {
+std::array<int, 5> DoganPlayer::getResourceCount(void) const {
   return inventory.getResourceCount();
 }
-std::array<int, 5> DoganPlayer::getDevelopmentCount(void) {
-  return inventory.getResourceCount();
+std::array<int, 5> DoganPlayer::getDevelopmentCount(void) const {
+  return inventory.getDevelopmentCount();
 }
 
 int DoganPlayer::getPlayerID(void) const { return playerID; }

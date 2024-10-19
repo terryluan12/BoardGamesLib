@@ -23,6 +23,11 @@ protected:
                           .setNumberLocations(numberLocations)
                           .setResourceConfig(generalConfig)
                           .setResources({4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
+                          .setDevelopmentConfig(generalConfig)
+                          .setDevelopmentLocations(
+                            {DevelopmentType::TAKETWO, DevelopmentType::BUILDROAD, DevelopmentType::SOLDIER, DevelopmentType::MONOPOLY, DevelopmentType::VICPOINT}
+                          )
+                          .setDevelopmentCount({1, 1, 1, 1, 1})
                           .build();
     nGame = DoganGame(config1);
     iGame = DoganGame(config2);
@@ -137,4 +142,23 @@ TEST_F(GameFixture, StartPhaseTest) {
   iGame.buildStructure(playerID1, villageInt, {1, 1}, "N", {0, 0, 0, 0, 0});
   iGame.giveResources(playerID1, {1, 0, 0, 0, 0});
   iGame.buildStructure(playerID1, roadInt, {1, 0}, "NE", {0, 0, 0, 0, 0});
+}
+
+TEST_F(GameFixture, PurchaseDevelopmentCardTest) {
+  std::array<int, 5> expected{0, 0, 0, 0, 0};
+  for(int i = 0; i < 5; i++) {
+    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+    expected[i] = 1;
+    std::array<int, 5> actual = iGame.getDevelopmentCount(playerID1);
+    EXPECT_EQ(actual, expected);
+  }
+}
+
+TEST_F(GameFixture, CircularEconomyTest) {
+  ASSERT_EQ(iGame.getResourceCount(-1), (std::array<int, 5>{19, 19, 19, 19, 19}));
+  iGame.giveResources(playerID1, {4, 4, 4, 4, 4});
+  iGame.buildStructure(playerID1, villageInt, {1, 1}, "NW", {0, 1, 2, 3, 4});
+  
+  std::array<int, 5> expected{19, 20, 21, 22, 23};
+  EXPECT_EQ(iGame.getResourceCount(-1), expected);
 }
