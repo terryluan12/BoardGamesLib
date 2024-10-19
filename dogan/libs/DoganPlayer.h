@@ -16,6 +16,7 @@ public:
 
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
+  void addVictoryPoints(const int vp);
 
   void setAvailableStructures(const std::array<int, 3> as);
   void addResources(std::array<int, 5> r);
@@ -32,7 +33,6 @@ public:
   void buildStructure(std::shared_ptr<DoganStructure> s,
                       std::array<int, 5> c);
 
-  // void useDevelopmentCard(DevelopmentType dt, )
 private:
   std::string name;
   int playerID;

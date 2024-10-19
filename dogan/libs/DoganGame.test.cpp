@@ -154,6 +154,17 @@ TEST_F(GameFixture, PurchaseDevelopmentCardTest) {
   }
 }
 
+TEST_F(GameFixture, UseDevelopmentCardVictoryTest) {
+  for(int i = 0; i < 5; i++) {
+    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+  }
+  iGame.useDevelopmentCard(playerID1, DevelopmentType::VICPOINT);
+
+  EXPECT_EQ(iGame.getVictoryPoints(playerID1), 1);
+  
+}
+
+
 TEST_F(GameFixture, CircularEconomyTest) {
   ASSERT_EQ(iGame.getResourceCount(-1), (std::array<int, 5>{19, 19, 19, 19, 19}));
   iGame.giveResources(playerID1, {4, 4, 4, 4, 4});

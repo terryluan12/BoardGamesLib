@@ -119,11 +119,11 @@ void DoganGame::buildStructure(int playerID, size_t structType,
   bank.addResources(cost);
 }
 
-void DoganGame::giveResources(int playerID, std::array<int, 5> r) {
+void DoganGame::giveResources(int playerID, std::array<int, 5> resources) {
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
-  players.at(playerID).addResources(r);
+  players.at(playerID).addResources(resources);
 }
 
 bool DoganGame::hasStructure(Coordinate2D coord, std::string dir, int structureType) {
@@ -162,6 +162,28 @@ void DoganGame::moveRobber(Coordinate2D tileLocation) {
 
   board.moveRobber(tileLocation);
 }
+
+int DoganGame::getVictoryPoints(int playerID) {
+  auto player = players.find(playerID);
+  if(player == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+  return players.at(playerID).getVictoryPoints();
+}
+
+
+void DoganGame::useDevelopmentCard(int playerID, DevelopmentType developmentType, std::pair<int, int> coords, Direction direction, std::pair<ResourceType, ResourceType> resources) {
+  auto player = players.find(playerID);
+  if(player == players.end())
+    throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
+
+  switch(developmentType) {
+    case DevelopmentType::VICPOINT:
+      break;
+    default:
+      throw InvalidTypeException("Error: Invalid Development Type");
+  }
+}
+
 
 
 std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {

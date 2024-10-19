@@ -2,11 +2,12 @@
 #include "DoganExceptions.h"
 
 DoganPlayer::DoganPlayer(std::string n, int pid)
-    : name(n), playerID(pid), inventory(), victoryPoints(0) {};
+    : name(n), playerID(pid), inventory(), victoryPoints(0), soldierCount(0) {};
 
 // Victory Point Functions
 int DoganPlayer::getVictoryPoints(void) const { return victoryPoints; }
 void DoganPlayer::setVictoryPoints(const int vp) { victoryPoints = vp; }
+void DoganPlayer::addVictoryPoints(const int vp) { victoryPoints += vp; }
 
 void DoganPlayer::setAvailableStructures(const std::array<int, 3> as) {
   availableStructures = as;
@@ -24,6 +25,13 @@ void DoganPlayer::addResource(int r, int n) {
 }
 bool DoganPlayer::canAfford(const std::array<int, 5> r) {
   return inventory.canAfford(r);
+}
+
+void DoganPlayer::increaseSoldierCount(void) {
+  ++soldierCount;
+}
+int DoganPlayer::getSoldierCount(void) {
+  return soldierCount;
 }
 
 std::string DoganPlayer::getName(void) const { return name; }
