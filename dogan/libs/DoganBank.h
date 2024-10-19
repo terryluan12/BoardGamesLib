@@ -15,8 +15,6 @@ public:
   void addResources(const std::array<int, 5> r);
   const std::array<int, 5> getResourceCount(void) const;
   void setResources(const std::array<int, 5> r);
-  void removeResource(const ResourceType r, const int n);
-  void removeResources(const std::array<int, 5> r);
   bool canAfford(const std::array<int, 5> r);
   bool canAfford(ResourceType r, int n);
 

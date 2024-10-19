@@ -42,6 +42,47 @@ protected:
   int playerID3;
 };
 
+class MidGameFixture : public ::testing::Test {
+  protected:
+    void SetUp() override {
+      playerID1 = 0;
+      playerID2 = 1;
+      playerID3 = 2;
+
+    std::array<int, 2> generalConfig{2, 2};
+    std::vector<int> numberLocations{2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12};
+    DoganConfig config = DoganConfigBuilder()
+                          .setNumberConfig(generalConfig)
+                          .setNumberLocations(numberLocations)
+                          .setResourceConfig(generalConfig)
+                          .setResources({4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
+                          .setDevelopmentConfig(generalConfig)
+                          .setDevelopmentLocations(
+                            {DevelopmentType::TAKETWO, DevelopmentType::BUILDROAD, DevelopmentType::SOLDIER, DevelopmentType::MONOPOLY, DevelopmentType::VICPOINT}
+                          )
+                          .setDevelopmentCount({1, 1, 1, 1, 1})
+                          .build();
+    game = DoganGame(config);
+    game.addPlayer("Dogan1", playerID1);
+    game.addPlayer("Dogan2", playerID2);
+    game.addPlayer("Dogan3", playerID3);
+
+    game.buildStructure(playerID1, StructureType::VILLAGE, {0, 0}, Direction::NORTH, {0, 0, 0, 0, 0});
+    game.buildStructure(playerID2, StructureType::VILLAGE, {-1, 4}, Direction::SOUTH, {0, 0, 0, 0, 0});
+    game.buildStructure(playerID3, StructureType::VILLAGE, {0, 2}, Direction::SOUTH, {0, 0, 0, 0, 0});
+    game.buildStructure(playerID1, StructureType::ROAD, {0, 0}, Direction::NORTHWEST, {0, 0, 0, 0, 0});
+    game.buildStructure(playerID2, StructureType::ROAD, {0, 2}, Direction::SOUTHEAST, {0, 0, 0, 0, 0});
+    game.buildStructure(playerID3, StructureType::ROAD, {0, 2}, Direction::SOUTHWEST, {0, 0, 0, 0, 0});
+
+    game.giveResources(playerID1, {4, 4, 4, 4, 4});
+    game.giveResources(playerID2, {1, 2, 3, 4, 5});
+    game.giveResources(playerID3, {0, 0, 0, 0, 0});
+    }
+  int playerID1, playerID2, playerID3;
+  DoganGame game;
+
+};
+
 TEST_F(GameFixture, AddExistingPlayersTest) {
   nGame.addPlayer("DoganPlayer", 0);
   EXPECT_THROW({ nGame.addPlayer("", 0); }, SamePlayerException);
@@ -82,17 +123,32 @@ TEST_F(GameFixture, EmptyStructureTest) {
   EXPECT_EQ((iGame.hasStructure({1, 1}, Direction::NORTHWEST, StructureType::ROAD)), false);
 }
 
-TEST_F(GameFixture, TradeTest) {
-  iGame.giveResources(0, {4, 4, 4, 4, 4});
-  iGame.giveResources(1, {4, 4, 4, 4, 4});
-  iGame.tradeResources(0, {0, 1, 2, 3, 4}, 1, {0, 0, 0 , 0, 0});
+// Trading Tests
+
+TEST_F(MidGameFixture, TradeSuccessTest) {
+  ASSERT_EQ((game.getResourceCount(playerID1)), (std::array<int, 5>{4, 4, 4, 4, 4}));
+  ASSERT_EQ((game.getResourceCount(playerID2)), (std::array<int, 5>{1, 2, 3, 4, 5}));
+
+  game.tradeResources(playerID1, {0, 1, 2, 3, 4}, playerID2, {0, 0, 0 , 0, 0});
 
   std::array<int, 5> expected1 = {4, 3, 2, 1, 0};
-  std::array<int, 5> expected2 = {4, 5, 6, 7, 8};
+  std::array<int, 5> expected2 = {1, 3, 5, 7, 9};
 
-  EXPECT_EQ((iGame.getResourceCount(0)), expected1);
-  EXPECT_EQ((iGame.getResourceCount(1)), expected2);
+  EXPECT_EQ((game.getResourceCount(playerID1)), expected1);
+  EXPECT_EQ((game.getResourceCount(playerID2)), expected2);
 }
+
+TEST_F(MidGameFixture, TradeDebtTest) {
+  ASSERT_EQ((game.getResourceCount(playerID1)), (std::array<int, 5>{4, 4, 4, 4, 4}));
+  ASSERT_EQ((game.getResourceCount(playerID2)), (std::array<int, 5>{1, 2, 3, 4, 5}));
+
+  EXPECT_THROW(
+      {
+        game.tradeResources(playerID1, {5, 0, 0, 0, 0}, playerID2, {0, 0, 0 , 0, 0});
+      },
+      InsufficientResourcesException);
+}
+
 
 TEST_F(GameFixture, BuildExistingStructuresTest) {
 
@@ -134,11 +190,8 @@ TEST_F(GameFixture, DistributeResourcesTest) {
 }
 
 
-TEST_F(GameFixture, StartPhaseTest) {
-  iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 1}, Direction::NORTH, {0, 0, 0, 0, 0});
-  iGame.giveResources(playerID1, {1, 0, 0, 0, 0});
-  iGame.buildStructure(playerID1, StructureType::ROAD, {1, 0}, Direction::NORTHEAST, {0, 0, 0, 0, 0});
-}
+
+// Development Card Tests
 
 TEST_F(GameFixture, PurchaseDevelopmentCardTest) {
   std::array<int, 5> expected{0, 0, 0, 0, 0};
@@ -157,6 +210,7 @@ TEST_F(GameFixture, UseDevelopmentCardVictoryTest) {
   EXPECT_EQ(iGame.getVictoryPoints(playerID1), 1);
   
 }
+
 TEST_F(GameFixture, UseDevelopmentCardMonopolyTest) {
   for(int i = 0; i < 5; i++) {
     iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
@@ -237,4 +291,19 @@ TEST_F(GameFixture, CircularEconomyTest) {
   
   std::array<int, 5> expected{19, 20, 21, 22, 23};
   EXPECT_EQ(iGame.getResourceCount(-1), expected);
+}
+
+
+// Functional Tests
+
+TEST_F(GameFixture, StartPhaseTest) {
+  iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 1}, Direction::NORTH, {0, 0, 0, 0, 0});
+  iGame.giveResources(playerID1, {1, 0, 0, 0, 0});
+  iGame.buildStructure(playerID1, StructureType::ROAD, {1, 0}, Direction::NORTHEAST, {0, 0, 0, 0, 0});
+}
+
+TEST_F(GameFixture, TradePhaseTest) {
+  iGame.giveResources(playerID1, {4, 4, 4, 4, 4});
+  iGame.giveResources(playerID2, {4, 4, 4, 4, 4});
+  iGame.tradeResources(playerID1, {0, 1, 2, 3, 4}, playerID2, {0, 0, 0, 0, 0});
 }

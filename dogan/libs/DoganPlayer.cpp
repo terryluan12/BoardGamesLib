@@ -17,12 +17,6 @@ void DoganPlayer::setAvailableStructures(const std::array<int, 3> as) {
 void DoganPlayer::addResources(std::array<int, 5> r) {
   inventory.addResources(r);
 }
-void DoganPlayer::removeResources(std::array<int, 5> r) {
-  inventory.removeResources(r);
-}
-void DoganPlayer::removeResource(const ResourceType r, const int n) {
-  inventory.removeResource(r, n);
-}
 void DoganPlayer::addResource(const ResourceType r, int n) {
   inventory.addResource(r, n);
 }
@@ -58,8 +52,11 @@ void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s,
     throw InsufficientStructuresException(
         "Error: Player does not have enough structures");
   }
-
-  inventory.removeResources(c);
+  std::array<int, 5> cost;
+  std::transform(c.begin(), c.end(), cost.begin(), [](int x) {
+    return -x;
+  });
+  inventory.addResources(cost);
   buildStructure(s);
   availableStructures[static_cast<int>(s->getStructureType())] -= 1;
 }

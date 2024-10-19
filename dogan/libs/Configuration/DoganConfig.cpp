@@ -6,7 +6,7 @@
 std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
   auto &[orderConfig, replaceConfig] = initialNumberConfig;
   std::uniform_int_distribution<pip> pipRand(1, 6);
-  size_t sizeDifference = boardSize - initialNumberLocations.size();
+  int sizeDifference = boardSize - initialNumberLocations.size();
 
   switch (replaceConfig) {
   case ReplaceConfiguration::DEFAULT:
@@ -29,7 +29,7 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
                 << "). You should not include 7 as a number. If this is not "
                    "intended, please fix this\n";
       if (sizeDifference - 1 > 0) {
-        for (size_t i = 0; i < sizeDifference; i++) {
+        for (int i = 0; i < sizeDifference; i++) {
           initialNumberLocations.push_back(pipRand(rengine));
         }
       }
@@ -54,7 +54,7 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
 std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
   auto &[orderConfig, replaceConfig] = initialPortResourceConfig;
   std::uniform_int_distribution<size_t> resourceRand(0, 4);
-  size_t sizeDifference =
+  int sizeDifference =
       initialPortLocations.size() - initialPortResources.size();
 
   switch (replaceConfig) {
@@ -78,7 +78,7 @@ std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
                 << initialPortResources.size()
                 << "). If this is not intended, please fix this\n";
       if (sizeDifference > 0) {
-        for (size_t i = 0; i < sizeDifference; i++) {
+        for (int i = 0; i < sizeDifference; i++) {
           initialPortResources.push_back(
               static_cast<ResourceType>(resourceRand(rengine)));
         }

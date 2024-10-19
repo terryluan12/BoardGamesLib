@@ -47,16 +47,20 @@ void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
   if(pe2 == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID2) + " invalid");
 
+  std::array<int, 5> resourceDifference;
+  std::array<int, 5> negativeResourceDifference;
+  for(int i = 0; i < 5; i++) {
+    resourceDifference[i] = resources1[i] - resources2[i];
+    negativeResourceDifference[i] = -resourceDifference[i];
+  }
   DoganPlayer &p1 = players.at(playerID1), &p2 = players.at(playerID2);
-  if(!p1.canAfford(resources1))
+  if(!p1.canAfford(resourceDifference))
     throw InsufficientResourcesException(p1.getName() + " can't afford this trade");
-  if(!p2.canAfford(resources2))
+  if(!p2.canAfford(negativeResourceDifference))
     throw InsufficientResourcesException(p2.getName() + " can't afford this trade");
-  
-  p1.removeResources(resources1);
-  p2.addResources(resources1);
-  p2.removeResources(resources2);
-  p1.addResources(resources2);
+
+  p2.addResources(resourceDifference);
+  p1.addResources(negativeResourceDifference);
   }
 
 const std::array<int, 5> DoganGame::getResourceCount(int playerID) const {
@@ -85,12 +89,10 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
   auto pe = players.find(playerID);
   if(pe == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) + " invalid");
-  
   if (!pe->second.canAfford(cost)) 
     throw InsufficientFundsException(
         "Error: Player does not have enough resources to build structure");
   DoganPlayer &p = players.at(playerID);
-
   if(!board.hasTile(tileLocation))
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
 
@@ -142,7 +144,7 @@ void DoganGame::distributeResources(int numberRolled) {
     
     for(size_t i = 0; i < resources.size(); i++) {
       if(bank.canAfford(static_cast<ResourceType>(i), resources[i])) {
-        bank.removeResource(static_cast<ResourceType>(i), resources[i]);
+        bank.addResource(static_cast<ResourceType>(i), -1*resources[i]);
         players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
       }
       else {
@@ -176,7 +178,7 @@ void DoganGame::useMonopolyDevelopmentCard(int playerID, ResourceType resource) 
       continue;
     int stolenCount = p.getResourceCount()[resourceIndex];
     players.at(playerID).addResource(resource, stolenCount);
-    p.removeResource(resource, stolenCount);
+    p.addResource(resource, -1*stolenCount);
   }
 }
 
@@ -229,7 +231,7 @@ void DoganGame::useTakeTwoDevelopmentCard(int playerID, std::array<ResourceType,
 
   for(int i = 0; i < 2; i++) {
     players.at(playerID).addResource(resources[i], 1);
-    bank.removeResource(resources[i], 1);
+    bank.addResource(resources[i], -1);
   }
   
 }
@@ -267,7 +269,7 @@ void DoganGame::stealResource(int playerID, int stolenPlayerID) {
   std::uniform_int_distribution<std::size_t> randomPicker(0, availableIndices.size() - 1);
   ResourceType resourceStolen = static_cast<ResourceType>(availableIndices[randomPicker(rengine)]);
 
-  players.at(stolenPlayerID).removeResource(resourceStolen, 1);
+  players.at(stolenPlayerID).addResource(resourceStolen, -1);
   players.at(playerID).addResource(resourceStolen, 1);
 }
 
