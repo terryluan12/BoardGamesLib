@@ -61,6 +61,9 @@ void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
     break;
   case (StructureType::ROAD):
     roads.push_back(std::dynamic_pointer_cast<DoganRoad>(s));
+    break;
+  case(StructureType::PORT):
+    throw InvalidTypeException("Error: Cannot build a port");
   }
 }
 

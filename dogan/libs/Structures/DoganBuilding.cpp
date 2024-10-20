@@ -2,7 +2,8 @@
 #include <cassert>
 
 DoganBuilding::DoganBuilding(int pid, StructureType t, DoganVertex dv)
-    : DoganStructure(pid, t) {
+    : DoganStructure(t) {
+  playerID = pid;
   if (t == StructureType::ROAD) {
     throw InvalidTypeException("Error: Invalid Building Type");
   }

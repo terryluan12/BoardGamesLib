@@ -17,9 +17,6 @@ add_library(DoganPlayer DoganPlayer.cpp DoganPlayer.h)
 target_link_libraries(DoganPlayer PUBLIC DoganBank DoganBuilding DoganRoad DoganStructure)
 target_link_libraries(DoganPlayer PRIVATE DoganExceptions)
 
-add_library(DoganPort DoganPort.cpp DoganPort.h)
-target_link_libraries(DoganPort PRIVATE DoganVertex enums)
-
 add_library(enums enums.cpp)
 target_link_libraries(enums PUBLIC AxialHexDirection Common)
 

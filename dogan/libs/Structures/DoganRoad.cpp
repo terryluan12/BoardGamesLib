@@ -2,11 +2,9 @@
 #include <cassert>
 #include <memory>
 
-DoganRoad::DoganRoad(int pid, StructureType t, DoganEdge de)
-    : DoganStructure(pid, t) {
-  if (t != StructureType::ROAD) {
-    throw InvalidTypeException("Error: Invalid Building Type");
-  }
+DoganRoad::DoganRoad(int pid, DoganEdge de)
+    : DoganStructure(StructureType::ROAD) {
+  playerID = pid;
   graphElements.push_back(std::make_shared<DoganEdge>(de));
   addCorrespondingEdge();
 }

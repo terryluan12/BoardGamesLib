@@ -165,6 +165,8 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
                                   std::dynamic_pointer_cast<DoganRoad>(ds)));
     }
     break;
+    case(StructureType::PORT):
+      throw InvalidTypeException("Error: Cannot build a port");
   }
 }
 

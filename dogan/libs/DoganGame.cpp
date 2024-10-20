@@ -61,8 +61,10 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
     break;
   case StructureType::ROAD:
     element = std::make_shared<DoganRoad>(
-        DoganRoad(playerID, structType, DoganEdge(tileLocation, direction)));
+        DoganRoad(playerID, DoganEdge(tileLocation, direction)));
     break;
+  case StructureType::PORT:
+    throw InvalidTypeException("Error: Cannot build a port");
   }
   board.buildStructure(element, cost);
   players.at(playerID).buildStructure(element, cost);

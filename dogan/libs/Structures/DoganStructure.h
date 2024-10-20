@@ -17,7 +17,7 @@ public:
   virtual ~DoganStructure(void){};
 
 protected:
-  DoganStructure(int pid, StructureType t) : playerID(pid), type(t){};
+  DoganStructure(StructureType t) : type(t){};
   std::vector<std::shared_ptr<DoganGraphElement>> graphElements;
   int playerID;
   StructureType type;

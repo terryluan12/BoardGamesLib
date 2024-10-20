@@ -7,7 +7,7 @@
 
 class DoganRoad : public DoganStructure {
 public:
-  DoganRoad(int pid, StructureType t, DoganEdge de);
+  DoganRoad(int pid, DoganEdge de);
 
 private:
   void addCorrespondingEdge(void);
