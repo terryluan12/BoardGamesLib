@@ -31,7 +31,7 @@ void DoganBank::setResources(const std::array<int, 5> r) { resources = r; }
 
 // Development Functions
 void DoganBank::addDevelopment(const DevelopmentType d) {
-  developments.push_back(d);
+  developments.emplace_back(d);
   developmentCount[static_cast<int>(d)] += 1;
 }
 
@@ -45,7 +45,7 @@ const std::vector<DevelopmentType> DoganBank::getDevelopments(void) const {
 
 void DoganBank::setDevelopments(const std::vector<DevelopmentType> d) {
   for (auto dev : d) {
-    developments.push_back(dev);
+    developments.emplace_back(dev);
     developmentCount[static_cast<int>(dev)] += 1;
   }
 }

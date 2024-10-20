@@ -215,7 +215,7 @@ void DoganGame::stealResource(int playerID, int stolenPlayerID) {
     if (resourceCount[i] == 0) {
       continue;
     }
-    availableIndices.push_back(i);
+    availableIndices.emplace_back(i);
   }
   if (availableIndices.size() == 0) {
     throw InsufficientResourcesException(

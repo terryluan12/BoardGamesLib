@@ -30,7 +30,7 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
                    "intended, please fix this\n";
       if (sizeDifference - 1 > 0) {
         for (int i = 0; i < sizeDifference; i++) {
-          initialNumberLocations.push_back(pipRand(rengine));
+          initialNumberLocations.emplace_back(pipRand(rengine));
         }
       }
     }
@@ -79,7 +79,7 @@ std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
                 << "). If this is not intended, please fix this\n";
       if (sizeDifference > 0) {
         for (int i = 0; i < sizeDifference; i++) {
-          initialPortResources.push_back(
+          initialPortResources.emplace_back(
               static_cast<ResourceType>(resourceRand(rengine)));
         }
       }
@@ -126,7 +126,7 @@ std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
                 << "If this is not intended, please fix this\n";
       if (sizeDifference > 0) {
         for (size_t i = 0; i < sizeDifference; i++) {
-          initialResources.push_back(
+          initialResources.emplace_back(
               static_cast<ResourceType>(resourceRand(rengine)));
         }
       }
@@ -175,7 +175,7 @@ DoganConfig::getDevelopments(std::mt19937 rengine) {
         allZero = false;
       } else if (sizeDifferences[i] > 0) {
         for (size_t j = 0; j < sizeDifferences[i]; j++) {
-          initialDevelopmentLocations.push_back(
+          initialDevelopmentLocations.emplace_back(
               static_cast<DevelopmentType>(i));
         }
       } else {

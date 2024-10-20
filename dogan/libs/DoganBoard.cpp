@@ -26,7 +26,7 @@ DoganBoard::DoganBoard(DoganConfig config) {
       this->numbers.emplace(numberOrder[i],
                             std::vector<std::shared_ptr<DoganCell>>{});
     }
-    this->numbers.at(numberOrder[i]).push_back(dc);
+    this->numbers.at(numberOrder[i]).emplace_back(dc);
 
     ++i;
   }

@@ -1,7 +1,5 @@
 Separate out the enums from enums.h
-Add players
 Add boundary checking for config class
-Change uses of push_back to emplace_back where applicable
 Decide if I want to return a shared_ptr in [] operator
 Add CppDoc
 Set int to size_t where relevant
@@ -10,4 +8,4 @@ Optimize CMakeFiles
 Add checking to see if a DoganPort is valid
 Deal with if Bank is bankrupt
 Figure out sizeDifferences in getDevelopments
-Seed/Mock the rengine to have the same result everytime
+Seed/Mock the rengine to have the same result everytime in tests

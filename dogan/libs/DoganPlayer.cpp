@@ -55,11 +55,11 @@ void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
   switch (s->getStructureType()) {
   case (StructureType::VILLAGE):
   case (StructureType::CITY):
-    buildings.push_back(std::dynamic_pointer_cast<DoganBuilding>(s));
+    buildings.emplace_back(std::dynamic_pointer_cast<DoganBuilding>(s));
     victoryPoints += 1;
     break;
   case (StructureType::ROAD):
-    roads.push_back(std::dynamic_pointer_cast<DoganRoad>(s));
+    roads.emplace_back(std::dynamic_pointer_cast<DoganRoad>(s));
     break;
   case (StructureType::PORT):
     throw InvalidTypeException("Error: Cannot build a port");
