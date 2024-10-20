@@ -28,7 +28,6 @@ DoganBoard::DoganBoard(DoganConfig config) {
 
     ++i;
   }
-  cells.at(config.getRobberLocation())->setRobber(true);
 }
 
 size_t DoganBoard::getBoardSize(void) const { return boardSize; }
@@ -169,11 +168,7 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
   }
 }
 
-void DoganBoard::moveRobber(Coordinate2D nl) {
-  cells.at(robberLocation)->setRobber(false);
-  cells.at(nl)->setRobber(true);
-  robberLocation = nl;
-}
+void DoganBoard::moveRobber(Coordinate2D nl) { robberLocation = nl; }
 
 std::ostream &operator<<(std::ostream &os, DoganBoard const &db) {
   for (const auto &c : db.cells) {

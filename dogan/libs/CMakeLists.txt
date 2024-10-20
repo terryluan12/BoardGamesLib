@@ -11,7 +11,7 @@ target_link_libraries(DoganBoard PUBLIC DoganBank DoganCell DoganConfig DoganPla
 target_link_libraries(DoganBoard PRIVATE Common DoganCell)
 
 add_library(DoganCell DoganCell.cpp DoganCell.h)
-target_link_libraries(DoganCell PUBLIC CellInterface Coordinate enums)
+target_link_libraries(DoganCell PUBLIC Coordinate enums)
 
 add_library(DoganPlayer DoganPlayer.cpp DoganPlayer.h)
 target_link_libraries(DoganPlayer PUBLIC DoganBank DoganBuilding DoganRoad DoganStructure)
