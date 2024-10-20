@@ -21,8 +21,7 @@ void DoganGame::addPlayer(std::string pn, int pid) {
   if (players.find(pid) != players.end()) {
     throw SamePlayerException("Cannot add same player twice");
   }
-  DoganPlayer p = DoganPlayer(pn, pid);
-  p.setAvailableStructures(config.getTotalStructureCount());
+  DoganPlayer p = DoganPlayer(pn, pid, config.getTotalStructureCount());
   this->players.emplace(pid, p);
 };
 

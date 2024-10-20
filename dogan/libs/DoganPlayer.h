@@ -10,31 +10,30 @@
 
 class DoganPlayer {
 public:
-  DoganPlayer(std::string n, int pid);
-  friend std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);
+  DoganPlayer(std::string n, int pid, std::array<int, 3> as);
+
+  // Game Functions
+  void giveDevelopment(DevelopmentType d);
+  void buildStructure(std::shared_ptr<DoganStructure> s, std::array<int, 5> c);
 
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
   void addVictoryPoints(const int vp);
 
-  void setAvailableStructures(const std::array<int, 3> as);
   void addResources(std::array<int, 5> r);
   void addResource(const ResourceType r, int n);
-  bool canAfford(const std::array<int, 5> r) const;
 
+  int getSoldierCount(void) const;
   void increaseSoldierCount(void);
-  int getSoldierCount(void);
 
-  // Other Functions
-  std::string getName(void) const;
+  // General Accessors
+  bool canAfford(const std::array<int, 5> r) const;
   std::array<int, 5> getResourceCount(void) const;
   std::array<int, 5> getDevelopmentCount(void) const;
   int getPlayerID(void) const;
-  void giveDevelopment(DevelopmentType d);
-  void buildStructure(std::shared_ptr<DoganStructure> s, std::array<int, 5> c);
+  friend std::ostream &operator<<(std::ostream &os, const DoganPlayer &p);
 
 private:
-  std::string name;
   int playerID;
   DoganBank inventory;
   std::array<int, 3> availableStructures;
