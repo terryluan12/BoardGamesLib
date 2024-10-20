@@ -7,8 +7,8 @@
 #include <sstream>
 
 DoganGame::DoganGame(DoganConfig config)
-    : config(config), rengine(std::random_device{}()), die(1, 6),
-      board(DoganBoard(config)) {
+    : config(config), die(1, 6),
+      board(DoganBoard(config)), rengine(std::random_device{}()) {
   std::array<int, 5> resourceCount{};
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
@@ -25,6 +25,50 @@ void DoganGame::addPlayer(std::string pn, int pid) {
   p.setAvailableStructures(config.getTotalStructureCount());
   this->players.emplace(pid, p);
 };
+
+void DoganGame::giveResources(int playerID, std::array<int, 5> resources) {
+  checkPlayerExists(playerID);
+  players.at(playerID).addResources(resources);
+}
+
+int DoganGame::rollDice(void) { return die(rengine) + die(rengine); }
+
+void DoganGame::distributeResources(int numberRolled) {
+  auto buildings = board.getResourceDistribution(numberRolled);
+  for (auto [pid, resources] : buildings) {
+    checkPlayerExists(pid);
+    for (size_t i = 0; i < resources.size(); i++) {
+      checkBankCanAfford(static_cast<ResourceType>(i), resources[i]);
+      bank.addResource(static_cast<ResourceType>(i), -1 * resources[i]);
+      players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
+    }
+  }
+}
+
+void DoganGame::buildStructure(int playerID, StructureType structType,
+                               Coordinate2D tileLocation, Direction direction,
+                               std::array<int, 5> cost) {
+  std::shared_ptr<DoganStructure> element;
+  checkPlayerExists(playerID);
+  checkPlayerCanAfford(playerID, cost);
+  checkCoordinateValid(tileLocation);
+  checkStructureExists(tileLocation, direction, structType);
+
+  switch (structType) {
+  case StructureType::VILLAGE:
+  case StructureType::CITY:
+    element = std::make_shared<DoganBuilding>(DoganBuilding(
+        playerID, structType, DoganVertex(tileLocation, direction)));
+    break;
+  case StructureType::ROAD:
+    element = std::make_shared<DoganRoad>(
+        DoganRoad(playerID, structType, DoganEdge(tileLocation, direction)));
+    break;
+  }
+  board.buildStructure(element, cost);
+  players.at(playerID).buildStructure(element, cost);
+  bank.addResources(cost);
+}
 
 void DoganGame::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
   checkPlayerExists(playerID);
@@ -53,73 +97,17 @@ void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
   players.at(playerID1).addResources(negativeResourceDifference);
 }
 
-const std::array<int, 5> DoganGame::getResourceCount(int playerID) const {
-  if (playerID == -1) {
-    return bank.getResourceCount();
-  }
+void DoganGame::useRobber(int playerID, Coordinate2D tileLocation,
+                          Direction direction) {
   checkPlayerExists(playerID);
-  return players.at(playerID).getResourceCount();
-}
-const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
-  if (playerID == -1) {
-    return bank.getDevelopmentCount();
-  }
-  checkPlayerExists(playerID);
-  return players.at(playerID).getDevelopmentCount();
-}
-
-void DoganGame::buildStructure(int playerID, StructureType structType,
-                               Coordinate2D tileLocation, Direction direction,
-                               std::array<int, 5> cost) {
-  std::shared_ptr<DoganStructure> element;
-  checkPlayerExists(playerID);
-  checkPlayerCanAfford(playerID, cost);
   checkCoordinateValid(tileLocation);
-  checkStructureExists(tileLocation, direction, structType);
+  if (!board.hasBuilding(tileLocation, direction))
+    throw NoSuchStructureException("Error: No Building at given location");
 
-  switch (structType) {
-  case StructureType::VILLAGE:
-  case StructureType::CITY:
-    element = std::make_shared<DoganBuilding>(DoganBuilding(
-        playerID, structType, DoganVertex(tileLocation, direction)));
-    break;
-  case StructureType::ROAD:
-    element = std::make_shared<DoganRoad>(
-        DoganRoad(playerID, structType, DoganEdge(tileLocation, direction)));
-    break;
-  }
-  board.buildStructure(element, cost);
-  players.at(playerID).buildStructure(element, cost);
-  bank.addResources(cost);
-}
+  board.moveRobber(tileLocation);
 
-void DoganGame::giveResources(int playerID, std::array<int, 5> resources) {
-  checkPlayerExists(playerID);
-  players.at(playerID).addResources(resources);
-}
-
-bool DoganGame::hasStructure(Coordinate2D coord, Direction direction,
-                             StructureType structureType) {
-  return board.hasStructure(coord, direction, structureType);
-}
-
-int DoganGame::rollDice(void) { return die(rengine) + die(rengine); }
-
-void DoganGame::distributeResources(int numberRolled) {
-  auto buildings = board.getResourceDistribution(numberRolled);
-  for (auto [pid, resources] : buildings) {
-    checkPlayerExists(pid);
-    for (size_t i = 0; i < resources.size(); i++) {
-      checkBankCanAfford(static_cast<ResourceType>(i), resources[i]);
-      bank.addResource(static_cast<ResourceType>(i), -1 * resources[i]);
-      players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
-    }
-  }
-}
-
-int DoganGame::getVictoryPoints(int playerID) const {
-  checkPlayerExists(playerID);
-  return players.at(playerID).getVictoryPoints();
+  int stolenPID = board.getBuilding(tileLocation, direction).getPlayerID();
+  stealResource(playerID, stolenPID);
 }
 
 void DoganGame::useMonopolyDevelopmentCard(int playerID,
@@ -191,17 +179,29 @@ void DoganGame::useTakeTwoDevelopmentCard(
   }
 }
 
-void DoganGame::useRobber(int playerID, Coordinate2D tileLocation,
-                          Direction direction) {
+const std::array<int, 5> DoganGame::getResourceCount(int playerID) const {
+  if (playerID == -1) {
+    return bank.getResourceCount();
+  }
   checkPlayerExists(playerID);
-  checkCoordinateValid(tileLocation);
-  if (!board.hasBuilding(tileLocation, direction))
-    throw NoSuchStructureException("Error: No Building at given location");
+  return players.at(playerID).getResourceCount();
+}
+const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
+  if (playerID == -1) {
+    return bank.getDevelopmentCount();
+  }
+  checkPlayerExists(playerID);
+  return players.at(playerID).getDevelopmentCount();
+}
 
-  board.moveRobber(tileLocation);
+int DoganGame::getVictoryPoints(int playerID) const {
+  checkPlayerExists(playerID);
+  return players.at(playerID).getVictoryPoints();
+}
 
-  int stolenPID = board.getBuilding(tileLocation, direction).getPlayerID();
-  stealResource(playerID, stolenPID);
+bool DoganGame::hasStructure(Coordinate2D coord, Direction direction,
+                             StructureType structureType) const {
+  return board.hasStructure(coord, direction, structureType);
 }
 
 void DoganGame::stealResource(int playerID, int stolenPlayerID) {
@@ -229,6 +229,7 @@ void DoganGame::stealResource(int playerID, int stolenPlayerID) {
   players.at(playerID).addResource(resourceStolen, 1);
 }
 
+// Utility Functions
 void DoganGame::checkPlayerExists(int playerID) const {
   if (players.find(playerID) == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
