@@ -13,7 +13,7 @@ protected:
     playerID3 = 2;
 
     DoganConfig config1 = DoganConfigBuilder().build();
-    std::array<int, 2> generalConfig{2, 2};
+    Configuration generalConfig{OrderConfiguration::EXACT, ReplaceConfiguration::EXACT};
     std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6, 7,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
     DoganConfig config2 =
@@ -52,7 +52,7 @@ protected:
     playerID2 = 1;
     playerID3 = 2;
 
-    std::array<int, 2> generalConfig{2, 2};
+    Configuration generalConfig{OrderConfiguration::EXACT, ReplaceConfiguration::EXACT};
     std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6, 7,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
     DoganConfig config =

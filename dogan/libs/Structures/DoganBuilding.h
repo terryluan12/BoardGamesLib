@@ -8,10 +8,8 @@
 
 class DoganBuilding : public DoganStructure {
 public:
-  DoganBuilding(int pid, StructureType t, DoganVertex dv);
+  DoganBuilding(int pid, StructureType t);
   void upgradeToCity(void);
   int getWorth(void);
 
-private:
-  void addCorrespondingVertices(void);
 };

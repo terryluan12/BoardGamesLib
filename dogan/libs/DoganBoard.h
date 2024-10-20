@@ -29,7 +29,7 @@ public:
   bool hasTile(const Coordinate2D c) const;
 
   // Game moves
-  void buildStructure(std::shared_ptr<DoganStructure> ds, std::array<int, 5> c);
+  void buildStructure(std::shared_ptr<DoganStructure> ds, std::shared_ptr<DoganGraphElement> dg, std::array<int, 5> c);
   void moveRobber(Coordinate2D nl);
 
   friend std::ostream &operator<<(std::ostream &os, DoganBoard const &db);
@@ -42,6 +42,6 @@ private:
   std::map<Coordinate2D, std::map<Direction, std::shared_ptr<DoganBuilding>>>
       buildings;
   std::map<Coordinate2D, std::map<Direction, std::shared_ptr<DoganRoad>>> roads;
-  std::vector<DoganPort> ports;
+  std::map<Coordinate2D, std::map<Direction, std::shared_ptr<DoganPort>>> ports;
   std::mt19937 rengine;
 };

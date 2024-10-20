@@ -51,6 +51,7 @@ public:
 
   Coordinate2D getRobberLocation(void) const;
   const std::vector<Coordinate2D> getTileLocations(void) const;
+  const std::vector<std::vector<DoganVertex>> getPortLocations(void) const;
   const std::array<size_t, 5> getResourceCount(void) const;
   const std::array<size_t, 5> getDevelopmentCount(void) const;
 
@@ -69,7 +70,7 @@ public:
   void setDevelopmentLocations(std::vector<DevelopmentType> dl);
   void setNumberLocations(std::vector<pip> nl);
   void setPortLocations(
-      std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls);
+      std::vector<std::vector<std::pair<Coordinate2D, Direction>>> pls);
   void setRobberLocation(Coordinate2D irl);
   void setTileLocations(std::vector<Coordinate2D> tl);
 

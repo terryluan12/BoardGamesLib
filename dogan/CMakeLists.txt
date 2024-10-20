@@ -18,6 +18,6 @@ target_link_libraries(DoganConfigBuilder PRIVATE DoganConfig Coordinate DoganVer
 
 add_library(DoganGame libs/DoganGame.cpp include/DoganGame.h)
 target_link_libraries(DoganGame PUBLIC DoganExceptions)
-target_link_libraries(DoganGame PRIVATE DoganBank DoganBoard DoganBuilding DoganPlayer DoganRoad DoganConfig)
+target_link_libraries(DoganGame PRIVATE DoganBank DoganBoard DoganBuilding DoganPlayer DoganConfig)
 
 add_subdirectory(libs)

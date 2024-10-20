@@ -7,14 +7,14 @@ target_link_libraries(DoganBank PUBLIC enums)
 target_link_libraries(DoganBank PRIVATE DoganExceptions)
 
 add_library(DoganBoard DoganBoard.cpp DoganBoard.h)
-target_link_libraries(DoganBoard PUBLIC DoganBank DoganCell DoganConfig DoganPlayer DoganPort DoganBuilding DoganRoad DoganStructure)
+target_link_libraries(DoganBoard PUBLIC DoganBank DoganCell DoganConfig DoganPlayer DoganEdge DoganVertex DoganBuilding DoganStructure)
 target_link_libraries(DoganBoard PRIVATE Common DoganCell)
 
 add_library(DoganCell DoganCell.cpp DoganCell.h)
 target_link_libraries(DoganCell PUBLIC Coordinate enums)
 
 add_library(DoganPlayer DoganPlayer.cpp DoganPlayer.h)
-target_link_libraries(DoganPlayer PUBLIC DoganBank DoganBuilding DoganRoad DoganStructure)
+target_link_libraries(DoganPlayer PUBLIC DoganBank DoganBuilding DoganStructure)
 target_link_libraries(DoganPlayer PRIVATE DoganExceptions)
 
 add_library(enums enums.cpp)

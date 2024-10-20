@@ -8,19 +8,10 @@ DoganEdge::DoganEdge(Coordinate2D c, Direction d) : DoganGraphElement(c, d) {
   }
 }
 
-DoganEdge::DoganEdge(Coordinate2D c, std::string d)
-    : DoganGraphElement(c, AxialHexDirection::fromString(d)) {
-  Direction direction = AxialHexDirection::fromString(d);
-  if (direction == Direction::NORTH || direction == Direction::SOUTH) {
-    throw std::invalid_argument("Error: Direction::NORTH and Direction::SOUTH "
-                                "are invalid directions for edges");
-  }
-}
-
-DoganEdge DoganEdge::getCorrespondingEdge(void) {
+std::vector<std::shared_ptr<DoganGraphElement>> DoganEdge::getAllRepresentations(void) const {
   const Direction oppositeDirection =
       AxialHexDirection::getOppositeDirection(direction);
   const Coordinate2D oppositeCoordinate =
       AxialHexDirection::toCoordinate(direction);
-  return DoganEdge(this->coordinates + oppositeCoordinate, oppositeDirection);
+  return {std::make_shared<DoganEdge>(*this), std::make_shared<DoganEdge>(this->coordinates + oppositeCoordinate, oppositeDirection)};
 };

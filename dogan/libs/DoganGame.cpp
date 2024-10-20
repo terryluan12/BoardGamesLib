@@ -1,6 +1,7 @@
 #include "DoganGame.h"
 #include "DoganBuilding.h"
 #include "DoganExceptions.h"
+#include "DoganEdge.h"
 #include "DoganRoad.h"
 #include "enums.h"
 #include <memory>
@@ -57,16 +58,17 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
   case StructureType::VILLAGE:
   case StructureType::CITY:
     element = std::make_shared<DoganBuilding>(DoganBuilding(
-        playerID, structType, DoganVertex(tileLocation, direction)));
+        playerID, structType));
+    board.buildStructure(element, std::make_shared<DoganVertex>(tileLocation, direction), cost);
     break;
   case StructureType::ROAD:
     element = std::make_shared<DoganRoad>(
-        DoganRoad(playerID, DoganEdge(tileLocation, direction)));
+        DoganRoad(playerID));
+    board.buildStructure(element, std::make_shared<DoganEdge>(tileLocation, direction), cost);
     break;
   case StructureType::PORT:
     throw InvalidTypeException("Error: Cannot build a port");
   }
-  board.buildStructure(element, cost);
   players.at(playerID).buildStructure(element, cost);
   bank.addResources(cost);
 }

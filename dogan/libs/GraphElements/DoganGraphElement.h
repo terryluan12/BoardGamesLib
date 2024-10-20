@@ -20,6 +20,7 @@ public:
       return coordinates < c.coordinates;
     }
   }
+  virtual std::vector<std::shared_ptr<DoganGraphElement>> getAllRepresentations(void) const=0;
 
 protected:
   Coordinate2D coordinates;

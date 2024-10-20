@@ -1,14 +1,11 @@
 #include "DoganBuilding.h"
 #include <cassert>
-
-DoganBuilding::DoganBuilding(int pid, StructureType t, DoganVertex dv)
+DoganBuilding::DoganBuilding(int pid, StructureType t)
     : DoganStructure(t) {
   playerID = pid;
-  if (t == StructureType::ROAD) {
+  if (t == StructureType::ROAD || t == StructureType::PORT) {
     throw InvalidTypeException("Error: Invalid Building Type");
   }
-  graphElements.push_back(std::make_shared<DoganVertex>(dv));
-  addCorrespondingVertices();
 };
 void DoganBuilding::upgradeToCity(void) {
   if (this->type == StructureType::CITY) {
@@ -25,15 +22,5 @@ int DoganBuilding::getWorth() {
     return 2;
   default:
     throw InvalidTypeException("Error: Invalid Building Type");
-  }
-}
-
-void DoganBuilding::addCorrespondingVertices(void) {
-  assert((this->graphElements.size() == 1));
-  std::shared_ptr<DoganVertex> dv =
-      std::dynamic_pointer_cast<DoganVertex>(graphElements[0]);
-  auto corrVertices = dv->getCorrespondingVertices();
-  for (auto &v : corrVertices) {
-    graphElements.push_back(std::make_shared<DoganVertex>(v));
   }
 }

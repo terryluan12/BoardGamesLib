@@ -213,7 +213,7 @@ std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
   std::vector<ResourceType> portConfiguration = getPortResources(rengine);
 
   for (size_t i = 0; i < portConfiguration.size(); i++) {
-    ports.emplace_back(portConfiguration[i], initialPortLocations[i]);
+    ports.emplace_back(portConfiguration[i]);
   }
   return ports;
 }
@@ -232,6 +232,10 @@ Coordinate2D DoganConfig::getRobberLocation(void) const {
 
 const std::vector<Coordinate2D> DoganConfig::getTileLocations(void) const {
   return initialTileLocations;
+}
+
+const std::vector<std::vector<DoganVertex>> DoganConfig::getPortLocations(void) const {
+  return initialPortLocations;
 }
 
 const std::array<size_t, 5> DoganConfig::getResourceCount(void) const {
@@ -282,11 +286,11 @@ void DoganConfig::setNumberLocations(std::vector<pip> nl) {
 }
 
 void DoganConfig::setPortLocations(
-    std::vector<std::vector<std::pair<std::array<int, 2>, std::string>>> pls) {
+    std::vector<std::vector<std::pair<Coordinate2D, Direction>>> pls) {
   std::vector<std::vector<DoganVertex>> pvs;
-  for (auto portVertices : pls) {
+  for (auto portVertexRepresentations : pls) {
     std::vector<DoganVertex> pv;
-    for (auto [coord, direction] : portVertices) {
+    for (auto [coord, direction] : portVertexRepresentations) {
       pv.emplace_back(coord, direction);
     }
     pvs.push_back(pv);

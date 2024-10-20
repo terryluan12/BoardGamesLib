@@ -9,7 +9,7 @@ DoganConfigBuilder &DoganConfigBuilder::setBoardSize(size_t boardSize) {
 }
 
 DoganConfigBuilder &
-DoganConfigBuilder::setRobberLocation(PublicCoordinate2D robberLocations) {
+DoganConfigBuilder::setRobberLocation(Coordinate2D robberLocations) {
   config.setRobberLocation(robberLocations);
   return *this;
 }
@@ -21,9 +21,9 @@ DoganConfigBuilder &DoganConfigBuilder::setTotalStructureCount(
 }
 
 DoganConfigBuilder &DoganConfigBuilder::setTileLocations(
-    std::vector<PublicCoordinate2D> tileLocations) {
+    std::vector<Coordinate2D> tileLocations) {
   std::vector<Coordinate2D> tls;
-  for (PublicCoordinate2D tileLocation : tileLocations) {
+  for (Coordinate2D tileLocation : tileLocations) {
     tls.emplace_back(tileLocation);
   }
   config.setTileLocations(tls);
@@ -43,61 +43,26 @@ DoganConfigBuilder::setDevelopmentCount(std::array<size_t, 5> dc) {
 }
 
 DoganConfigBuilder &DoganConfigBuilder::setDevelopmentConfig(
-    PublicConfiguration developmentConfiguration) {
-  if (developmentConfiguration[0] > 3 || developmentConfiguration[0] < 0 ||
-      developmentConfiguration[1] > 3 || developmentConfiguration[1] < 0) {
-    throw InvalidTypeException("Error: Development Configuration is invalid");
-  }
-
-  Configuration dc = std::make_tuple(
-      static_cast<OrderConfiguration>(developmentConfiguration[0]),
-      static_cast<ReplaceConfiguration>(developmentConfiguration[1]));
-
-  config.setDevelopmentConfig(dc);
+    Configuration developmentConfiguration) {
+  config.setDevelopmentConfig(developmentConfiguration);
   return *this;
 }
 
 DoganConfigBuilder &
-DoganConfigBuilder::setNumberConfig(PublicConfiguration numberConfiguration) {
-  if (numberConfiguration[0] > 3 || numberConfiguration[0] < 0 ||
-      numberConfiguration[1] > 3 || numberConfiguration[1] < 0) {
-    throw InvalidTypeException("Error: Development Configuration is invalid");
-  }
-
-  Configuration nc = std::make_tuple(
-      static_cast<OrderConfiguration>(numberConfiguration[0]),
-      static_cast<ReplaceConfiguration>(numberConfiguration[1]));
-
-  config.setNumberConfig(nc);
+DoganConfigBuilder::setNumberConfig(Configuration numberConfiguration) {
+  config.setNumberConfig(numberConfiguration);
   return *this;
 }
 
 DoganConfigBuilder &DoganConfigBuilder::setPortResourceConfig(
-    PublicConfiguration portResourceConfigurations) {
-  if (portResourceConfigurations[0] > 3 || portResourceConfigurations[0] < 0 ||
-      portResourceConfigurations[1] > 3 || portResourceConfigurations[1] < 0) {
-    throw InvalidTypeException("Error: Development Configuration is invalid");
-  }
-
-  Configuration prc = std::make_tuple(
-      static_cast<OrderConfiguration>(portResourceConfigurations[0]),
-      static_cast<ReplaceConfiguration>(portResourceConfigurations[1]));
-
-  config.setPortResourceConfig(prc);
+    Configuration portResourceConfigurations) {
+  config.setPortResourceConfig(portResourceConfigurations);
   return *this;
 }
 
 DoganConfigBuilder &DoganConfigBuilder::setResourceConfig(
-    PublicConfiguration resourceConfigurations) {
-  if (resourceConfigurations[0] > 3 || resourceConfigurations[0] < 0 ||
-      resourceConfigurations[1] > 3 || resourceConfigurations[1] < 0) {
-    throw InvalidTypeException("Error: Development Configuration is invalid");
-  }
-
-  Configuration rc = std::make_tuple(
-      static_cast<OrderConfiguration>(resourceConfigurations[0]),
-      static_cast<ReplaceConfiguration>(resourceConfigurations[1]));
-  config.setResourceConfig(rc);
+    Configuration resourceConfigurations) {
+  config.setResourceConfig(resourceConfigurations);
   return *this;
 }
 
@@ -114,7 +79,7 @@ DoganConfigBuilder::setNumberLocations(std::vector<int> numberLocations) {
 }
 
 DoganConfigBuilder &DoganConfigBuilder::setPortLocations(
-    std::vector<std::vector<std::pair<PublicCoordinate2D, std::string>>>
+    std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
         portLocations) {
   config.setPortLocations(portLocations);
   return *this;
