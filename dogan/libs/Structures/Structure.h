@@ -1,19 +1,21 @@
 #pragma once
 
-#include "DoganStructureType.h"
+#include "enums.h"
 #include <memory>
 #include <vector>
 
-class DoganStructure {
+namespace Dogan {
+class Structure {
 public:
   StructureType getStructureType(void) const;
   void setPlayerID(int pid);
   void setStructureType(StructureType t);
   int getPlayerID(void) const;
-  virtual ~DoganStructure(void){};
+  virtual ~Structure(void){};
 
 protected:
-  DoganStructure(StructureType t) : type(t){};
+  Structure(StructureType t) : type(t){};
   int playerID;
   StructureType type;
 };
+} // namespace Dogan

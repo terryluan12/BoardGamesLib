@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DoganPort.h"
+#include "Port.h"
 #include "common.h"
 #include "defaultConfiguration.h"
 #include "enums.h"
@@ -9,10 +9,11 @@
 #include <random>
 #include <vector>
 
-class DoganConfig {
+namespace Dogan {
+class Config {
 public:
   // add port locations
-  DoganConfig(void)
+  Config(void)
       : boardSize(configDefault::initialTileLocations.size()),
         totalStructureCount(configDefault::totalStructureCount),
         initialResourceCount(configDefault::initialResourceCount),
@@ -41,7 +42,7 @@ public:
   std::vector<pip> getNumbers(std::mt19937 rengine);
   std::vector<ResourceType> getPortResources(std::mt19937 rengine);
   std::vector<ResourceType> getResources(std::mt19937 rengine);
-  std::vector<DoganPort> getPorts(std::mt19937 rengine);
+  std::vector<Port> getPorts(std::mt19937 rengine);
   std::vector<DevelopmentType> getDevelopments(std::mt19937 rengine);
 
   // Getters
@@ -107,3 +108,4 @@ private:
 
   size_t robberIndex;
 };
+} // namespace Dogan

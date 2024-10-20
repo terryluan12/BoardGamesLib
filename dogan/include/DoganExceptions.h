@@ -3,6 +3,7 @@
 #include <exception>
 #include <string>
 
+namespace Dogan {
 class InsufficientFundsException : std::exception {
 public:
   InsufficientFundsException(std::string m) : message(m){};
@@ -110,3 +111,4 @@ public:
 private:
   std::string message;
 };
+} // namespace Dogan

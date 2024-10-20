@@ -1,15 +1,16 @@
-#include "DoganBank.h"
+#include "Bank.h"
 #include "DoganExceptions.h"
 #include <gtest/gtest.h>
 
+using namespace Dogan;
 class BankFixture : public ::testing::Test {
 protected:
   void SetUp() override {}
-  DoganBank dBank{};
-  DoganBank pBank{{10, 11, 12, 13, 14},
-                  {DevelopmentType::BUILDROAD, DevelopmentType::MONOPOLY,
-                   DevelopmentType::SOLDIER, DevelopmentType::TAKETWO,
-                   DevelopmentType::VICPOINT}};
+  Bank dBank{};
+  Bank pBank{{10, 11, 12, 13, 14},
+             {DevelopmentType::BUILDROAD, DevelopmentType::MONOPOLY,
+              DevelopmentType::SOLDIER, DevelopmentType::TAKETWO,
+              DevelopmentType::VICPOINT}};
 };
 
 TEST_F(BankFixture, DefaultConstructor) {

@@ -1,11 +1,12 @@
-#include "DoganBank.h"
+#include "Bank.h"
 #include "DoganExceptions.h"
 
-DoganBank::DoganBank(void)
+namespace Dogan {
+Bank::Bank(void)
     : resources({0, 0, 0, 0, 0}), developments({}),
       developmentCount({0, 0, 0, 0, 0}) {}
 
-DoganBank::DoganBank(std::array<int, 5> r, std::vector<DevelopmentType> d)
+Bank::Bank(std::array<int, 5> r, std::vector<DevelopmentType> d)
     : resources(r), developments(d), developmentCount({0, 0, 0, 0, 0}) {
   for (auto dev : d) {
     developmentCount[static_cast<int>(dev)] += 1;
@@ -13,44 +14,44 @@ DoganBank::DoganBank(std::array<int, 5> r, std::vector<DevelopmentType> d)
 }
 
 // Resource Functions
-void DoganBank::addResource(const ResourceType r, const int n) {
+void Bank::addResource(const ResourceType r, const int n) {
   if (resources[static_cast<int>(r)] + n < 0) {
     throw InsufficientResourcesException("Error: Not enough resources");
   }
   resources[static_cast<int>(r)] += n;
 }
-void DoganBank::addResources(const std::array<int, 5> r) {
+void Bank::addResources(const std::array<int, 5> r) {
   for (size_t i = 0; i < 5; i++) {
     resources[i] += r[i];
   }
 }
-const std::array<int, 5> DoganBank::getResourceCount(void) const {
+const std::array<int, 5> Bank::getResourceCount(void) const {
   return resources;
 }
-void DoganBank::setResources(const std::array<int, 5> r) { resources = r; }
+void Bank::setResources(const std::array<int, 5> r) { resources = r; }
 
 // Development Functions
-void DoganBank::addDevelopment(const DevelopmentType d) {
+void Bank::addDevelopment(const DevelopmentType d) {
   developments.emplace_back(d);
   developmentCount[static_cast<int>(d)] += 1;
 }
 
-const std::array<int, 5> DoganBank::getDevelopmentCount(void) const {
+const std::array<int, 5> Bank::getDevelopmentCount(void) const {
   return developmentCount;
 }
 
-const std::vector<DevelopmentType> DoganBank::getDevelopments(void) const {
+const std::vector<DevelopmentType> Bank::getDevelopments(void) const {
   return developments;
 }
 
-void DoganBank::setDevelopments(const std::vector<DevelopmentType> d) {
+void Bank::setDevelopments(const std::vector<DevelopmentType> d) {
   for (auto dev : d) {
     developments.emplace_back(dev);
     developmentCount[static_cast<int>(dev)] += 1;
   }
 }
 
-DevelopmentType DoganBank::popDevelopment(void) {
+DevelopmentType Bank::popDevelopment(void) {
   if (developments.empty()) {
     throw InsufficientDevelopmentsException("Error: No developments left");
   }
@@ -60,7 +61,7 @@ DevelopmentType DoganBank::popDevelopment(void) {
   return dt;
 }
 
-bool DoganBank::canAfford(const std::array<int, 5> r) const {
+bool Bank::canAfford(const std::array<int, 5> r) const {
   for (size_t i = 0; i < 5; i++) {
     if (resources[i] < r[i]) {
       return false;
@@ -69,11 +70,11 @@ bool DoganBank::canAfford(const std::array<int, 5> r) const {
   return true;
 }
 
-bool DoganBank::canAfford(ResourceType r, int n) const {
+bool Bank::canAfford(ResourceType r, int n) const {
   return resources[static_cast<int>(r)] > n;
 }
 
-std::ostream &operator<<(std::ostream &os, DoganBank const &d) {
+std::ostream &operator<<(std::ostream &os, Bank const &d) {
   os << "Bank:\n"
      << "  Resource Cards:\n";
 
@@ -92,3 +93,4 @@ std::ostream &operator<<(std::ostream &os, DoganBank const &d) {
   }
   return os;
 }
+} // namespace Dogan

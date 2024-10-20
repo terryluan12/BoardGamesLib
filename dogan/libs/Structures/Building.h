@@ -2,12 +2,14 @@
 
 #include "Coordinate.h"
 #include "DoganExceptions.h"
-#include "DoganStructure.h"
+#include "Structure.h"
 #include <vector>
 
-class DoganBuilding : public DoganStructure {
+namespace Dogan {
+class Building : public Structure {
 public:
-  DoganBuilding(int pid, StructureType t);
+  Building(int pid, StructureType t);
   void upgradeToCity(void);
   int getWorth(void) const;
 };
+} // namespace Dogan

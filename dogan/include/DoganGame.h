@@ -1,17 +1,18 @@
 #pragma once
 
-#include "DoganBank.h"
-#include "DoganBoard.h"
-#include "DoganConfig.h"
-#include "DoganPlayer.h"
+#include "Bank.h"
+#include "Board.h"
+#include "Config.h"
+#include "Player.h"
 #include <random>
 
-class DoganGame {
+namespace Dogan {
+class Game {
 public:
-  DoganGame(DoganConfig config = DoganConfig());
+  Game(Config config = Config());
 
   // Start phase functions
-  void addPlayer(std::string pn, int pid);
+  void addPlayer(int pid);
   void giveResources(int playerID, std::array<int, 5> resources);
 
   // General Game functions (to be used during turn phases)
@@ -44,14 +45,14 @@ public:
   bool hasStructure(Coordinate2D coord, Direction direction,
                     StructureType structureType) const;
 
-  friend std::ostream &operator<<(std::ostream &os, DoganGame const &dg);
+  friend std::ostream &operator<<(std::ostream &os, Game const &dg);
 
 private:
-  DoganConfig config;
+  Config config;
   std::uniform_int_distribution<pip> die;
-  DoganBank bank;
-  DoganBoard board;
-  std::map<int, DoganPlayer> players;
+  Bank bank;
+  Board board;
+  std::map<int, Player> players;
   std::pair<int, int> mostSoldiers;
   std::pair<int, int> longestRoad;
   std::mt19937 rengine;
@@ -68,3 +69,4 @@ private:
                             StructureType structureType) const;
   void checkResourceType(ResourceType resourceType) const;
 };
+} // namespace Dogan

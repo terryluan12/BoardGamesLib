@@ -1,38 +1,39 @@
-#include "DoganGame.h"
-#include "DoganBuilding.h"
+#include "Building.h"
 #include "DoganExceptions.h"
-#include "DoganRoad.h"
+#include "DoganGame.h"
+#include "Road.h"
 #include "enums.h"
 #include <memory>
 #include <sstream>
 
-DoganGame::DoganGame(DoganConfig config)
-    : config(config), die(1, 6), board(DoganBoard(config)),
+namespace Dogan {
+Game::Game(Config config)
+    : config(config), die(1, 6), board(Board(config)),
       rengine(std::random_device{}()) {
   std::array<int, 5> resourceCount{};
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
   }
   std::vector<DevelopmentType> developments = config.getDevelopments(rengine);
-  bank = DoganBank(resourceCount, developments);
+  bank = Bank(resourceCount, developments);
 }
 
-void DoganGame::addPlayer(std::string pn, int pid) {
+void Game::addPlayer(int pid) {
   if (players.find(pid) != players.end()) {
     throw SamePlayerException("Cannot add same player twice");
   }
-  DoganPlayer p = DoganPlayer(pn, pid, config.getTotalStructureCount());
+  Player p = Player(pid, config.getTotalStructureCount());
   this->players.emplace(pid, p);
 };
 
-void DoganGame::giveResources(int playerID, std::array<int, 5> resources) {
+void Game::giveResources(int playerID, std::array<int, 5> resources) {
   checkPlayerExists(playerID);
   players.at(playerID).addResources(resources);
 }
 
-int DoganGame::rollDice(void) { return die(rengine) + die(rengine); }
+int Game::rollDice(void) { return die(rengine) + die(rengine); }
 
-void DoganGame::distributeResources(int numberRolled) {
+void Game::distributeResources(int numberRolled) {
   auto buildings = board.getResourceDistribution(numberRolled);
   for (auto [pid, resources] : buildings) {
     checkPlayerExists(pid);
@@ -44,10 +45,10 @@ void DoganGame::distributeResources(int numberRolled) {
   }
 }
 
-void DoganGame::buildStructure(int playerID, StructureType structType,
-                               Coordinate2D tileLocation, Direction direction,
-                               std::array<int, 5> cost) {
-  std::shared_ptr<DoganStructure> element;
+void Game::buildStructure(int playerID, StructureType structType,
+                          Coordinate2D tileLocation, Direction direction,
+                          std::array<int, 5> cost) {
+  std::shared_ptr<Structure> element;
   checkPlayerExists(playerID);
   checkPlayerCanAfford(playerID, cost);
   checkCoordinateValid(tileLocation);
@@ -56,11 +57,10 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
   switch (structType) {
   case StructureType::VILLAGE:
   case StructureType::CITY:
-    element =
-        std::make_shared<DoganBuilding>(DoganBuilding(playerID, structType));
+    element = std::make_shared<Building>(Building(playerID, structType));
     break;
   case StructureType::ROAD:
-    element = std::make_shared<DoganRoad>(DoganRoad(playerID));
+    element = std::make_shared<Road>(Road(playerID));
     break;
   case StructureType::PORT:
     throw InvalidTypeException("Error: Cannot build a port");
@@ -71,7 +71,7 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
   bank.addResources(cost);
 }
 
-void DoganGame::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
+void Game::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
   checkPlayerExists(playerID);
   checkPlayerCanAfford(playerID, cost);
 
@@ -80,8 +80,8 @@ void DoganGame::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
   bank.addResources(cost);
 }
 
-void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
-                               int playerID2, std::array<int, 5> resources2) {
+void Game::tradeResources(int playerID1, std::array<int, 5> resources1,
+                          int playerID2, std::array<int, 5> resources2) {
   checkPlayerExists(playerID1);
   checkPlayerExists(playerID2);
 
@@ -98,8 +98,8 @@ void DoganGame::tradeResources(int playerID1, std::array<int, 5> resources1,
   players.at(playerID1).addResources(negativeResourceDifference);
 }
 
-void DoganGame::useRobber(int playerID, Coordinate2D tileLocation,
-                          Direction direction) {
+void Game::useRobber(int playerID, Coordinate2D tileLocation,
+                     Direction direction) {
   checkPlayerExists(playerID);
   checkCoordinateValid(tileLocation);
   if (!board.hasBuilding(tileLocation, direction))
@@ -111,8 +111,7 @@ void DoganGame::useRobber(int playerID, Coordinate2D tileLocation,
   stealResource(playerID, stolenPID);
 }
 
-void DoganGame::useMonopolyDevelopmentCard(int playerID,
-                                           ResourceType resource) {
+void Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::MONOPOLY);
   checkResourceType(resource);
@@ -128,9 +127,8 @@ void DoganGame::useMonopolyDevelopmentCard(int playerID,
   }
 }
 
-void DoganGame::useSoldierDevelopmentCard(int playerID,
-                                          Coordinate2D tileLocation,
-                                          Direction direction) {
+void Game::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
+                                     Direction direction) {
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::SOLDIER);
 
   useRobber(playerID, tileLocation, direction);
@@ -144,9 +142,9 @@ void DoganGame::useSoldierDevelopmentCard(int playerID,
   }
 }
 
-void DoganGame::useRoadDevelopmentCard(
-    int playerID, std::array<Coordinate2D, 2> tileLocations,
-    std::array<Direction, 2> directions) {
+void Game::useRoadDevelopmentCard(int playerID,
+                                  std::array<Coordinate2D, 2> tileLocations,
+                                  std::array<Direction, 2> directions) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::BUILDROAD);
 
@@ -160,8 +158,8 @@ void DoganGame::useRoadDevelopmentCard(
                    directions[i], {0, 0, 0, 0, 0});
   }
 }
-void DoganGame::useTakeTwoDevelopmentCard(
-    int playerID, std::array<ResourceType, 2> resources) {
+void Game::useTakeTwoDevelopmentCard(int playerID,
+                                     std::array<ResourceType, 2> resources) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::TAKETWO);
   checkResourceType(resources[0]);
@@ -180,14 +178,14 @@ void DoganGame::useTakeTwoDevelopmentCard(
   }
 }
 
-const std::array<int, 5> DoganGame::getResourceCount(int playerID) const {
+const std::array<int, 5> Game::getResourceCount(int playerID) const {
   if (playerID == -1) {
     return bank.getResourceCount();
   }
   checkPlayerExists(playerID);
   return players.at(playerID).getResourceCount();
 }
-const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
+const std::array<int, 5> Game::getDevelopmentCount(int playerID) const {
   if (playerID == -1) {
     return bank.getDevelopmentCount();
   }
@@ -195,17 +193,17 @@ const std::array<int, 5> DoganGame::getDevelopmentCount(int playerID) const {
   return players.at(playerID).getDevelopmentCount();
 }
 
-int DoganGame::getVictoryPoints(int playerID) const {
+int Game::getVictoryPoints(int playerID) const {
   checkPlayerExists(playerID);
   return players.at(playerID).getVictoryPoints();
 }
 
-bool DoganGame::hasStructure(Coordinate2D coord, Direction direction,
-                             StructureType structureType) const {
+bool Game::hasStructure(Coordinate2D coord, Direction direction,
+                        StructureType structureType) const {
   return board.hasStructure(coord, direction, structureType);
 }
 
-void DoganGame::stealResource(int playerID, int stolenPlayerID) {
+void Game::stealResource(int playerID, int stolenPlayerID) {
   checkPlayerExists(playerID);
   checkPlayerExists(stolenPlayerID);
   auto resourceCount = players.at(stolenPlayerID).getResourceCount();
@@ -231,45 +229,44 @@ void DoganGame::stealResource(int playerID, int stolenPlayerID) {
 }
 
 // Utility Functions
-void DoganGame::checkPlayerExists(int playerID) const {
+void Game::checkPlayerExists(int playerID) const {
   if (players.find(playerID) == players.end())
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
                                   " invalid");
 }
-void DoganGame::checkPlayerCanAfford(int playerID,
-                                     std::array<int, 5> cost) const {
+void Game::checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const {
   if (!players.at(playerID).canAfford(cost))
     throw InsufficientFundsException(
         "Error: Player does not have enough resources to build structure");
 }
-void DoganGame::checkBankCanAfford(ResourceType resourceType, int num) const {
+void Game::checkBankCanAfford(ResourceType resourceType, int num) const {
   if (!bank.canAfford(resourceType, num))
     throw InsufficientFundsException(
         "Error: Bank does not have enough resources to build structure");
 }
-void DoganGame::checkPlayerHasDevelopmentCard(int playerID,
-                                              DevelopmentType devType) const {
+void Game::checkPlayerHasDevelopmentCard(int playerID,
+                                         DevelopmentType devType) const {
   std::stringstream oss;
   oss << "Error: Player does not have " << devType << " card";
   if (players.at(playerID).getDevelopmentCount()[static_cast<int>(devType)] ==
       0)
     throw InsufficientDevelopmentsException(oss.str());
 }
-void DoganGame::checkCoordinateValid(Coordinate2D coord) const {
+void Game::checkCoordinateValid(Coordinate2D coord) const {
   if (!board.hasTile(coord))
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
 }
-void DoganGame::checkStructureExists(Coordinate2D coord, Direction direction,
-                                     StructureType structureType) const {
+void Game::checkStructureExists(Coordinate2D coord, Direction direction,
+                                StructureType structureType) const {
   if (board.hasStructure(coord, direction, structureType))
     throw SameStructureException("Error: Structure already exists");
 }
-void DoganGame::checkResourceType(ResourceType resourceType) const {
+void Game::checkResourceType(ResourceType resourceType) const {
   if (resourceType == ResourceType::OTHER)
     throw InvalidTypeException("Error: Resource type must be set");
 }
 
-std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
+std::ostream &operator<<(std::ostream &os, Game const &dg) {
   os << dg.board;
   for (auto &p : dg.players) {
     os << p.second;
@@ -277,3 +274,4 @@ std::ostream &operator<<(std::ostream &os, DoganGame const &dg) {
   os << dg.bank;
   return os;
 }
+} // namespace Dogan

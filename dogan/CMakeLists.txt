@@ -9,15 +9,15 @@ add_compile_options(-Wall)
 
 include_directories(include)
 
-add_library(DoganExceptions INTERFACE)
-target_include_directories(DoganExceptions INTERFACE include)
+add_library(Exceptions INTERFACE)
+target_include_directories(Exceptions INTERFACE include)
 
-add_library(DoganConfigBuilder libs/Configuration/DoganConfigBuilder.cpp include/DoganConfigBuilder.h)
-target_link_libraries(DoganConfigBuilder PUBLIC DoganExceptions enums)
-target_link_libraries(DoganConfigBuilder PRIVATE DoganConfig Coordinate)
+add_library(ConfigBuilder libs/Configuration/ConfigBuilder.cpp include/DoganConfigBuilder.h)
+target_link_libraries(ConfigBuilder PUBLIC Exceptions enums)
+target_link_libraries(ConfigBuilder PRIVATE Config Coordinate)
 
-add_library(DoganGame libs/DoganGame.cpp include/DoganGame.h)
-target_link_libraries(DoganGame PUBLIC DoganExceptions)
-target_link_libraries(DoganGame PRIVATE DoganBank DoganBoard DoganBuilding DoganPlayer DoganConfig)
+add_library(Game libs/Game.cpp include/DoganGame.h)
+target_link_libraries(Game PUBLIC Exceptions)
+target_link_libraries(Game PRIVATE Bank Board Building Player Config enums)
 
 add_subdirectory(libs)

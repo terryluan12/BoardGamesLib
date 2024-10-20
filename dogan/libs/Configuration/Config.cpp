@@ -1,9 +1,10 @@
-#include "DoganConfig.h"
+#include "Config.h"
 #include <algorithm>
 #include <iostream>
 #include <random>
 
-std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
+namespace Dogan {
+std::vector<pip> Config::getNumbers(std::mt19937 rengine) {
   auto &[orderConfig, replaceConfig] = initialNumberConfig;
   std::uniform_int_distribution<pip> pipRand(1, 6);
   int sizeDifference = boardSize - initialNumberLocations.size();
@@ -51,7 +52,7 @@ std::vector<pip> DoganConfig::getNumbers(std::mt19937 rengine) {
   return initialNumberLocations;
 }
 
-std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
+std::vector<ResourceType> Config::getPortResources(std::mt19937 rengine) {
   auto &[orderConfig, replaceConfig] = initialPortResourceConfig;
   std::uniform_int_distribution<size_t> resourceRand(0, 4);
   int sizeDifference =
@@ -99,7 +100,7 @@ std::vector<ResourceType> DoganConfig::getPortResources(std::mt19937 rengine) {
   return initialPortResources;
 }
 
-std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
+std::vector<ResourceType> Config::getResources(std::mt19937 rengine) {
   auto &[orderConfig, replaceConfig] = initialResourceConfig;
   std::uniform_int_distribution<size_t> resourceRand(0, 4);
   size_t sizeDifference = boardSize - initialResources.size();
@@ -146,8 +147,7 @@ std::vector<ResourceType> DoganConfig::getResources(std::mt19937 rengine) {
   return initialResources;
 }
 
-std::vector<DevelopmentType>
-DoganConfig::getDevelopments(std::mt19937 rengine) {
+std::vector<DevelopmentType> Config::getDevelopments(std::mt19937 rengine) {
   auto &[orderConfig, replaceConfig] = initialDevelopmentConfig;
   std::uniform_int_distribution<size_t> developRand(0, 5);
   std::array<size_t, 5> sizeDifferences{initialDevelopmentCount};
@@ -208,8 +208,8 @@ DoganConfig::getDevelopments(std::mt19937 rengine) {
   return initialDevelopmentLocations;
 }
 
-std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
-  std::vector<DoganPort> ports;
+std::vector<Port> Config::getPorts(std::mt19937 rengine) {
+  std::vector<Port> ports;
   std::vector<ResourceType> portConfiguration = getPortResources(rengine);
 
   for (size_t i = 0; i < portConfiguration.size(); i++) {
@@ -220,89 +220,84 @@ std::vector<DoganPort> DoganConfig::getPorts(std::mt19937 rengine) {
 
 // Getters
 
-size_t DoganConfig::getBoardSize(void) const { return boardSize; }
+size_t Config::getBoardSize(void) const { return boardSize; }
 
-std::array<int, 3> DoganConfig::getTotalStructureCount(void) const {
+std::array<int, 3> Config::getTotalStructureCount(void) const {
   return totalStructureCount;
 }
 
-Coordinate2D DoganConfig::getRobberLocation(void) const {
+Coordinate2D Config::getRobberLocation(void) const {
   return initialRobberLocation;
 }
 
-const std::vector<Coordinate2D> DoganConfig::getTileLocations(void) const {
+const std::vector<Coordinate2D> Config::getTileLocations(void) const {
   return initialTileLocations;
 }
 
 const std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
-DoganConfig::getPortLocations(void) const {
+Config::getPortLocations(void) const {
   return initialPortLocations;
 }
 
-const std::array<size_t, 5> DoganConfig::getResourceCount(void) const {
+const std::array<size_t, 5> Config::getResourceCount(void) const {
   return initialResourceCount;
 }
-const std::array<size_t, 5> DoganConfig::getDevelopmentCount(void) const {
+const std::array<size_t, 5> Config::getDevelopmentCount(void) const {
   return initialDevelopmentCount;
 }
 
 // Setters
 
-void DoganConfig::setBoardSize(size_t s) { boardSize = s; }
+void Config::setBoardSize(size_t s) { boardSize = s; }
 
-void DoganConfig::setTotalStructureCount(std::array<int, 3> tsc) {
+void Config::setTotalStructureCount(std::array<int, 3> tsc) {
   totalStructureCount = tsc;
 }
 
-void DoganConfig::setResourceCount(std::array<size_t, 5> rc) {
+void Config::setResourceCount(std::array<size_t, 5> rc) {
   initialResourceCount = rc;
 }
 
-void DoganConfig::setDevelopmentCount(std::array<size_t, 5> dc) {
+void Config::setDevelopmentCount(std::array<size_t, 5> dc) {
   initialDevelopmentCount = dc;
 }
 
-void DoganConfig::setDevelopmentConfig(Configuration dc) {
+void Config::setDevelopmentConfig(Configuration dc) {
   initialDevelopmentConfig = dc;
 }
 
-void DoganConfig::setNumberConfig(Configuration nc) {
-  initialNumberConfig = nc;
-}
+void Config::setNumberConfig(Configuration nc) { initialNumberConfig = nc; }
 
-void DoganConfig::setPortResourceConfig(Configuration prc) {
+void Config::setPortResourceConfig(Configuration prc) {
   initialPortResourceConfig = prc;
 }
 
-void DoganConfig::setResourceConfig(Configuration rc) {
-  initialResourceConfig = rc;
-}
+void Config::setResourceConfig(Configuration rc) { initialResourceConfig = rc; }
 
-void DoganConfig::setDevelopmentLocations(std::vector<DevelopmentType> dl) {
+void Config::setDevelopmentLocations(std::vector<DevelopmentType> dl) {
   initialDevelopmentLocations = dl;
 }
 
-void DoganConfig::setNumberLocations(std::vector<pip> nl) {
+void Config::setNumberLocations(std::vector<pip> nl) {
   initialNumberLocations = nl;
 }
 
-void DoganConfig::setPortLocations(
+void Config::setPortLocations(
     std::vector<std::vector<std::pair<Coordinate2D, Direction>>> pls) {
   initialPortLocations = pls;
 }
 
-void DoganConfig::setRobberLocation(Coordinate2D irl) {
+void Config::setRobberLocation(Coordinate2D irl) {
   initialRobberLocation = irl;
 }
 
-void DoganConfig::setTileLocations(std::vector<Coordinate2D> tl) {
+void Config::setTileLocations(std::vector<Coordinate2D> tl) {
   initialTileLocations = tl;
 }
 
-void DoganConfig::setResources(std::vector<ResourceType> r) {
-  initialResources = r;
-}
+void Config::setResources(std::vector<ResourceType> r) { initialResources = r; }
 
-void DoganConfig::setPortResources(std::vector<ResourceType> pr) {
+void Config::setPortResources(std::vector<ResourceType> pr) {
   initialPortResources = pr;
 }
+} // namespace Dogan

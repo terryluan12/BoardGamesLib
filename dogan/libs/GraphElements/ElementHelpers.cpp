@@ -1,6 +1,7 @@
-#include "DoganElementHelpers.h"
+#include "ElementHelpers.h"
 #include <stdexcept>
 
+namespace Dogan {
 std::vector<std::pair<Coordinate2D, Direction>>
 getAllVertexRepresentations(std::pair<Coordinate2D, Direction> dvp) {
   auto [c, d] = dvp;
@@ -34,3 +35,4 @@ getAllEdgeRepresentations(std::pair<Coordinate2D, Direction> dep) {
   const Coordinate2D oppositeCoordinate = AxialHexDirection::toCoordinate(d);
   return {{c, d}, {c + oppositeCoordinate, oppositeDirection}};
 };
+} // namespace Dogan

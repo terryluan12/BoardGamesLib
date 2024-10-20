@@ -1,9 +1,13 @@
-#include "DoganGame.h"
 #include "DoganConfigBuilder.h"
 #include "DoganExceptions.h"
-#include "DoganStructureType.h"
+#include "DoganGame.h"
 #include "config.enum.h"
+#include "enums.h"
 #include <gtest/gtest.h>
+
+using Direction = Dogan::Direction;
+using StructureType = Dogan::StructureType;
+using ResourceType = Dogan::ResourceType;
 
 class GameFixture : public ::testing::Test {
 protected:
@@ -12,34 +16,35 @@ protected:
     playerID2 = 1;
     playerID3 = 2;
 
-    DoganConfig config1 = DoganConfigBuilder().build();
-    Configuration generalConfig{OrderConfiguration::EXACT,
-                                ReplaceConfiguration::EXACT};
+    Dogan::Config config1 = Dogan::ConfigBuilder().build();
+    Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
+                                       Dogan::ReplaceConfiguration::EXACT};
     std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6, 7,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
-    DoganConfig config2 =
-        DoganConfigBuilder()
+    Dogan::Config config2 =
+        Dogan::ConfigBuilder()
             .setNumberConfig(generalConfig)
             .setNumberLocations(numberLocations)
             .setResourceConfig(generalConfig)
             .setResources(
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
-            .setDevelopmentLocations(
-                {DevelopmentType::TAKETWO, DevelopmentType::BUILDROAD,
-                 DevelopmentType::SOLDIER, DevelopmentType::MONOPOLY,
-                 DevelopmentType::VICPOINT})
+            .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
+                                      Dogan::DevelopmentType::BUILDROAD,
+                                      Dogan::DevelopmentType::SOLDIER,
+                                      Dogan::DevelopmentType::MONOPOLY,
+                                      Dogan::DevelopmentType::VICPOINT})
             .setDevelopmentCount({1, 1, 1, 1, 1})
             .build();
-    nGame = DoganGame(config1);
-    iGame = DoganGame(config2);
-    iGame.addPlayer("Dogan1", playerID1);
-    iGame.addPlayer("Dogan2", playerID2);
-    iGame.addPlayer("Dogan3", playerID3);
+    nGame = Dogan::Game(config1);
+    iGame = Dogan::Game(config2);
+    iGame.addPlayer(playerID1);
+    iGame.addPlayer(playerID2);
+    iGame.addPlayer(playerID3);
   }
 
-  DoganGame nGame;
-  DoganGame iGame;
+  Dogan::Game nGame;
+  Dogan::Game iGame;
 
   int playerID1;
   int playerID2;
@@ -53,31 +58,32 @@ protected:
     playerID2 = 1;
     playerID3 = 2;
 
-    Configuration generalConfig{OrderConfiguration::EXACT,
-                                ReplaceConfiguration::EXACT};
+    Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
+                                       Dogan::ReplaceConfiguration::EXACT};
     std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6, 7,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
-    DoganConfig config =
-        DoganConfigBuilder()
+    Dogan::Config config =
+        Dogan::ConfigBuilder()
             .setNumberConfig(generalConfig)
             .setNumberLocations(numberLocations)
             .setResourceConfig(generalConfig)
             .setResources(
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
-            .setDevelopmentLocations(
-                {DevelopmentType::TAKETWO, DevelopmentType::BUILDROAD,
-                 DevelopmentType::SOLDIER, DevelopmentType::MONOPOLY,
-                 DevelopmentType::VICPOINT})
+            .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
+                                      Dogan::DevelopmentType::BUILDROAD,
+                                      Dogan::DevelopmentType::SOLDIER,
+                                      Dogan::DevelopmentType::MONOPOLY,
+                                      Dogan::DevelopmentType::VICPOINT})
             .setDevelopmentCount({1, 1, 1, 1, 1})
             .build();
-    game = DoganGame(config);
-    game.addPlayer("Dogan1", playerID1);
-    game.addPlayer("Dogan2", playerID2);
-    game.addPlayer("Dogan3", playerID3);
+    game = Dogan::Game(config);
+    game.addPlayer(playerID1);
+    game.addPlayer(playerID2);
+    game.addPlayer(playerID3);
 
     game.buildStructure(playerID1, StructureType::VILLAGE, {0, 0},
-                        Direction::NORTH, {0, 0, 0, 0, 0});
+                        Dogan::Direction::NORTH, {0, 0, 0, 0, 0});
     game.buildStructure(playerID2, StructureType::VILLAGE, {-1, 4},
                         Direction::SOUTH, {0, 0, 0, 0, 0});
     game.buildStructure(playerID3, StructureType::VILLAGE, {0, 2},
@@ -94,12 +100,12 @@ protected:
     game.giveResources(playerID3, {0, 0, 0, 0, 0});
   }
   int playerID1, playerID2, playerID3;
-  DoganGame game;
+  Dogan::Game game;
 };
 
 TEST_F(GameFixture, AddExistingPlayersTest) {
-  nGame.addPlayer("DoganPlayer", 0);
-  EXPECT_THROW({ nGame.addPlayer("", 0); }, SamePlayerException);
+  nGame.addPlayer(0);
+  EXPECT_THROW({ nGame.addPlayer(0); }, Dogan::SamePlayerException);
 }
 
 TEST_F(GameFixture, BuildStructuresTest) {
@@ -204,7 +210,7 @@ TEST_F(MidGameFixture, TradeDebtTest) {
         game.tradeResources(playerID1, {5, 0, 0, 0, 0}, playerID2,
                             {0, 0, 0, 0, 0});
       },
-      InsufficientFundsException);
+      Dogan::InsufficientFundsException);
 }
 
 // Structures
@@ -218,13 +224,13 @@ TEST_F(GameFixture, BuildExistingStructuresTest) {
         iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 1},
                              Direction::NORTHWEST, {0, 0, 0, 0, 0});
       },
-      SameStructureException);
+      Dogan::SameStructureException);
   EXPECT_THROW(
       {
         iGame.buildStructure(playerID2, StructureType::VILLAGE, {1, 0},
                              Direction::SOUTH, {0, 0, 0, 0, 0});
       },
-      SameStructureException);
+      Dogan::SameStructureException);
 
   // Roads
   iGame.buildStructure(playerID1, StructureType::ROAD, {1, 0},
@@ -234,14 +240,14 @@ TEST_F(GameFixture, BuildExistingStructuresTest) {
         iGame.buildStructure(playerID1, StructureType::ROAD, {1, 0},
                              Direction::SOUTHEAST, {0, 0, 0, 0, 0});
       },
-      SameStructureException);
+      Dogan::SameStructureException);
 
   EXPECT_THROW(
       {
         iGame.buildStructure(playerID2, StructureType::ROAD, {1, 1},
                              Direction::NORTHWEST, {0, 0, 0, 0, 0});
       },
-      SameStructureException);
+      Dogan::SameStructureException);
 }
 
 TEST_F(GameFixture, DistributeResourcesTest) {

@@ -1,2 +1,2 @@
-add_library(DoganElementHelpers DoganElementHelpers.cpp DoganElementHelpers.h)
-target_link_libraries(DoganElementHelpers PUBLIC Coordinate enums)
+add_library(ElementHelpers ElementHelpers.cpp ElementHelpers.h)
+target_link_libraries(ElementHelpers PUBLIC Coordinate enums)

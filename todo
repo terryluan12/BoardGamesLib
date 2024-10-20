@@ -3,7 +3,6 @@ Add boundary checking for config class
 Decide if I want to return a shared_ptr in [] operator
 Add CppDoc
 Set int to size_t where relevant
-Move everything to Dogan namespace
 Optimize CMakeFiles
 Add checking to see if a DoganPort is valid
 Deal with if Bank is bankrupt

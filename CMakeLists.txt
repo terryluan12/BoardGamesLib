@@ -37,24 +37,23 @@ option(BUILD_EXECUTABLE "Build the executable" ON)
 option(BUILD_UNITTESTS "Build tests" ON)
 if(BUILD_EXECUTABLE)
     add_executable(Dogan dogan/src/main.cpp)
-    target_link_libraries(Dogan PUBLIC DoganGame DoganConfigBuilder)
+    target_link_libraries(Dogan PUBLIC Game ConfigBuilder)
     target_include_directories(Dogan PUBLIC dogan/include PRIVATE dogan/libs)
 endif()
 
 
 if(BUILD_UNITTESTS)
     enable_testing()
-    add_executable(DoganTests 
-                  dogan/libs/DoganBank.test.cpp 
-                  dogan/libs/DoganCell.test.cpp
-                  dogan/libs/DoganGame.test.cpp
-                  dogan/libs/DoganBoard.test.cpp)
-    target_link_libraries(DoganTests gtest_main 
-                  DoganBank 
-                  DoganCell
-                  DoganGame
-                  DoganStructureType
-                  DoganConfigBuilder
-                  DoganBoard)
-    gtest_add_tests(TARGET DoganTests )
+    add_executable(Tests 
+                  dogan/libs/Bank.test.cpp 
+                  dogan/libs/Cell.test.cpp
+                  dogan/libs/Game.test.cpp
+                  dogan/libs/Board.test.cpp)
+    target_link_libraries(Tests gtest_main 
+                  Bank 
+                  Cell
+                  Game
+                  ConfigBuilder
+                  Board)
+    gtest_add_tests(TARGET Tests )
 endif()

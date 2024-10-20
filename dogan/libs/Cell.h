@@ -7,15 +7,17 @@
 #include <unordered_set>
 #include <vector>
 
-class DoganCell {
+namespace Dogan {
+class Cell {
 public:
-  DoganCell(bool cr, Coordinate2D c, int n, ResourceType t);
+  Cell(bool cr, Coordinate2D c, int n, ResourceType t);
   Coordinate2D getCoordinate(void) const;
   ResourceType getResource(void) const;
 
-  friend std::ostream &operator<<(std::ostream &os, DoganCell const &dc);
+  friend std::ostream &operator<<(std::ostream &os, Cell const &dc);
 
 private:
   Coordinate2D coordinate;
   ResourceType type;
 };
+} // namespace Dogan

@@ -4,11 +4,12 @@
 #include <array>
 #include <cstddef>
 
-class DoganBank {
+namespace Dogan {
+class Bank {
 public:
-  DoganBank(void);
-  DoganBank(std::array<int, 5> r, std::vector<DevelopmentType> d);
-  friend std::ostream &operator<<(std::ostream &os, DoganBank const &d);
+  Bank(void);
+  Bank(std::array<int, 5> r, std::vector<DevelopmentType> d);
+  friend std::ostream &operator<<(std::ostream &os, Bank const &d);
 
   // Resource Functions
   void addResource(const ResourceType r, const int n);
@@ -32,3 +33,4 @@ private:
   std::vector<DevelopmentType> developments;
   std::array<int, 5> developmentCount;
 };
+} // namespace Dogan

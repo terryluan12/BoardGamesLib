@@ -1,33 +1,34 @@
 #pragma once
 
-#include "DoganConfig.h"
+#include "Config.h"
 #include <array>
 #include <vector>
 
-class DoganConfigBuilder {
+namespace Dogan {
+class ConfigBuilder {
 public:
-  DoganConfigBuilder &setBoardSize(size_t boardSize);
-  DoganConfigBuilder &setRobberLocation(Coordinate2D robberLocations);
-  DoganConfigBuilder &
+  ConfigBuilder &setBoardSize(size_t boardSize);
+  ConfigBuilder &setRobberLocation(Coordinate2D robberLocations);
+  ConfigBuilder &
   setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount);
-  DoganConfigBuilder &setTileLocations(std::vector<Coordinate2D> tileLocations);
-  DoganConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
-  DoganConfigBuilder &
-  setDevelopmentCount(std::array<size_t, 5> developmentCount);
-  DoganConfigBuilder &setDevelopmentConfig(Configuration developmentConfig);
-  DoganConfigBuilder &setNumberConfig(Configuration numberConfig);
-  DoganConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
-  DoganConfigBuilder &setResourceConfig(Configuration resourceConfig);
-  DoganConfigBuilder &setDevelopmentLocations(
+  ConfigBuilder &setTileLocations(std::vector<Coordinate2D> tileLocations);
+  ConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
+  ConfigBuilder &setDevelopmentCount(std::array<size_t, 5> developmentCount);
+  ConfigBuilder &setDevelopmentConfig(Configuration developmentConfig);
+  ConfigBuilder &setNumberConfig(Configuration numberConfig);
+  ConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
+  ConfigBuilder &setResourceConfig(Configuration resourceConfig);
+  ConfigBuilder &setDevelopmentLocations(
       std::vector<DevelopmentType> developmentConfigurations);
-  DoganConfigBuilder &setNumberLocations(std::vector<int> numberLocations);
-  DoganConfigBuilder &
+  ConfigBuilder &setNumberLocations(std::vector<int> numberLocations);
+  ConfigBuilder &
   setPortLocations(std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
                        portLocations);
-  DoganConfigBuilder &setResources(std::vector<int> resourceLocations);
-  DoganConfigBuilder &setPortResources(std::vector<int> portResources);
-  DoganConfig build();
+  ConfigBuilder &setResources(std::vector<int> resourceLocations);
+  ConfigBuilder &setPortResources(std::vector<int> portResources);
+  Config build();
 
 private:
-  DoganConfig config;
+  Config config;
 };
+} // namespace Dogan

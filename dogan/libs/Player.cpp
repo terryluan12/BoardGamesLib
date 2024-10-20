@@ -1,13 +1,14 @@
-#include "DoganPlayer.h"
+#include "Player.h"
 #include "DoganExceptions.h"
 
-DoganPlayer::DoganPlayer(std::string n, int pid, std::array<int, 3> as)
+namespace Dogan {
+Player::Player(int pid, std::array<int, 3> as)
     : playerID(pid), inventory(), availableStructures(as), victoryPoints(0),
       soldierCount(0){};
 
-void DoganPlayer::giveDevelopment(DevelopmentType d) { addDevelopment(d); }
-void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s,
-                                 std::array<int, 5> c) {
+void Player::giveDevelopment(DevelopmentType d) { addDevelopment(d); }
+void Player::buildStructure(std::shared_ptr<Structure> s,
+                            std::array<int, 5> c) {
   if (availableStructures[static_cast<int>(s->getStructureType())] <= 0) {
     throw InsufficientStructuresException(
         "Error: Player does not have enough structures");
@@ -20,53 +21,51 @@ void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s,
 }
 
 // Victory Point Functions
-int DoganPlayer::getVictoryPoints(void) const { return victoryPoints; }
-void DoganPlayer::setVictoryPoints(const int vp) { victoryPoints = vp; }
-void DoganPlayer::addVictoryPoints(const int vp) { victoryPoints += vp; }
+int Player::getVictoryPoints(void) const { return victoryPoints; }
+void Player::setVictoryPoints(const int vp) { victoryPoints = vp; }
+void Player::addVictoryPoints(const int vp) { victoryPoints += vp; }
 
-void DoganPlayer::addResources(std::array<int, 5> r) {
-  inventory.addResources(r);
-}
-void DoganPlayer::addResource(const ResourceType r, int n) {
+void Player::addResources(std::array<int, 5> r) { inventory.addResources(r); }
+void Player::addResource(const ResourceType r, int n) {
   inventory.addResource(r, n);
 }
 
-int DoganPlayer::getSoldierCount(void) const { return soldierCount; }
-void DoganPlayer::increaseSoldierCount(void) { ++soldierCount; }
+int Player::getSoldierCount(void) const { return soldierCount; }
+void Player::increaseSoldierCount(void) { ++soldierCount; }
 
-bool DoganPlayer::canAfford(const std::array<int, 5> r) const {
+bool Player::canAfford(const std::array<int, 5> r) const {
   return inventory.canAfford(r);
 }
-std::array<int, 5> DoganPlayer::getResourceCount(void) const {
+std::array<int, 5> Player::getResourceCount(void) const {
   return inventory.getResourceCount();
 }
-std::array<int, 5> DoganPlayer::getDevelopmentCount(void) const {
+std::array<int, 5> Player::getDevelopmentCount(void) const {
   return inventory.getDevelopmentCount();
 }
-int DoganPlayer::getPlayerID(void) const { return playerID; }
+int Player::getPlayerID(void) const { return playerID; }
 
-void DoganPlayer::addDevelopment(DevelopmentType d) {
+void Player::addDevelopment(DevelopmentType d) {
   if (d == DevelopmentType::VICPOINT) {
     victoryPoints += 1;
   }
   inventory.addDevelopment(d);
 }
-void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
+void Player::buildStructure(std::shared_ptr<Structure> s) {
   switch (s->getStructureType()) {
   case (StructureType::VILLAGE):
   case (StructureType::CITY):
-    buildings.emplace_back(std::dynamic_pointer_cast<DoganBuilding>(s));
+    buildings.emplace_back(std::dynamic_pointer_cast<Building>(s));
     victoryPoints += 1;
     break;
   case (StructureType::ROAD):
-    roads.emplace_back(std::dynamic_pointer_cast<DoganRoad>(s));
+    roads.emplace_back(std::dynamic_pointer_cast<Road>(s));
     break;
   case (StructureType::PORT):
     throw InvalidTypeException("Error: Cannot build a port");
   }
 }
 
-std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {
+std::ostream &operator<<(std::ostream &os, const Player &p) {
   os << "Player " << p.playerID << ": \n  VP: " << p.victoryPoints
      << "\n  Resource Cards:\n";
   for (size_t i = 0; i < 5; ++i) {
@@ -81,3 +80,4 @@ std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {
   os << "\n";
   return os;
 }
+} // namespace Dogan

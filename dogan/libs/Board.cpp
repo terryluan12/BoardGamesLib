@@ -1,9 +1,10 @@
-#include "DoganBoard.h"
-#include "DoganElementHelpers.h"
+#include "Board.h"
+#include "ElementHelpers.h"
 #include "enums.h"
 #include <memory>
 
-DoganBoard::DoganBoard(DoganConfig config) {
+namespace Dogan {
+Board::Board(Config config) {
   rengine.seed(std::random_device{}());
 
   this->boardSize = config.getBoardSize();
@@ -19,12 +20,12 @@ DoganBoard::DoganBoard(DoganConfig config) {
     if (this->hasTile(c)) {
       throw std::invalid_argument("Error: Cell already exists");
     }
-    std::shared_ptr<DoganCell> dc = std::make_shared<DoganCell>(
-        DoganCell(false, c, numberOrder[i], resources[i]));
+    std::shared_ptr<Cell> dc =
+        std::make_shared<Cell>(Cell(false, c, numberOrder[i], resources[i]));
     this->cells.insert(std::make_pair(c, dc));
     if (numbers.find(numberOrder[i]) == numbers.end()) {
       this->numbers.emplace(numberOrder[i],
-                            std::vector<std::shared_ptr<DoganCell>>{});
+                            std::vector<std::shared_ptr<Cell>>{});
     }
     this->numbers.at(numberOrder[i]).emplace_back(dc);
 
@@ -37,20 +38,20 @@ DoganBoard::DoganBoard(DoganConfig config) {
     for (auto vertex : portVertices) {
       for (auto [coordinate, direction] : getAllVertexRepresentations(vertex)) {
         if (this->ports.find(coordinate) == this->ports.end()) {
-          this->ports.emplace(
-              coordinate, std::map<Direction, std::shared_ptr<DoganPort>>());
+          this->ports.emplace(coordinate,
+                              std::map<Direction, std::shared_ptr<Port>>());
         }
-        std::shared_ptr<DoganPort> dp =
-            std::make_shared<DoganPort>(DoganPort(portResources[i]));
+        std::shared_ptr<Port> dp =
+            std::make_shared<Port>(Port(portResources[i]));
         this->ports.at(coordinate).emplace(direction, dp);
       }
     }
   }
 }
 
-size_t DoganBoard::getBoardSize(void) const { return boardSize; }
+size_t Board::getBoardSize(void) const { return boardSize; }
 
-DoganBuilding DoganBoard::getBuilding(Coordinate2D c, Direction d) const {
+Building Board::getBuilding(Coordinate2D c, Direction d) const {
   const auto &map = buildings.find(c);
   if (map == buildings.end() || map->second.find(d) == map->second.end()) {
     throw NoSuchStructureException("Error: No Building at given location");
@@ -58,12 +59,10 @@ DoganBuilding DoganBoard::getBuilding(Coordinate2D c, Direction d) const {
   return *(map->second.at(d));
 }
 
-Coordinate2D DoganBoard::getRobberLocation(void) const {
-  return robberLocation;
-}
+Coordinate2D Board::getRobberLocation(void) const { return robberLocation; }
 
 std::map<int, std::array<size_t, 5>>
-DoganBoard::getResourceDistribution(int numberRolled) const {
+Board::getResourceDistribution(int numberRolled) const {
   std::map<int, std::array<size_t, 5>> playerDistribution;
   for (auto &cell : this->numbers.at(numberRolled)) {
     if (this->buildings.find(cell->getCoordinate()) == this->buildings.end()) {
@@ -86,7 +85,7 @@ DoganBoard::getResourceDistribution(int numberRolled) const {
   return playerDistribution;
 }
 
-bool DoganBoard::hasBuilding(const Coordinate2D c, const Direction d) const {
+bool Board::hasBuilding(const Coordinate2D c, const Direction d) const {
   const auto &map = buildings.find(c);
   if (map == buildings.end()) {
     return false;
@@ -94,8 +93,8 @@ bool DoganBoard::hasBuilding(const Coordinate2D c, const Direction d) const {
   return map->second.find(d) != map->second.end();
 }
 
-bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d,
-                              StructureType st) const {
+bool Board::hasStructure(const Coordinate2D c, const Direction d,
+                         StructureType st) const {
   switch (st) {
   case StructureType::VILLAGE:
   case StructureType::CITY: {
@@ -129,17 +128,15 @@ bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d,
   }
 }
 
-bool DoganBoard::hasTile(const Coordinate2D c) const {
+bool Board::hasTile(const Coordinate2D c) const {
   return cells.find(c) != cells.end();
 }
 
-void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
-                                Coordinate2D coord, Direction dir,
-                                std::array<int, 5> c) {
+void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D coord,
+                           Direction dir, std::array<int, 5> c) {
   switch (ds->getStructureType()) {
   case (StructureType::CITY): {
-    std::shared_ptr<DoganBuilding> db =
-        std::dynamic_pointer_cast<DoganBuilding>(ds);
+    std::shared_ptr<Building> db = std::dynamic_pointer_cast<Building>(ds);
     if (!this->hasStructure(coord, dir, StructureType::VILLAGE)) {
       throw NoVillageException("Error: Must build city on village");
     }
@@ -154,8 +151,7 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
     break;
   }
   case (StructureType::VILLAGE): {
-    std::shared_ptr<DoganBuilding> db =
-        std::dynamic_pointer_cast<DoganBuilding>(ds);
+    std::shared_ptr<Building> db = std::dynamic_pointer_cast<Building>(ds);
     for (auto [coordinate, direction] :
          getAllVertexRepresentations({coord, dir})) {
       if (this->cells.find(coordinate) == this->cells.end()) {
@@ -163,12 +159,12 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
         continue;
       }
       if (buildings.find(coordinate) == buildings.end()) {
-        buildings.emplace(
-            coordinate, std::map<Direction, std::shared_ptr<DoganBuilding>>());
+        buildings.emplace(coordinate,
+                          std::map<Direction, std::shared_ptr<Building>>());
       }
       buildings.at(coordinate)
-          .emplace(std::make_pair(
-              direction, std::dynamic_pointer_cast<DoganBuilding>(ds)));
+          .emplace(std::make_pair(direction,
+                                  std::dynamic_pointer_cast<Building>(ds)));
     }
 
     break;
@@ -180,12 +176,11 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
         continue;
       }
       if (roads.find(coordinate) == roads.end()) {
-        roads.emplace(coordinate,
-                      std::map<Direction, std::shared_ptr<DoganRoad>>());
+        roads.emplace(coordinate, std::map<Direction, std::shared_ptr<Road>>());
       }
       roads.at(coordinate)
-          .emplace(std::make_pair(direction,
-                                  std::dynamic_pointer_cast<DoganRoad>(ds)));
+          .emplace(
+              std::make_pair(direction, std::dynamic_pointer_cast<Road>(ds)));
     }
     break;
   }
@@ -194,9 +189,9 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
   }
 }
 
-void DoganBoard::moveRobber(Coordinate2D nl) { robberLocation = nl; }
+void Board::moveRobber(Coordinate2D nl) { robberLocation = nl; }
 
-std::ostream &operator<<(std::ostream &os, DoganBoard const &db) {
+std::ostream &operator<<(std::ostream &os, Board const &db) {
   for (const auto &c : db.cells) {
     os << c.second;
   }
@@ -207,3 +202,4 @@ std::ostream &operator<<(std::ostream &os, DoganBoard const &db) {
   // }
   return os;
 }
+} // namespace Dogan
