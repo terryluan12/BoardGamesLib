@@ -9,7 +9,6 @@ Change all declarations of type* var to type *var
 Change all declarations of type& var to type &var
 Add const to all getter functions like func(...) const {}
 add use of std::optional where applicable
-Figure out a way to bring the getBoard function to the parent BoardInterface (std::map<Coordinate, Cell> is not covariant to std::map<Coordinate, Cell>, so can't override/load it)
 Decide if I want to return a shared_ptr in [] operator
 Add CppDoc
 Set int to size_t where relevant
