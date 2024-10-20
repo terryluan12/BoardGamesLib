@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DoganStructure.h"
-#include "DoganVertex.h"
 #include "enums.h"
 #include <utility>
 

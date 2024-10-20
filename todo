@@ -12,7 +12,6 @@ add use of std::optional where applicable
 Decide if I want to return a shared_ptr in [] operator
 Add CppDoc
 Set int to size_t where relevant
-Decide if it's better to always do checks for if DoganVertex is a valid tile on the board
 Do checks if village exists when building city
 Actually add Google Tests
 Add general Vertex Class and extend Dogan Vertex

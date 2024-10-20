@@ -3,7 +3,6 @@
 #include "Coordinate.h"
 #include "DoganExceptions.h"
 #include "DoganStructure.h"
-#include "DoganVertex.h"
 #include <vector>
 
 class DoganBuilding : public DoganStructure {

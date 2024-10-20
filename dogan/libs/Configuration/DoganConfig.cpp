@@ -234,7 +234,7 @@ const std::vector<Coordinate2D> DoganConfig::getTileLocations(void) const {
   return initialTileLocations;
 }
 
-const std::vector<std::vector<DoganVertex>> DoganConfig::getPortLocations(void) const {
+const std::vector<std::vector<std::pair<Coordinate2D, Direction>>> DoganConfig::getPortLocations(void) const {
   return initialPortLocations;
 }
 
@@ -287,15 +287,7 @@ void DoganConfig::setNumberLocations(std::vector<pip> nl) {
 
 void DoganConfig::setPortLocations(
     std::vector<std::vector<std::pair<Coordinate2D, Direction>>> pls) {
-  std::vector<std::vector<DoganVertex>> pvs;
-  for (auto portVertexRepresentations : pls) {
-    std::vector<DoganVertex> pv;
-    for (auto [coord, direction] : portVertexRepresentations) {
-      pv.emplace_back(coord, direction);
-    }
-    pvs.push_back(pv);
-  }
-  initialPortLocations = pvs;
+  initialPortLocations = pls;
 }
 
 void DoganConfig::setRobberLocation(Coordinate2D irl) {

@@ -16,10 +16,9 @@ TEST(BoardTest, UpgradeVillageFailTest) {
   DoganBoard board{config};
   std::shared_ptr<DoganStructure> dv = std::make_shared<DoganBuilding>(
       DoganBuilding(0, StructureType::CITY));
-  auto coordinate = std::make_shared<DoganVertex>(Coordinate2D{0, 0}, Direction::NORTH);
   EXPECT_THROW(
       {
-        board.buildStructure(dv, coordinate, {0, 0, 0, 0, 0});
+        board.buildStructure(dv, {0, 0}, Direction::NORTH, {0, 0, 0, 0, 0});
       },
       NoVillageException);
 }
@@ -30,9 +29,8 @@ TEST(BoardTest, UpgradeVillageSuccessTest) {
       DoganBuilding(0, StructureType::VILLAGE));
   auto dv2 = std::make_shared<DoganBuilding>(
       DoganBuilding(0, StructureType::CITY));
-  auto coordinate = std::make_shared<DoganVertex>(Coordinate2D{0, 0}, Direction::NORTH);
   EXPECT_NO_THROW({
-    board.buildStructure(dv1, coordinate, {0, 0, 0, 0, 0});
-    board.buildStructure(dv2, coordinate, {0, 0, 0, 0, 0});
+    board.buildStructure(dv1, Coordinate2D{0, 0}, Direction::NORTH, {0, 0, 0, 0, 0});
+    board.buildStructure(dv2, Coordinate2D{0, 0}, Direction::NORTH, {0, 0, 0, 0, 0});
   });
 }
