@@ -29,19 +29,6 @@ const std::array<int, 5> DoganBank::getResourceCount(void) const {
 }
 void DoganBank::setResources(const std::array<int, 5> r) { resources = r; }
 
-bool DoganBank::canAfford(const std::array<int, 5> r) const {
-  for (size_t i = 0; i < 5; i++) {
-    if (resources[i] < r[i]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool DoganBank::canAfford(ResourceType r, int n) const {
-  return resources[static_cast<int>(r)] > n;
-}
-
 // Development Functions
 void DoganBank::addDevelopment(const DevelopmentType d) {
   developments.push_back(d);
@@ -71,6 +58,19 @@ DevelopmentType DoganBank::popDevelopment(void) {
   developments.pop_back();
   developmentCount[static_cast<int>(dt)] -= 1;
   return dt;
+}
+
+bool DoganBank::canAfford(const std::array<int, 5> r) const {
+  for (size_t i = 0; i < 5; i++) {
+    if (resources[i] < r[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool DoganBank::canAfford(ResourceType r, int n) const {
+  return resources[static_cast<int>(r)] > n;
 }
 
 std::ostream &operator<<(std::ostream &os, DoganBank const &d) {

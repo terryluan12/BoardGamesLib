@@ -15,8 +15,6 @@ public:
   void addResources(const std::array<int, 5> r);
   const std::array<int, 5> getResourceCount(void) const;
   void setResources(const std::array<int, 5> r);
-  bool canAfford(const std::array<int, 5> r) const;
-  bool canAfford(ResourceType r, int n) const;
 
   // Development Functions
   void addDevelopment(const DevelopmentType d);
@@ -26,7 +24,8 @@ public:
   DevelopmentType popDevelopment(void);
 
   // Other Functions
-  const std::array<int, 10> getFullCount(void) const;
+  bool canAfford(const std::array<int, 5> r) const;
+  bool canAfford(ResourceType r, int n) const;
 
 private:
   std::array<int, 5> resources;

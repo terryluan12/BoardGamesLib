@@ -77,7 +77,6 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
   checkCoordinateValid(tileLocation);
   checkStructureExists(tileLocation, direction, structType);
 
-
   switch (structType) {
   case StructureType::VILLAGE:
   case StructureType::CITY:
@@ -154,7 +153,6 @@ void DoganGame::useSoldierDevelopmentCard(int playerID,
     mostSoldiers = {playerID, soldierCount};
     players.at(playerID).addVictoryPoints(2);
   }
-
 }
 
 void DoganGame::useRoadDevelopmentCard(
@@ -180,10 +178,9 @@ void DoganGame::useTakeTwoDevelopmentCard(
   checkResourceType(resources[0]);
   checkResourceType(resources[1]);
 
-  if(resources[0] == resources[1]) {
+  if (resources[0] == resources[1]) {
     checkBankCanAfford(resources[0], 2);
-  }
-  else {
+  } else {
     checkBankCanAfford(resources[0], 1);
     checkBankCanAfford(resources[1], 1);
   }
@@ -237,7 +234,8 @@ void DoganGame::checkPlayerExists(int playerID) const {
     throw PlayerNotFoundException("Player ID " + std::to_string(playerID) +
                                   " invalid");
 }
-void DoganGame::checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const {
+void DoganGame::checkPlayerCanAfford(int playerID,
+                                     std::array<int, 5> cost) const {
   if (!players.at(playerID).canAfford(cost))
     throw InsufficientFundsException(
         "Error: Player does not have enough resources to build structure");
@@ -247,18 +245,20 @@ void DoganGame::checkBankCanAfford(ResourceType resourceType, int num) const {
     throw InsufficientFundsException(
         "Error: Bank does not have enough resources to build structure");
 }
-void DoganGame::checkPlayerHasDevelopmentCard(int playerID, DevelopmentType devType) const {
+void DoganGame::checkPlayerHasDevelopmentCard(int playerID,
+                                              DevelopmentType devType) const {
   std::stringstream oss;
   oss << "Error: Player does not have " << devType << " card";
-  if (players.at(playerID).getDevelopmentCount()[static_cast<int>(devType)] == 0)
-    throw InsufficientDevelopmentsException(
-        oss.str());
+  if (players.at(playerID).getDevelopmentCount()[static_cast<int>(devType)] ==
+      0)
+    throw InsufficientDevelopmentsException(oss.str());
 }
 void DoganGame::checkCoordinateValid(Coordinate2D coord) const {
   if (!board.hasTile(coord))
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
 }
-void DoganGame::checkStructureExists(Coordinate2D coord, Direction direction, StructureType structureType) const {
+void DoganGame::checkStructureExists(Coordinate2D coord, Direction direction,
+                                     StructureType structureType) const {
   if (board.hasStructure(coord, direction, structureType))
     throw SameStructureException("Error: Structure already exists");
 }

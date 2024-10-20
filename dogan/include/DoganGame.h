@@ -54,8 +54,10 @@ private:
   void checkPlayerExists(int playerID) const;
   void checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const;
   void checkBankCanAfford(ResourceType resourceType, int num) const;
-  void checkPlayerHasDevelopmentCard(int playerID, DevelopmentType devType) const;
+  void checkPlayerHasDevelopmentCard(int playerID,
+                                     DevelopmentType devType) const;
   void checkCoordinateValid(Coordinate2D coord) const;
-  void checkStructureExists(Coordinate2D coord, Direction direction, StructureType structureType) const;
+  void checkStructureExists(Coordinate2D coord, Direction direction,
+                            StructureType structureType) const;
   void checkResourceType(ResourceType resourceType) const;
 };

@@ -38,12 +38,13 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
   std::shared_ptr<DoganEdge> fde = nullptr;
   switch (ds->getStructureType()) {
   case (StructureType::CITY): {
-    if(!this->hasStructure(dg.getCoordinate(), dg.getDirection(), StructureType::VILLAGE)){
+    if (!this->hasStructure(dg.getCoordinate(), dg.getDirection(),
+                            StructureType::VILLAGE)) {
       throw NoVillageException("Error: Must build city on village");
     }
-    for(auto el : ds->getGraphElements()) {
+    for (auto el : ds->getGraphElements()) {
       auto dv = std::dynamic_pointer_cast<DoganVertex>(el);
-      if(this->cells.find(dv->getCoordinate()) == this->cells.end()){
+      if (this->cells.find(dv->getCoordinate()) == this->cells.end()) {
         continue;
       }
       buildings.at(dv->getCoordinate()).at(dv->getDirection())->upgradeToCity();
