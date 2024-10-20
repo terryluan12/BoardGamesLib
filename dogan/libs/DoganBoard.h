@@ -29,7 +29,8 @@ public:
   bool hasTile(const Coordinate2D c) const;
 
   // Game moves
-  void buildStructure(std::shared_ptr<DoganStructure> ds, Coordinate2D coord, Direction dir, std::array<int, 5> c);
+  void buildStructure(std::shared_ptr<DoganStructure> ds, Coordinate2D coord,
+                      Direction dir, std::array<int, 5> c);
   void moveRobber(Coordinate2D nl);
 
   friend std::ostream &operator<<(std::ostream &os, DoganBoard const &db);

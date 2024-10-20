@@ -9,6 +9,5 @@ class DoganBuilding : public DoganStructure {
 public:
   DoganBuilding(int pid, StructureType t);
   void upgradeToCity(void);
-  int getWorth(void);
-
+  int getWorth(void) const;
 };

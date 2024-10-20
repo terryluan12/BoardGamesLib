@@ -1,7 +1,7 @@
 #pragma once
 
-#include <ostream>
 #include <cstddef>
+#include <ostream>
 
 class DoganStructureType {
 public:

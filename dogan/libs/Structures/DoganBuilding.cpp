@@ -1,7 +1,6 @@
 #include "DoganBuilding.h"
 #include <cassert>
-DoganBuilding::DoganBuilding(int pid, StructureType t)
-    : DoganStructure(t) {
+DoganBuilding::DoganBuilding(int pid, StructureType t) : DoganStructure(t) {
   playerID = pid;
   if (t == StructureType::ROAD || t == StructureType::PORT) {
     throw InvalidTypeException("Error: Invalid Building Type");
@@ -14,7 +13,7 @@ void DoganBuilding::upgradeToCity(void) {
   this->type = StructureType::CITY;
 }
 
-int DoganBuilding::getWorth() {
+int DoganBuilding::getWorth() const {
   switch (this->type) {
   case StructureType::VILLAGE:
     return 1;

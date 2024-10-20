@@ -5,5 +5,5 @@
 
 class DoganRoad : public DoganStructure {
 public:
-  DoganRoad(int pid) : DoganStructure(StructureType::ROAD) {playerID = pid;};
+  DoganRoad(int pid) : DoganStructure(StructureType::ROAD) { playerID = pid; };
 };

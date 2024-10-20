@@ -32,16 +32,17 @@ DoganBoard::DoganBoard(DoganConfig config) {
   }
 
   // Add all Ports
-  for(size_t i = 0; i < config.getPortLocations().size(); i++) {
+  for (size_t i = 0; i < config.getPortLocations().size(); i++) {
     const auto portVertices = portLocations[i];
-    for(auto vertex : portVertices) {
-      for(auto [coordinate, direction] : getAllVertexRepresentations(vertex)) {
+    for (auto vertex : portVertices) {
+      for (auto [coordinate, direction] : getAllVertexRepresentations(vertex)) {
         if (this->ports.find(coordinate) == this->ports.end()) {
-          this->ports.emplace(coordinate,
-                              std::map<Direction, std::shared_ptr<DoganPort>>());
+          this->ports.emplace(
+              coordinate, std::map<Direction, std::shared_ptr<DoganPort>>());
         }
-      std::shared_ptr<DoganPort> dp = std::make_shared<DoganPort>(DoganPort(portResources[i]));
-      this->ports.at(coordinate).emplace(direction, dp);
+        std::shared_ptr<DoganPort> dp =
+            std::make_shared<DoganPort>(DoganPort(portResources[i]));
+        this->ports.at(coordinate).emplace(direction, dp);
       }
     }
   }
@@ -95,36 +96,36 @@ bool DoganBoard::hasBuilding(const Coordinate2D c, const Direction d) const {
 
 bool DoganBoard::hasStructure(const Coordinate2D c, const Direction d,
                               StructureType st) const {
-  switch(st) {
-    case StructureType::VILLAGE:
-    case StructureType::CITY: {
-      const auto &map = buildings.find(c);
-      if (map == buildings.end()) {
-        return false;
-      }
-      const auto &building = map->second.find(d);
-      if (building == map->second.end()) {
-        return false;
-      }
-      return building->second->getStructureType() == st;
+  switch (st) {
+  case StructureType::VILLAGE:
+  case StructureType::CITY: {
+    const auto &map = buildings.find(c);
+    if (map == buildings.end()) {
+      return false;
     }
-    case StructureType::ROAD: {
-      const auto &map = roads.find(c);
-      if (map == roads.end()) {
-        return false;
-      }
-      return map->second.find(d) != map->second.end();
+    const auto &building = map->second.find(d);
+    if (building == map->second.end()) {
+      return false;
     }
-    case StructureType::PORT: {
-      const auto &map = ports.find(c);
-      if (map == ports.end()) {
-        return false;
-      }
-      return map->second.find(d) != map->second.end();
+    return building->second->getStructureType() == st;
+  }
+  case StructureType::ROAD: {
+    const auto &map = roads.find(c);
+    if (map == roads.end()) {
+      return false;
     }
-    default : {
-      throw InvalidTypeException("Error: Invalid StructureType");
+    return map->second.find(d) != map->second.end();
+  }
+  case StructureType::PORT: {
+    const auto &map = ports.find(c);
+    if (map == ports.end()) {
+      return false;
     }
+    return map->second.find(d) != map->second.end();
+  }
+  default: {
+    throw InvalidTypeException("Error: Invalid StructureType");
+  }
   }
 }
 
@@ -132,16 +133,18 @@ bool DoganBoard::hasTile(const Coordinate2D c) const {
   return cells.find(c) != cells.end();
 }
 
-void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, Coordinate2D coord, Direction dir,
+void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds,
+                                Coordinate2D coord, Direction dir,
                                 std::array<int, 5> c) {
   switch (ds->getStructureType()) {
   case (StructureType::CITY): {
-    std::shared_ptr<DoganBuilding> db = std::dynamic_pointer_cast<DoganBuilding>(ds);
-    if (!this->hasStructure(coord, dir,
-                            StructureType::VILLAGE)) {
+    std::shared_ptr<DoganBuilding> db =
+        std::dynamic_pointer_cast<DoganBuilding>(ds);
+    if (!this->hasStructure(coord, dir, StructureType::VILLAGE)) {
       throw NoVillageException("Error: Must build city on village");
     }
-    for (auto [coordinate, direction] : getAllVertexRepresentations({coord, dir})) {
+    for (auto [coordinate, direction] :
+         getAllVertexRepresentations({coord, dir})) {
       if (this->cells.find(coordinate) == this->cells.end()) {
         continue;
       }
@@ -151,8 +154,10 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, Coordinate2D
     break;
   }
   case (StructureType::VILLAGE): {
-    std::shared_ptr<DoganBuilding> db = std::dynamic_pointer_cast<DoganBuilding>(ds);
-    for (auto [coordinate, direction] : getAllVertexRepresentations({coord, dir})) {
+    std::shared_ptr<DoganBuilding> db =
+        std::dynamic_pointer_cast<DoganBuilding>(ds);
+    for (auto [coordinate, direction] :
+         getAllVertexRepresentations({coord, dir})) {
       if (this->cells.find(coordinate) == this->cells.end()) {
         // If cell is outside map (e.g. the cell is on the edge of the map)
         continue;
@@ -162,15 +167,15 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, Coordinate2D
             coordinate, std::map<Direction, std::shared_ptr<DoganBuilding>>());
       }
       buildings.at(coordinate)
-          .emplace(
-              std::make_pair(direction,
-                             std::dynamic_pointer_cast<DoganBuilding>(ds)));
+          .emplace(std::make_pair(
+              direction, std::dynamic_pointer_cast<DoganBuilding>(ds)));
     }
 
     break;
   }
-  case (StructureType::ROAD):{
-    for (auto [coordinate, direction] : getAllEdgeRepresentations({coord, dir})) {
+  case (StructureType::ROAD): {
+    for (auto [coordinate, direction] :
+         getAllEdgeRepresentations({coord, dir})) {
       if (this->cells.find(coordinate) == this->cells.end()) {
         continue;
       }
@@ -184,8 +189,8 @@ void DoganBoard::buildStructure(std::shared_ptr<DoganStructure> ds, Coordinate2D
     }
     break;
   }
-    case(StructureType::PORT):
-      throw InvalidTypeException("Error: Cannot build a port");
+  case (StructureType::PORT):
+    throw InvalidTypeException("Error: Cannot build a port");
   }
 }
 

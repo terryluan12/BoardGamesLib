@@ -234,7 +234,8 @@ const std::vector<Coordinate2D> DoganConfig::getTileLocations(void) const {
   return initialTileLocations;
 }
 
-const std::vector<std::vector<std::pair<Coordinate2D, Direction>>> DoganConfig::getPortLocations(void) const {
+const std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
+DoganConfig::getPortLocations(void) const {
   return initialPortLocations;
 }
 

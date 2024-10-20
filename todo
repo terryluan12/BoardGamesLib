@@ -1,22 +1,10 @@
 Separate out the enums from enums.h
-DoganBuilding is currently relying on the `getComplementDirections` function returning North and South first where relevant. Figure out a way to not rely on this.
-Add ports
-Add cards
 Add players
 Add boundary checking for config class
 Change uses of push_back to emplace_back where applicable
-Change all declarations of type* var to type *var
-Change all declarations of type& var to type &var
-Add const to all getter functions like func(...) const {}
-add use of std::optional where applicable
 Decide if I want to return a shared_ptr in [] operator
 Add CppDoc
 Set int to size_t where relevant
-Do checks if village exists when building city
-Actually add Google Tests
-Add general Vertex Class and extend Dogan Vertex
-Add General Player class and extend Dogan Player
-Add more custom exceptions
 Move everything to Dogan namespace
 Optimize CMakeFiles
 Add checking to see if a DoganPort is valid

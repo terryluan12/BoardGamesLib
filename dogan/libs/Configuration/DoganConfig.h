@@ -50,7 +50,8 @@ public:
 
   Coordinate2D getRobberLocation(void) const;
   const std::vector<Coordinate2D> getTileLocations(void) const;
-  const std::vector<std::vector<std::pair<Coordinate2D, Direction>>> getPortLocations(void) const;
+  const std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
+  getPortLocations(void) const;
   const std::array<size_t, 5> getResourceCount(void) const;
   const std::array<size_t, 5> getDevelopmentCount(void) const;
 
@@ -93,7 +94,8 @@ private:
   // Initial Locations
   std::vector<DevelopmentType> initialDevelopmentLocations;
   std::vector<pip> initialNumberLocations;
-  std::vector<std::vector<std::pair<Coordinate2D, Direction>>> initialPortLocations;
+  std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
+      initialPortLocations;
   Coordinate2D initialRobberLocation;
   // Coordinate System is based on
   // https://www.redblobgames.com/grids/hexagons/

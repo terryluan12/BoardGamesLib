@@ -7,8 +7,8 @@
 #include <sstream>
 
 DoganGame::DoganGame(DoganConfig config)
-    : config(config), die(1, 6),
-      board(DoganBoard(config)), rengine(std::random_device{}()) {
+    : config(config), die(1, 6), board(DoganBoard(config)),
+      rengine(std::random_device{}()) {
   std::array<int, 5> resourceCount{};
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
@@ -56,12 +56,11 @@ void DoganGame::buildStructure(int playerID, StructureType structType,
   switch (structType) {
   case StructureType::VILLAGE:
   case StructureType::CITY:
-    element = std::make_shared<DoganBuilding>(DoganBuilding(
-        playerID, structType));
+    element =
+        std::make_shared<DoganBuilding>(DoganBuilding(playerID, structType));
     break;
   case StructureType::ROAD:
-    element = std::make_shared<DoganRoad>(
-        DoganRoad(playerID));
+    element = std::make_shared<DoganRoad>(DoganRoad(playerID));
     break;
   case StructureType::PORT:
     throw InvalidTypeException("Error: Cannot build a port");

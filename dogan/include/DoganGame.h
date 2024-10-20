@@ -27,7 +27,6 @@ public:
 
   void useRobber(int playerID, Coordinate2D tileLocation, Direction direction);
 
-
   // Development Cards
   void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
   void useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,

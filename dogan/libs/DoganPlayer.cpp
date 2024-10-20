@@ -2,8 +2,8 @@
 #include "DoganExceptions.h"
 
 DoganPlayer::DoganPlayer(std::string n, int pid, std::array<int, 3> as)
-    : playerID(pid), inventory(), availableStructures(as), victoryPoints(0), soldierCount(0){};
-
+    : playerID(pid), inventory(), availableStructures(as), victoryPoints(0),
+      soldierCount(0){};
 
 void DoganPlayer::giveDevelopment(DevelopmentType d) { addDevelopment(d); }
 void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s,
@@ -45,7 +45,6 @@ std::array<int, 5> DoganPlayer::getDevelopmentCount(void) const {
 }
 int DoganPlayer::getPlayerID(void) const { return playerID; }
 
-
 void DoganPlayer::addDevelopment(DevelopmentType d) {
   if (d == DevelopmentType::VICPOINT) {
     victoryPoints += 1;
@@ -62,7 +61,7 @@ void DoganPlayer::buildStructure(std::shared_ptr<DoganStructure> s) {
   case (StructureType::ROAD):
     roads.push_back(std::dynamic_pointer_cast<DoganRoad>(s));
     break;
-  case(StructureType::PORT):
+  case (StructureType::PORT):
     throw InvalidTypeException("Error: Cannot build a port");
   }
 }
@@ -71,8 +70,8 @@ std::ostream &operator<<(std::ostream &os, const DoganPlayer &p) {
   os << "Player " << p.playerID << ": \n  VP: " << p.victoryPoints
      << "\n  Resource Cards:\n";
   for (size_t i = 0; i < 5; ++i) {
-    os << "    " << static_cast<ResourceType>(i) << ": "
-       << p.resources[i] << "\n";
+    os << "    " << static_cast<ResourceType>(i) << ": " << p.resources[i]
+       << "\n";
   }
   os << "  Development Cards:\n";
   for (size_t i = 0; i < 5; ++i) {

@@ -10,7 +10,7 @@ StructureType DoganStructureType::fromInt(std::size_t i) {
     return StructureType::CITY;
   case 2:
     return StructureType::ROAD;
-  case 3: 
+  case 3:
     return StructureType::PORT;
   default:
     throw InvalidTypeException("Error: Invalid Structure Type");
@@ -32,21 +32,21 @@ std::size_t DoganStructureType::toInt(StructureType t) {
 }
 
 std::ostream &operator<<(std::ostream &os, StructureType const &st) {
-  switch(st) {
-    case StructureType::VILLAGE:
-      os << "Village";
-      break;
-    case StructureType::CITY:
-      os << "City";
-      break;
-    case StructureType::ROAD:
-      os << "Road";
-      break;
-    case StructureType::PORT:
-      os << "Port";
-      break;
-    default:
-      throw InvalidTypeException("Error: Invalid Structure Type");
+  switch (st) {
+  case StructureType::VILLAGE:
+    os << "Village";
+    break;
+  case StructureType::CITY:
+    os << "City";
+    break;
+  case StructureType::ROAD:
+    os << "Road";
+    break;
+  case StructureType::PORT:
+    os << "Port";
+    break;
+  default:
+    throw InvalidTypeException("Error: Invalid Structure Type");
   }
   return os;
 }

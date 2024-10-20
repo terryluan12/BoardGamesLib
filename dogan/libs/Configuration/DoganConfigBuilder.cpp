@@ -20,8 +20,8 @@ DoganConfigBuilder &DoganConfigBuilder::setTotalStructureCount(
   return *this;
 }
 
-DoganConfigBuilder &DoganConfigBuilder::setTileLocations(
-    std::vector<Coordinate2D> tileLocations) {
+DoganConfigBuilder &
+DoganConfigBuilder::setTileLocations(std::vector<Coordinate2D> tileLocations) {
   std::vector<Coordinate2D> tls;
   for (Coordinate2D tileLocation : tileLocations) {
     tls.emplace_back(tileLocation);
@@ -60,8 +60,8 @@ DoganConfigBuilder &DoganConfigBuilder::setPortResourceConfig(
   return *this;
 }
 
-DoganConfigBuilder &DoganConfigBuilder::setResourceConfig(
-    Configuration resourceConfigurations) {
+DoganConfigBuilder &
+DoganConfigBuilder::setResourceConfig(Configuration resourceConfigurations) {
   config.setResourceConfig(resourceConfigurations);
   return *this;
 }

@@ -6,10 +6,10 @@
 
 class DoganStructure {
 public:
-  StructureType getStructureType(void);
+  StructureType getStructureType(void) const;
   void setPlayerID(int pid);
   void setStructureType(StructureType t);
-  int getPlayerID(void);
+  int getPlayerID(void) const;
   virtual ~DoganStructure(void){};
 
 protected:
