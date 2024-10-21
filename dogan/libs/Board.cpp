@@ -61,6 +61,14 @@ Building Board::getBuilding(Coordinate2D c, Direction d) const {
   return *(map->second.at(d));
 }
 
+Road Board::getRoad(Coordinate2D c, Direction d) const {
+  const auto &map = roads.find(c);
+  if (map == roads.end() || map->second.find(d) == map->second.end()) {
+    throw NoSuchStructureException("Error: No Building at given location");
+  }
+  return *(map->second.at(d));
+}
+
 Coordinate2D Board::getRobberLocation(void) const { return robberLocation; }
 
 std::map<int, std::array<size_t, 5>>
@@ -152,7 +160,6 @@ void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D c,
       if(buildings.find(coordinate) != buildings.end()){
         const auto cwDir = AxialHexDirection::vertexDirections[((AxialHexDirection::getVertexIndex(direction)+1)%7)];
         const auto ccwDir = AxialHexDirection::vertexDirections[((AxialHexDirection::getVertexIndex(direction)-1+7)%7)];
-        std::cout << "For " << coordinate << "-" << direction << " checking " << cwDir << " and " << ccwDir << std::endl;
         if(hasBuilding(coordinate, cwDir) || hasBuilding(coordinate, ccwDir)){
           throw AdjacentBuildingException("Error: Building too close to another building");
         }

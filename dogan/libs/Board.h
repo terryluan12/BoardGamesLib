@@ -18,6 +18,7 @@ public:
   // Getters
   size_t getBoardSize(void) const;
   Building getBuilding(Coordinate2D c, Direction d) const;
+  Road getRoad(Coordinate2D c, Direction d) const;
   const std::vector<Port> getPorts(void) const;
   Coordinate2D getRobberLocation(void) const;
   std::map<int, std::array<size_t, 5>>

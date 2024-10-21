@@ -3,6 +3,8 @@
 #include "DoganGame.h"
 #include "Road.h"
 #include "enums.h"
+#include "AxialHexDirection.h"
+#include "ElementHelpers.h"
 #include <memory>
 #include <sstream>
 
@@ -69,6 +71,51 @@ void Game::buildStructure(int playerID, StructureType structType,
   board.buildStructure(element, tileLocation, direction);
   players.at(playerID).buildStructure(element, cost);
   bank.addResources(cost);
+}
+
+void Game::buildAdjacentStructure(int playerID, StructureType structType,
+                            Coordinate2D tileLocation, Direction direction,
+                            std::array<int, 5> cost) {
+  bool hasAdjacentRoad = false;
+  if(structType == StructureType::ROAD){
+    for(const auto &[localCoordinate, localDirection] : getAllEdgeRepresentations({tileLocation, direction})){
+      for(Direction adjacentDirection : AxialHexDirection::getAdjacentEdgeDirections(localDirection)){
+        if(hasStructure(localCoordinate, adjacentDirection, StructureType::ROAD)){
+          if(board.getRoad(localCoordinate, adjacentDirection).getPlayerID() != playerID){
+            hasAdjacentRoad = false;
+            break;
+          }
+          hasAdjacentRoad = true;
+        }
+      }
+    }
+  }
+  else if(structType == StructureType::VILLAGE){
+    for(const auto &[localCoordinate, localDirection] : getAllVertexRepresentations({tileLocation, direction})){
+      int edgeIndex = AxialHexDirection::getVertexIndex(localDirection);
+      Direction d1 = AxialHexDirection::edgeDirections[edgeIndex];
+      Direction d2 = AxialHexDirection::edgeDirections[(edgeIndex+1)%6];
+      if(hasStructure(localCoordinate, d1, StructureType::ROAD)){
+          if(board.getRoad(localCoordinate, d1).getPlayerID() != playerID){
+            hasAdjacentRoad = false;
+            break;
+          }
+          hasAdjacentRoad = true;
+      }
+      if(hasStructure(localCoordinate, d2, StructureType::ROAD)) {
+          if(board.getRoad(localCoordinate, d2).getPlayerID() != playerID){
+            hasAdjacentRoad = false;
+            break;
+          }
+          hasAdjacentRoad = true;
+
+      }
+    }
+  }
+  if(!hasAdjacentRoad){
+    throw NoAdjacentRoadException("Error: Must build adjacent to road");
+  }
+  buildStructure(playerID, structType, tileLocation, direction, cost);
 }
 
 void Game::upgradeToCity(Coordinate2D c, Direction d) {

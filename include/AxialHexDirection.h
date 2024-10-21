@@ -31,6 +31,10 @@ public:
   static Direction getOppositeDirection(Direction d);
   static std::array<Direction, 4>
   getComplementaryDirections(Direction d);
+  static std::array<Direction, 2>
+  getAdjacentEdgeDirections(Direction d);
+  static std::array<Direction, 2>
+  getAdjacentVertexDirections(Direction d);
 
   static const int getEdgeIndex(Direction d);
   static const int getVertexIndex(Direction d);

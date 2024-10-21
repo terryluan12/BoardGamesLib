@@ -66,6 +66,19 @@ AxialHexDirection::getComplementaryDirections(Direction d) {
   return {firstDirection, firstTravelDirection, secondDirection, secondTravelDirection};
 }
 
+std::array<Direction, 2>
+AxialHexDirection::getAdjacentEdgeDirections(Direction d) {
+  int edgeIndex = getEdgeIndex(d);
+  return {edgeDirections[(edgeIndex + 1) % 6], edgeDirections[(edgeIndex + 5) % 6]};
+}
+
+std::array<Direction, 2>
+AxialHexDirection::getAdjacentVertexDirections(Direction d) {
+  int vertexIndex = getVertexIndex(d);
+  return {vertexDirections[(vertexIndex + 1) % 6], vertexDirections[(vertexIndex + 5) % 6]};
+}
+
+
 const int AxialHexDirection::getEdgeIndex(Direction d) {
   if(d == Direction::NORTH || d == Direction::SOUTH){
     throw std::invalid_argument("Error: Invalid Direction. Edge Cannot be North or South");

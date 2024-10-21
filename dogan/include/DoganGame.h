@@ -22,6 +22,9 @@ public:
   void buildStructure(int playerID, StructureType structType,
                       Coordinate2D tileLocation, Direction direction,
                       std::array<int, 5> cost);
+  void buildAdjacentStructure(int playerID, StructureType structType,
+                              Coordinate2D tileLocation, Direction direction,
+                              std::array<int, 5> cost);
   void upgradeToCity(Coordinate2D c, Direction d);
   void purchaseDevelopmentCard(int playerID, std::array<int, 5> c);
   void tradeResources(int playerID1, std::array<int, 5> resources1,

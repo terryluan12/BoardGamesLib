@@ -66,8 +66,6 @@ TEST_F(BoardFixture, BuildEdgeStructuresTest) {
   auto villageEdge = std::make_shared<Building>(0, StructureType::VILLAGE);
   auto roadEdge = std::make_shared<Road>(0);
   // Edge Villages
-  for (auto [i, j] : getAllVertexRepresentations(std::make_pair<Coordinate2D, Direction>({0, 0}, Direction::NORTHWEST)))
-    std::cout << i << j;
   board.buildStructure(villageEdge, {0, 0},
                        Direction::NORTHWEST);
   EXPECT_EQ((board.hasStructure({0, 0}, Direction::NORTHWEST,
@@ -183,7 +181,6 @@ TEST_F(BoardFixture, BuildAdjacentBuildingTest) {
   auto village1 = std::make_shared<Building>(0, StructureType::VILLAGE);
   auto village2 = std::make_shared<Building>(0, StructureType::VILLAGE);
   board.buildStructure(village1, {1, 1}, Direction::NORTHWEST);
-  std::cout << board << std::endl;
   EXPECT_THROW(
       {
         board.buildStructure(village2, {1, 0}, Direction::SOUTHEAST);
