@@ -13,7 +13,7 @@ protected:
               DevelopmentType::VICPOINT}};
 };
 
-TEST_F(BankFixture, DefaultConstructor) {
+TEST_F(BankFixture, DefaultConstructorTest) {
   std::array<int, 5> expected = {0, 0, 0, 0, 0};
   EXPECT_EQ(dBank.getResourceCount(), expected)
       << "Default resources should be 0";
@@ -21,7 +21,7 @@ TEST_F(BankFixture, DefaultConstructor) {
       << "Default developments should be 0";
 }
 
-TEST_F(BankFixture, AddResource) {
+TEST_F(BankFixture, AddResourceTest) {
   std::array<int, 5> expected = {5, 5, 5, 5, 5};
   dBank.addResources({5, 5, 5, 5, 5});
   EXPECT_EQ(dBank.getResourceCount(), expected)
@@ -37,7 +37,7 @@ TEST_F(BankFixture, AddResource) {
       << "Resources should be added correctly";
 }
 
-TEST_F(BankFixture, RemoveResource) {
+TEST_F(BankFixture, RemoveResourceTest) {
   std::array<int, 5> expected = {5, 6, 7, 8, 9};
   pBank.addResources({-5, -5, -5, -5, -5});
   EXPECT_EQ(pBank.getResourceCount(), expected)
@@ -53,14 +53,14 @@ TEST_F(BankFixture, RemoveResource) {
       << "Resources should be removed correctly";
 }
 
-TEST_F(BankFixture, RemoveResourceEmpty) {
+TEST_F(BankFixture, RemoveResourceEmptyTest) {
   EXPECT_THROW({ pBank.addResource(ResourceType::WOOD, -11); },
                InsufficientResourcesException);
   EXPECT_THROW({ dBank.addResource(ResourceType::WOOD, -1); },
                InsufficientResourcesException);
 }
 
-TEST_F(BankFixture, CanAfford) {
+TEST_F(BankFixture, CanAffordTest) {
   EXPECT_TRUE(pBank.canAfford({10, 11, 12, 13, 14}))
       << "Should be able to afford";
   EXPECT_TRUE(pBank.canAfford({2, 2, 2, 2, 2})) << "Should be able to afford";
@@ -70,7 +70,7 @@ TEST_F(BankFixture, CanAfford) {
       << "Should not be able to afford";
 }
 
-TEST_F(BankFixture, PopDevelopment) {
+TEST_F(BankFixture, PopDevelopmentTest) {
   DevelopmentType expected = DevelopmentType::VICPOINT;
   EXPECT_EQ(pBank.popDevelopment(), expected)
       << "Should pop the last development";

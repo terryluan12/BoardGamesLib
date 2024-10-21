@@ -46,12 +46,10 @@ if(BUILD_UNITTESTS)
     enable_testing()
     add_executable(Tests 
                   dogan/libs/Bank.test.cpp 
-                  dogan/libs/Cell.test.cpp
                   dogan/libs/Game.test.cpp
                   dogan/libs/Board.test.cpp)
     target_link_libraries(Tests gtest_main 
                   Bank 
-                  Cell
                   Game
                   ConfigBuilder
                   Board)
