@@ -4,22 +4,17 @@
 namespace Dogan {
 std::vector<std::pair<Coordinate2D, Direction>>
 getAllVertexRepresentations(std::pair<Coordinate2D, Direction> dvp) {
-  auto [c, d] = dvp;
-  if (d == Direction::EAST || d == Direction::WEST) {
+  auto [coordinates, direction] = dvp;
+  std::vector<std::pair<Coordinate2D, Direction>> corrVertices{{coordinates, direction}};
+  if (direction == Direction::EAST || direction == Direction::WEST) {
     throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
                                 "are invalid directions for edges");
   }
-  std::vector<std::pair<Coordinate2D, Direction>> corrVertices{{c, d}};
-  auto [d1, d2] = AxialHexDirection::getComplementaryDirections(d);
-  Direction dc1Dir = (d == Direction::NORTH || d == Direction::SOUTH)
-                         ? AxialHexDirection::getOppositeDirection(d1)
-                         : d;
-  Direction dc2Dir = AxialHexDirection::getOppositeDirection(d2);
-
-  Coordinate2D dc1 = c + AxialHexDirection::toCoordinate(dc1Dir);
-
-  corrVertices.emplace_back(dc1, d1);
-  corrVertices.emplace_back(dc1 + AxialHexDirection::toCoordinate(dc2Dir), d2);
+  auto [target1Dir, baseDir1, target2Dir, baseDir2] = AxialHexDirection::getComplementaryDirections(direction);
+  auto newCoord1 = coordinates + AxialHexDirection::toCoordinate(baseDir1);
+  auto newCoord2 = coordinates + AxialHexDirection::toCoordinate(baseDir2);
+  corrVertices.emplace_back(newCoord1, target1Dir);
+  corrVertices.emplace_back(newCoord2, target2Dir);
   return corrVertices;
 }
 

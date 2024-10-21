@@ -25,7 +25,7 @@ public:
   static const Coordinate2D toCoordinate(Direction d);
 
   static Direction getOppositeDirection(Direction d);
-  static std::pair<Direction, Direction>
+  static std::array<Direction, 4>
   getComplementaryDirections(Direction d);
 
   static const std::array<Direction, 6> getEdgeDirections(void);

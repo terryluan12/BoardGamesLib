@@ -9,14 +9,14 @@ Building::Building(int pid, StructureType t) : Structure(t) {
   }
 };
 void Building::upgradeToCity(void) {
-  if (this->type == StructureType::CITY) {
+  if (this->structureType == StructureType::CITY) {
     throw InvalidTypeException("Error: Already a City");
   }
-  this->type = StructureType::CITY;
+  this->structureType = StructureType::CITY;
 }
 
 int Building::getWorth() const {
-  switch (this->type) {
+  switch (this->structureType) {
   case StructureType::VILLAGE:
     return 1;
   case StructureType::CITY:

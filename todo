@@ -8,3 +8,6 @@ Add checking to see if a DoganPort is valid
 Deal with if Bank is bankrupt
 Figure out sizeDifferences in getDevelopments
 Seed/Mock the rengine to have the same result everytime in tests
+Fix printing of board by iterating through cell. Each cell should also have a number
+Determine whether checking should be done everywhere, or only in upper levels (perform performance testing) 
+ - for example whether checking should be done in game.upgradeCity, board.upgradeCity, or both

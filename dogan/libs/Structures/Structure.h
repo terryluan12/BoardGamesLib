@@ -14,8 +14,8 @@ public:
   virtual ~Structure(void){};
 
 protected:
-  Structure(StructureType t) : type(t){};
+  Structure(StructureType t) : structureType(t){};
   int playerID;
-  StructureType type;
+  StructureType structureType;
 };
 } // namespace Dogan

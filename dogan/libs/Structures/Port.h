@@ -10,7 +10,7 @@ public:
   Port(ResourceType r) : Structure(StructureType::PORT), resource(r){};
   const ResourceType getResource(void) const { return resource; };
   friend std::ostream &operator<<(std::ostream &os, Port const &dp) {
-    os << "Port " << dp.getResource() << ":\n";
+    os << dp.structureType << ": " << dp.getResource() << "\n";
     return os;
   };
 

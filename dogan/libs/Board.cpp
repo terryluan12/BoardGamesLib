@@ -132,28 +132,17 @@ bool Board::hasTile(const Coordinate2D c) const {
   return cells.find(c) != cells.end();
 }
 
-void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D coord,
-                           Direction dir, std::array<int, 5> c) {
+void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D c,
+                           Direction d) {
   switch (ds->getStructureType()) {
-  case (StructureType::CITY): {
-    std::shared_ptr<Building> db = std::dynamic_pointer_cast<Building>(ds);
-    if (!this->hasStructure(coord, dir, StructureType::VILLAGE)) {
-      throw NoVillageException("Error: Must build city on village");
-    }
-    for (auto [coordinate, direction] :
-         getAllVertexRepresentations({coord, dir})) {
-      if (this->cells.find(coordinate) == this->cells.end()) {
-        continue;
-      }
-      buildings.at(coordinate).at(direction)->upgradeToCity();
-      break;
-    }
-    break;
-  }
   case (StructureType::VILLAGE): {
+    if(this->hasStructure(c, d, StructureType::VILLAGE)){
+      throw SameStructureException("Error: Cannot build on existing structure");
+    }
     std::shared_ptr<Building> db = std::dynamic_pointer_cast<Building>(ds);
+    
     for (auto [coordinate, direction] :
-         getAllVertexRepresentations({coord, dir})) {
+         getAllVertexRepresentations({c, d})) {
       if (this->cells.find(coordinate) == this->cells.end()) {
         // If cell is outside map (e.g. the cell is on the edge of the map)
         continue;
@@ -166,12 +155,14 @@ void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D coord,
           .emplace(std::make_pair(direction,
                                   std::dynamic_pointer_cast<Building>(ds)));
     }
-
     break;
   }
   case (StructureType::ROAD): {
+    if(this->hasStructure(c, d, StructureType::ROAD)){
+      throw SameStructureException("Error: Cannot build on existing structure");
+    }
     for (auto [coordinate, direction] :
-         getAllEdgeRepresentations({coord, dir})) {
+         getAllEdgeRepresentations({c, d})) {
       if (this->cells.find(coordinate) == this->cells.end()) {
         continue;
       }
@@ -184,22 +175,39 @@ void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D coord,
     }
     break;
   }
-  case (StructureType::PORT):
-    throw InvalidTypeException("Error: Cannot build a port");
+  default:
+    throw InvalidTypeException("Error: Invalid type. Must be a village or a road. City must be upgraded from upgradeToCity function");
   }
+}
+
+void Board::upgradeToCity(Coordinate2D c, Direction d) {
+  if (!this->hasStructure(c, d, StructureType::VILLAGE)) {
+    throw NoVillageException("Error: Must build city on village");
+  }
+  buildings.at(c).at(d)->upgradeToCity();
 }
 
 void Board::moveRobber(Coordinate2D nl) { robberLocation = nl; }
 
 std::ostream &operator<<(std::ostream &os, Board const &db) {
-  for (const auto &c : db.cells) {
-    os << c.second;
+  for (const auto &[coordinate, cell] : db.cells) {
+    os << coordinate << ": " << *cell << "\n";
   }
-  // size_t i = 1;
-  // for (auto &pl : db.getPorts()) {
-  //   os << pl;
-  //   ++i;
-  // }
+  for(const auto &[coordinate, map] : db.buildings){
+    for(const auto &[direction, building] : map){
+      os << "Building " << coordinate << "-" << direction << ": " << *building << "\n";
+    }
+  }
+  for(const auto &[coordinate, map] : db.roads){
+    for(const auto &[direction, road] : map){
+      os << "Road " << coordinate << "-" << direction << ": " << *road << "\n";
+    }
+  }
+  for(const auto &[coordinate, map] : db.ports){
+    for(const auto &[direction, port] : map){
+      os << "Port " << coordinate << "-" << direction << ": " << *port << "\n";
+    }
+  }
   return os;
 }
 } // namespace Dogan

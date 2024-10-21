@@ -24,6 +24,7 @@ const Direction AxialHexDirection::fromString(std::string d) {
     throw NoSuchDirection("Error: Invalid Direction");
 }
 
+
 const Coordinate2D AxialHexDirection::toCoordinate(Direction d) {
   switch (d) {
   case Direction::NORTHEAST:
@@ -66,21 +67,21 @@ Direction AxialHexDirection::getOppositeDirection(Direction d) {
   }
 }
 
-std::pair<Direction, Direction>
+std::array<Direction, 4>
 AxialHexDirection::getComplementaryDirections(Direction d) {
   switch (d) {
   case Direction::NORTH:
-    return std::make_pair(Direction::SOUTHEAST, Direction::SOUTHWEST);
+    return {Direction::SOUTHEAST, Direction::NORTHWEST, Direction::SOUTHWEST, Direction::NORTHEAST};
   case Direction::NORTHEAST:
-    return std::make_pair(Direction::SOUTH, Direction::NORTHWEST);
+    return {Direction::SOUTH, Direction::NORTHEAST, Direction::NORTHWEST, Direction::EAST};
   case Direction::SOUTHEAST:
-    return std::make_pair(Direction::NORTH, Direction::SOUTHWEST);
+    return {Direction::SOUTHWEST, Direction::EAST, Direction::NORTH, Direction::SOUTHEAST};
   case Direction::SOUTH:
-    return std::make_pair(Direction::NORTHEAST, Direction::NORTHWEST);
+    return {Direction::NORTHWEST, Direction::SOUTHEAST, Direction::NORTHEAST, Direction::SOUTHWEST};
   case Direction::SOUTHWEST:
-    return std::make_pair(Direction::NORTH, Direction::SOUTHEAST);
+    return {Direction::NORTH, Direction::SOUTHWEST, Direction::SOUTHEAST, Direction::WEST};
   case Direction::NORTHWEST:
-    return std::make_pair(Direction::SOUTH, Direction::NORTHEAST);
+    return {Direction::NORTHEAST, Direction::WEST, Direction::SOUTH, Direction::NORTHWEST};
   default:
     throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
                                 "are invalid directions for edges");
@@ -112,7 +113,7 @@ std::ostream &operator<<(std::ostream &os, Direction const &d) {
     os << "NorthEast";
     break;
   case Direction::EAST:
-    os << "NorthEast";
+    os << "East";
     break;
   case Direction::SOUTHEAST:
     os << "SouthEast";
@@ -124,7 +125,7 @@ std::ostream &operator<<(std::ostream &os, Direction const &d) {
     os << "SouthWest";
     break;
   case Direction::WEST:
-    os << "NorthWest";
+    os << "West";
     break;
   case Direction::NORTHWEST:
     os << "NorthWest";

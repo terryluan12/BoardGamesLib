@@ -31,7 +31,8 @@ public:
 
   // Game moves
   void buildStructure(std::shared_ptr<Structure> ds, Coordinate2D coord,
-                      Direction dir, std::array<int, 5> c);
+                      Direction dir);
+  void upgradeToCity(Coordinate2D c, Direction d);
   void moveRobber(Coordinate2D nl);
 
   friend std::ostream &operator<<(std::ostream &os, Board const &db);

@@ -66,9 +66,15 @@ void Game::buildStructure(int playerID, StructureType structType,
     throw InvalidTypeException("Error: Cannot build a port");
   }
 
-  board.buildStructure(element, tileLocation, direction, cost);
+  board.buildStructure(element, tileLocation, direction);
   players.at(playerID).buildStructure(element, cost);
   bank.addResources(cost);
+}
+
+void Game::upgradeToCity(Coordinate2D c, Direction d) {
+  if (!hasStructure(c, d, StructureType::VILLAGE))
+    throw NoVillageException("Error: Must build city on village");
+  board.upgradeToCity(c, d);
 }
 
 void Game::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
