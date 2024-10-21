@@ -2,6 +2,8 @@
 #include "ElementHelpers.h"
 #include "enums.h"
 #include <memory>
+#include "AxialHexDirection.h"
+#include <iostream>
 
 namespace Dogan {
 Board::Board(Config config) {
@@ -140,7 +142,22 @@ void Board::buildStructure(std::shared_ptr<Structure> ds, Coordinate2D c,
       throw SameStructureException("Error: Cannot build on existing structure");
     }
     std::shared_ptr<Building> db = std::dynamic_pointer_cast<Building>(ds);
-    
+    // Check for proximity
+    for(auto [coordinate, direction] :
+         getAllVertexRepresentations({c, d})) {
+      if (this->cells.find(coordinate) == this->cells.end()) {
+        // If cell is outside map (e.g. the cell is on the edge of the map)
+        continue;
+      }
+      if(buildings.find(coordinate) != buildings.end()){
+        const auto cwDir = AxialHexDirection::vertexDirections[((AxialHexDirection::getVertexIndex(direction)+1)%7)];
+        const auto ccwDir = AxialHexDirection::vertexDirections[((AxialHexDirection::getVertexIndex(direction)-1+7)%7)];
+        std::cout << "For " << coordinate << "-" << direction << " checking " << cwDir << " and " << ccwDir << std::endl;
+        if(hasBuilding(coordinate, cwDir) || hasBuilding(coordinate, ccwDir)){
+          throw AdjacentBuildingException("Error: Building too close to another building");
+        }
+      }
+    }
     for (auto [coordinate, direction] :
          getAllVertexRepresentations({c, d})) {
       if (this->cells.find(coordinate) == this->cells.end()) {

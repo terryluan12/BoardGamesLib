@@ -1,9 +1,18 @@
 #include "AxialHexDirection.h"
 #include "Exceptions.h"
+#include <algorithm>
 
 using Direction = AxialHexDirection::Direction;
 
-const Direction AxialHexDirection::fromString(std::string d) {
+const std::array<Direction, 6> AxialHexDirection::edgeDirections{ Direction::NORTHWEST, Direction::NORTHEAST, Direction::EAST,
+                                                                  Direction::SOUTHEAST, Direction::SOUTHWEST, Direction::WEST};
+const std::array<Direction, 6> AxialHexDirection::vertexDirections{ Direction::NORTH, Direction::NORTHEAST, Direction::SOUTHEAST,
+                                                                    Direction::SOUTH, Direction::SOUTHWEST, Direction::NORTHWEST};
+const std::array<Direction, 8> AxialHexDirection::allDirections{Direction::NORTH,     Direction::NORTHEAST, Direction::EAST,
+                                                                Direction::SOUTHEAST, Direction::SOUTH,     Direction::SOUTHWEST,
+                                                                Direction::WEST,      Direction::NORTHWEST};
+
+Direction AxialHexDirection::fromString(std::string d) {
   if (d == "N")
     return Direction::NORTH;
   else if (d == "NE")
@@ -24,8 +33,7 @@ const Direction AxialHexDirection::fromString(std::string d) {
     throw NoSuchDirection("Error: Invalid Direction");
 }
 
-
-const Coordinate2D AxialHexDirection::toCoordinate(Direction d) {
+Coordinate2D AxialHexDirection::toCoordinate(Direction d) {
   switch (d) {
   case Direction::NORTHEAST:
     return {1, -1};
@@ -45,63 +53,33 @@ const Coordinate2D AxialHexDirection::toCoordinate(Direction d) {
 }
 
 Direction AxialHexDirection::getOppositeDirection(Direction d) {
-  switch (d) {
-  case Direction::NORTH:
-    return Direction::SOUTH;
-  case Direction::NORTHEAST:
-    return Direction::SOUTHWEST;
-  case Direction::EAST:
-    return Direction::WEST;
-  case Direction::SOUTHEAST:
-    return Direction::NORTHWEST;
-  case Direction::SOUTH:
-    return Direction::NORTH;
-  case Direction::SOUTHWEST:
-    return Direction::NORTHEAST;
-  case Direction::WEST:
-    return Direction::EAST;
-  case Direction::NORTHWEST:
-    return Direction::SOUTHEAST;
-  default:
-    throw("Unexpected Error: Reached end of getOppositeDirection");
-  }
+  return static_cast<Direction>((static_cast<int>(d) + 4) % 8);
 }
 
 std::array<Direction, 4>
 AxialHexDirection::getComplementaryDirections(Direction d) {
-  switch (d) {
-  case Direction::NORTH:
-    return {Direction::SOUTHEAST, Direction::NORTHWEST, Direction::SOUTHWEST, Direction::NORTHEAST};
-  case Direction::NORTHEAST:
-    return {Direction::SOUTH, Direction::NORTHEAST, Direction::NORTHWEST, Direction::EAST};
-  case Direction::SOUTHEAST:
-    return {Direction::SOUTHWEST, Direction::EAST, Direction::NORTH, Direction::SOUTHEAST};
-  case Direction::SOUTH:
-    return {Direction::NORTHWEST, Direction::SOUTHEAST, Direction::NORTHEAST, Direction::SOUTHWEST};
-  case Direction::SOUTHWEST:
-    return {Direction::NORTH, Direction::SOUTHWEST, Direction::SOUTHEAST, Direction::WEST};
-  case Direction::NORTHWEST:
-    return {Direction::NORTHEAST, Direction::WEST, Direction::SOUTH, Direction::NORTHWEST};
-  default:
-    throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
-                                "are invalid directions for edges");
+  int vertexIndex = getVertexIndex(d);
+  Direction firstDirection = vertexDirections[(vertexIndex+2)%6];
+  Direction firstTravelDirection = edgeDirections[vertexIndex];
+  Direction secondDirection = vertexDirections[(vertexIndex+4)%6];
+  Direction secondTravelDirection = edgeDirections[(vertexIndex+1)%6];
+  return {firstDirection, firstTravelDirection, secondDirection, secondTravelDirection};
+}
+
+const int AxialHexDirection::getEdgeIndex(Direction d) {
+  if(d == Direction::NORTH || d == Direction::SOUTH){
+    throw std::invalid_argument("Error: Invalid Direction. Edge Cannot be North or South");
   }
+  auto it = std::find(edgeDirections.begin(), edgeDirections.end(), d);
+  return std::distance(edgeDirections.begin(), it);
 }
 
-const std::array<Direction, 6> AxialHexDirection::getEdgeDirections(void) {
-  return {Direction::NORTHEAST, Direction::EAST, Direction::SOUTHEAST,
-          Direction::SOUTHWEST, Direction::WEST, Direction::NORTHWEST};
-}
-
-const std::array<Direction, 6> AxialHexDirection::getVertexDirections(void) {
-  return {Direction::NORTH, Direction::NORTHEAST, Direction::SOUTHEAST,
-          Direction::SOUTH, Direction::SOUTHWEST, Direction::NORTHWEST};
-}
-
-const std::array<Direction, 8> AxialHexDirection::getAllDirections(void) {
-  return {Direction::NORTH,     Direction::NORTHEAST, Direction::EAST,
-          Direction::SOUTHEAST, Direction::SOUTH,     Direction::SOUTHWEST,
-          Direction::WEST,      Direction::NORTHWEST};
+const int AxialHexDirection::getVertexIndex(Direction d) {
+  if(d == Direction::EAST || d == Direction::WEST){
+    throw std::invalid_argument("Error: Invalid Direction. Vertex Cannot be East or West");
+  }
+  auto it = std::find(vertexDirections.begin(), vertexDirections.end(), d);
+  return std::distance(vertexDirections.begin(), it);
 }
 
 std::ostream &operator<<(std::ostream &os, Direction const &d) {

@@ -161,7 +161,7 @@ TEST_F(BoardFixture, EmptyStructureTest) {
       false);
 }
 
-TEST_F(BoardFixture, upgradeEmptyTest) {
+TEST_F(BoardFixture, UpgradeEmptyTest) {
   EXPECT_THROW(
       {
         board.upgradeToCity({1, 1}, Direction::NORTHWEST);
@@ -169,7 +169,7 @@ TEST_F(BoardFixture, upgradeEmptyTest) {
       NoVillageException);
 }
 
-TEST_F(BoardFixture, upgradeCityTest) {
+TEST_F(BoardFixture, UpgradeCityTest) {
   board.buildStructure(std::make_shared<Building>(0, StructureType::VILLAGE), {1, 1}, Direction::NORTHWEST);
   board.upgradeToCity({1, 1}, Direction::NORTHWEST);
   EXPECT_THROW(
@@ -177,4 +177,32 @@ TEST_F(BoardFixture, upgradeCityTest) {
         board.upgradeToCity({1, 1}, Direction::NORTHWEST);
       },
       NoVillageException);
+}
+
+TEST_F(BoardFixture, BuildAdjacentBuildingTest) {
+  auto village1 = std::make_shared<Building>(0, StructureType::VILLAGE);
+  auto village2 = std::make_shared<Building>(0, StructureType::VILLAGE);
+  board.buildStructure(village1, {1, 1}, Direction::NORTHWEST);
+  std::cout << board << std::endl;
+  EXPECT_THROW(
+      {
+        board.buildStructure(village2, {1, 0}, Direction::SOUTHEAST);
+      },
+      AdjacentBuildingException);
+  
+  EXPECT_THROW(
+      {
+        board.buildStructure(village2, {0, 1}, Direction::SOUTHEAST);
+      },
+      AdjacentBuildingException);
+  EXPECT_THROW(
+      {
+        board.buildStructure(village2, {0, 2}, Direction::NORTH);
+      },
+      AdjacentBuildingException);
+  EXPECT_THROW(
+      {
+        board.buildStructure(village2, {2, 0}, Direction::SOUTHWEST);
+      },
+      AdjacentBuildingException);
 }
