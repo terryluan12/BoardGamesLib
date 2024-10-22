@@ -9,9 +9,6 @@ Building::Building(int pid, StructureType t) : Structure(t) {
   }
 };
 void Building::upgradeToCity(void) {
-  if (this->structureType == StructureType::CITY) {
-    throw InvalidTypeException("Error: Already a City");
-  }
   this->structureType = StructureType::CITY;
 }
 

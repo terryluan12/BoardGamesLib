@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Node.h"
 #include "enums.h"
 #include <memory>
 #include <vector>
 
 namespace Dogan {
-class Structure {
+class Structure : protected Node {
 public:
   StructureType getStructureType(void) const;
   void setPlayerID(int pid);

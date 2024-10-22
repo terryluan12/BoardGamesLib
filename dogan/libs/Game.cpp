@@ -81,7 +81,7 @@ void Game::buildAdjacentStructure(int playerID, StructureType structType,
     for(const auto &[localCoordinate, localDirection] : getAllEdgeRepresentations({tileLocation, direction})){
       for(Direction adjacentDirection : AxialHexDirection::getAdjacentEdgeDirections(localDirection)){
         if(hasStructure(localCoordinate, adjacentDirection, StructureType::ROAD)){
-          if(board.getRoad(localCoordinate, adjacentDirection).getPlayerID() != playerID){
+          if(board.getRoad(localCoordinate, adjacentDirection)->getPlayerID() != playerID){
             hasAdjacentRoad = false;
             break;
           }
@@ -96,14 +96,14 @@ void Game::buildAdjacentStructure(int playerID, StructureType structType,
       Direction d1 = AxialHexDirection::edgeDirections[edgeIndex];
       Direction d2 = AxialHexDirection::edgeDirections[(edgeIndex+1)%6];
       if(hasStructure(localCoordinate, d1, StructureType::ROAD)){
-          if(board.getRoad(localCoordinate, d1).getPlayerID() != playerID){
+          if(board.getRoad(localCoordinate, d1)->getPlayerID() != playerID){
             hasAdjacentRoad = false;
             break;
           }
           hasAdjacentRoad = true;
       }
       if(hasStructure(localCoordinate, d2, StructureType::ROAD)) {
-          if(board.getRoad(localCoordinate, d2).getPlayerID() != playerID){
+          if(board.getRoad(localCoordinate, d2)->getPlayerID() != playerID){
             hasAdjacentRoad = false;
             break;
           }
@@ -160,7 +160,7 @@ void Game::useRobber(int playerID, Coordinate2D tileLocation,
 
   board.moveRobber(tileLocation);
 
-  int stolenPID = board.getBuilding(tileLocation, direction).getPlayerID();
+  int stolenPID = board.getBuilding(tileLocation, direction)->getPlayerID();
   stealResource(playerID, stolenPID);
 }
 
