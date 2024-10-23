@@ -4,6 +4,7 @@
 #include "enums.h"
 #include "Structure.h"
 #include "Building.h"
+#include "Node.h"
 #include "Road.h"
 #include "Port.h"
 #include <memory>
@@ -18,13 +19,15 @@ public:
   ResourceType getResource(void) const;
 
   bool hasAdjacentBuildings(Direction d) const;
-  bool hasConnectedRoads(Direction d) const;
+  bool hasOwnConnectedRoads(int pid, Direction d, StructureType st) const;
+  void buildStructure(int pid, Direction direction, std::shared_ptr<Structure> ds, bool mustBeAdjacent);
+  void addAdjacentCell(Direction direction, std::shared_ptr<Cell> cell);
   bool hasStructure(Direction d, StructureType st) const;
-  void addStructure(Direction d, StructureType st,
-                    std::shared_ptr<Structure> ds);
+
   bool hasBuilding(Direction d) const;
   std::shared_ptr<Building> getBuilding(Direction d) const;
   std::vector<std::shared_ptr<Building>> getBuildings(void) const;
+
   
   bool hasRoad(Direction d) const;
   std::shared_ptr<Road> getRoad(Direction d) const;
@@ -34,10 +37,10 @@ public:
   friend std::ostream &operator<<(std::ostream &os, Cell const &dc);
 
 private:
-
+  std::map<Direction, std::shared_ptr<Cell>> adjacentCells;
   std::unordered_map<Direction, std::shared_ptr<Building>> buildings;
   std::unordered_map<Direction, std::shared_ptr<Road>> roads;
-  std::map<Coordinate2D, std::shared_ptr<Port>> ports;
+  std::map<Direction, std::shared_ptr<Port>> ports;
   Coordinate2D coordinate;
   ResourceType type;
 };

@@ -17,7 +17,8 @@ public:
     SOUTH = 4,
     SOUTHWEST = 5,
     WEST = 6,
-    NORTHWEST = 7
+    NORTHWEST = 7,
+    NONE = 8
   };
   static const std::array<Direction, 6> edgeDirections;
   static const std::array<Direction, 6> vertexDirections;
@@ -32,9 +33,17 @@ public:
   static std::array<Direction, 4>
   getComplementaryDirections(Direction d);
   static std::array<Direction, 2>
-  getAdjacentEdgeDirections(Direction d);
+  getLocalAdjacentEdgeToEdgeDirections(Direction d);
+  static std::array<std::array<Direction, 2>, 4>
+  getDistantAdjacentEdgeToEdgeDirections(Direction d);
   static std::array<Direction, 2>
-  getAdjacentVertexDirections(Direction d);
+  getAdjacentEdgeToVertexDirections(Direction d);
+  static std::array<Direction, 2>
+  getAdjacentVertexToVertexDirections(Direction d);
+  static std::array<std::array<Direction, 2>, 2>
+  getSecondDegreeVertex(Direction d);
+  static std::array<std::array<Direction, 2>, 2>
+  getEdgeFromVertexDirection(Direction d);
 
   static const int getEdgeIndex(Direction d);
   static const int getVertexIndex(Direction d);

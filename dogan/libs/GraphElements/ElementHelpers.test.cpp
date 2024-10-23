@@ -6,52 +6,57 @@
 using namespace Dogan;
 
 TEST(ElementHelpersTest, getNorthVertexRepresentationsTest) {
-  // Test NORTH
-  std::pair<Coordinate2D, Direction> dvp = {{1, 1}, Direction::NORTH};
-  std::vector<std::pair<Coordinate2D, Direction>> expected = {
-      {{1, 1}, Direction::NORTH}, {{1, 0}, Direction::SOUTHEAST},
-      {{2, 0}, Direction::SOUTHWEST}};
-  auto representations = getAllVertexRepresentations(dvp);
-  EXPECT_THAT(expected, ::testing::UnorderedElementsAreArray(representations));
+  Direction d = Direction::NORTH;
+  std::array<std::pair<Direction, Direction>, 3> expected = {{
+      {Direction::NONE, Direction::NORTH}, 
+      {Direction::NORTHWEST, Direction::SOUTHEAST},
+      {Direction::NORTHEAST, Direction::SOUTHWEST}}};
+  auto representations = getAllVertexRepresentations(d);
+  EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
 }
 TEST(ElementHelpersTest, getNorthEastVertexRepresentationsTest) {
-  // Test NORTH
-  std::pair<Coordinate2D, Direction> dvp = {{1, 1}, Direction::NORTHEAST};
-  std::vector<std::pair<Coordinate2D, Direction>> expected = {
-      {{1, 1}, Direction::NORTHEAST}, {{2, 0}, Direction::SOUTH},
-      {{2, 1}, Direction::NORTHWEST}};
-  auto representations = getAllVertexRepresentations(dvp);
-  EXPECT_THAT(expected, ::testing::UnorderedElementsAreArray(representations));
+  Direction d = Direction::NORTHEAST;
+  std::array<std::pair<Direction, Direction>, 3> expected = {{
+      {Direction::NONE, Direction::NORTHEAST}, 
+      {Direction::NORTHEAST, Direction::SOUTH},
+      {Direction::EAST, Direction::NORTHWEST}}};
+  auto representations = getAllVertexRepresentations(d);
+  EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
 }
 TEST(ElementHelpersTest, getSouthEastVertexRepresentationsTest) {
-  std::pair<Coordinate2D, Direction> dvp = {{1, 1}, Direction::SOUTHEAST};
-  std::vector<std::pair<Coordinate2D, Direction>> expected = {
-      {{2, 1}, Direction::SOUTHWEST}, {{1, 1}, Direction::SOUTHEAST},
-      {{1, 2}, Direction::NORTH}};
-  auto representations = getAllVertexRepresentations(dvp);
-  EXPECT_THAT(expected, ::testing::UnorderedElementsAreArray(representations));
+  Direction d = Direction::SOUTHEAST;
+  std::array<std::pair<Direction, Direction>, 3> expected = {{
+      {Direction::NONE, Direction::SOUTHEAST}, 
+      {Direction::SOUTHEAST, Direction::NORTH},
+      {Direction::EAST, Direction::SOUTHWEST}
+      }};
+  auto representations = getAllVertexRepresentations(d);
+  EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
 }
 TEST(ElementHelpersTest, getSouthVertexRepresentationsTest) {
-  std::pair<Coordinate2D, Direction> dvp = {{1, 1}, Direction::SOUTH};
-  std::vector<std::pair<Coordinate2D, Direction>> expected = {
-      {{0, 2}, Direction::NORTHEAST}, {{1, 1}, Direction::SOUTH},
-      {{1, 2}, Direction::NORTHWEST}};
-  auto representations = getAllVertexRepresentations(dvp);
-  EXPECT_THAT(expected, ::testing::UnorderedElementsAreArray(representations));
+  Direction d = Direction::SOUTH;
+  std::array<std::pair<Direction, Direction>, 3> expected = {{
+      {Direction::NONE, Direction::SOUTH}, 
+      {Direction::SOUTHEAST, Direction::NORTHWEST}, 
+      {Direction::SOUTHWEST, Direction::NORTHEAST}}};
+  auto representations = getAllVertexRepresentations(d);
+  EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
 }
 TEST(ElementHelpersTest, getSouthWestVertexRepresentationsTest) {
-  std::pair<Coordinate2D, Direction> dvp = {{1, 1}, Direction::SOUTHWEST};
-  std::vector<std::pair<Coordinate2D, Direction>> expected = {
-      {{0, 2}, Direction::NORTH}, {{1, 1}, Direction::SOUTHWEST},
-      {{0, 1}, Direction::SOUTHEAST}};
-  auto representations = getAllVertexRepresentations(dvp);
-  EXPECT_THAT(expected, ::testing::UnorderedElementsAreArray(representations));
+  Direction d = Direction::SOUTHWEST;
+  std::array<std::pair<Direction, Direction>, 3> expected = {{
+      {Direction::NONE, Direction::SOUTHWEST},
+      {Direction::SOUTHWEST, Direction::NORTH},
+      {Direction::WEST, Direction::SOUTHEAST}}};
+  auto representations = getAllVertexRepresentations(d);
+  EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
 }
 TEST(ElementHelpersTest, getNorthWestVertexRepresentationsTest) {
-  std::pair<Coordinate2D, Direction> dvp = {{1, 1}, Direction::NORTHWEST};
-  std::vector<std::pair<Coordinate2D, Direction>> expected = {
-      {{1, 0}, Direction::SOUTH}, {{1, 1}, Direction::NORTHWEST},
-      {{0, 1}, Direction::NORTHEAST}};
-  auto representations = getAllVertexRepresentations(dvp);
-  EXPECT_THAT(expected, ::testing::UnorderedElementsAreArray(representations));
+  Direction d = Direction::NORTHWEST;
+  std::array<std::pair<Direction, Direction>, 3> expected = {{
+      {Direction::NONE, Direction::NORTHWEST},
+      {Direction::NORTHWEST, Direction::SOUTH}, 
+      {Direction::WEST, Direction::NORTHEAST}}};
+  auto representations = getAllVertexRepresentations(d);
+  EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
 }

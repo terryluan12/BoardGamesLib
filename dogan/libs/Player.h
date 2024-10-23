@@ -15,7 +15,6 @@ public:
 
   // Game Functions
   void giveDevelopment(DevelopmentType d);
-  void buildStructure(std::shared_ptr<Structure> s, std::array<int, 5> c);
 
   int getVictoryPoints(void) const;
   void setVictoryPoints(const int vp);
@@ -40,11 +39,8 @@ private:
   std::array<int, 3> availableStructures;
   std::array<int, 5> resources;
   std::array<int, 5> developments;
-  std::vector<std::shared_ptr<Building>> buildings;
-  std::vector<std::shared_ptr<Road>> roads;
   int victoryPoints;
   int soldierCount;
   void addDevelopment(DevelopmentType d);
-  void buildStructure(std::shared_ptr<Structure> s);
 };
 } // namespace Dogan

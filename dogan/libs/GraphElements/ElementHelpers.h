@@ -4,8 +4,8 @@
 #include "enums.h"
 
 namespace Dogan {
-std::vector<std::pair<Coordinate2D, Direction>>
-getAllVertexRepresentations(std::pair<Coordinate2D, Direction> dvp);
-std::vector<std::pair<Coordinate2D, Direction>>
-getAllEdgeRepresentations(std::pair<Coordinate2D, Direction> dep);
+std::array<std::pair<Direction, Direction>, 3>
+getAllVertexRepresentations(Direction d);
+std::array<std::pair<Direction, Direction>, 2>
+getAllEdgeRepresentations(Direction d);
 } // namespace Dogan

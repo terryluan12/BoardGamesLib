@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace Dogan {
-class Structure : protected Node {
+class Structure : public Node {
 public:
   StructureType getStructureType(void) const;
   void setPlayerID(int pid);

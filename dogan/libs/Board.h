@@ -31,8 +31,8 @@ public:
   bool hasTile(const Coordinate2D c) const;
 
   // Game moves
-  void buildStructure(std::shared_ptr<Structure> ds, Coordinate2D coord,
-                      Direction dir);
+  void buildStructure(int pid, std::shared_ptr<Structure> ds, Coordinate2D coord,
+                      Direction dir, bool mustBeAdjacent);
   void upgradeToCity(Coordinate2D c, Direction d);
   void moveRobber(Coordinate2D nl);
 
@@ -44,5 +44,6 @@ private:
   std::map<Coordinate2D, std::shared_ptr<Cell>> tiles;
   std::map<pip, std::vector<std::shared_ptr<Cell>>> numbers;
   std::mt19937 rengine;
+  void checkCoordinateValid(Coordinate2D coord) const;
 };
 } // namespace Dogan

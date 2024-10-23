@@ -7,18 +7,6 @@ Player::Player(int pid, std::array<int, 3> as)
       soldierCount(0){};
 
 void Player::giveDevelopment(DevelopmentType d) { addDevelopment(d); }
-void Player::buildStructure(std::shared_ptr<Structure> s,
-                            std::array<int, 5> c) {
-  if (availableStructures[static_cast<int>(s->getStructureType())] <= 0) {
-    throw InsufficientStructuresException(
-        "Error: Player does not have enough structures");
-  }
-  std::array<int, 5> cost;
-  std::transform(c.begin(), c.end(), cost.begin(), [](int x) { return -x; });
-  inventory.addResources(cost);
-  buildStructure(s);
-  availableStructures[static_cast<int>(s->getStructureType())] -= 1;
-}
 
 // Victory Point Functions
 int Player::getVictoryPoints(void) const { return victoryPoints; }
@@ -49,20 +37,6 @@ void Player::addDevelopment(DevelopmentType d) {
     victoryPoints += 1;
   }
   inventory.addDevelopment(d);
-}
-void Player::buildStructure(std::shared_ptr<Structure> s) {
-  switch (s->getStructureType()) {
-  case (StructureType::VILLAGE):
-  case (StructureType::CITY):
-    buildings.emplace_back(std::dynamic_pointer_cast<Building>(s));
-    victoryPoints += 1;
-    break;
-  case (StructureType::ROAD):
-    roads.emplace_back(std::dynamic_pointer_cast<Road>(s));
-    break;
-  case (StructureType::PORT):
-    throw InvalidTypeException("Error: Cannot build a port");
-  }
 }
 
 std::ostream &operator<<(std::ostream &os, const Player &p) {

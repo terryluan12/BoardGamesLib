@@ -49,17 +49,15 @@ void Game::distributeResources(int numberRolled) {
 
 void Game::buildStructure(int playerID, StructureType structType,
                           Coordinate2D tileLocation, Direction direction,
-                          std::array<int, 5> cost) {
+                          std::array<int, 5> cost, bool mustBeAdjacent) {
   std::shared_ptr<Structure> element;
   checkPlayerExists(playerID);
   checkPlayerCanAfford(playerID, cost);
   checkCoordinateValid(tileLocation);
-  checkStructureExists(tileLocation, direction, structType);
-
   switch (structType) {
   case StructureType::VILLAGE:
-  case StructureType::CITY:
     element = std::make_shared<Building>(Building(playerID, structType));
+  case StructureType::CITY:
     break;
   case StructureType::ROAD:
     element = std::make_shared<Road>(Road(playerID));
@@ -67,61 +65,14 @@ void Game::buildStructure(int playerID, StructureType structType,
   case StructureType::PORT:
     throw InvalidTypeException("Error: Cannot build a port");
   }
-
-  board.buildStructure(element, tileLocation, direction);
-  players.at(playerID).buildStructure(element, cost);
+  
+  if(structType == StructureType::CITY) {
+    board.upgradeToCity(tileLocation, direction); 
+  }
+  else {
+    board.buildStructure(playerID, element, tileLocation, direction, mustBeAdjacent);
+  }
   bank.addResources(cost);
-}
-
-void Game::buildAdjacentStructure(int playerID, StructureType structType,
-                            Coordinate2D tileLocation, Direction direction,
-                            std::array<int, 5> cost) {
-  bool hasAdjacentRoad = false;
-  if(structType == StructureType::ROAD){
-    for(const auto &[localCoordinate, localDirection] : getAllEdgeRepresentations({tileLocation, direction})){
-      for(Direction adjacentDirection : AxialHexDirection::getAdjacentEdgeDirections(localDirection)){
-        if(hasStructure(localCoordinate, adjacentDirection, StructureType::ROAD)){
-          if(board.getRoad(localCoordinate, adjacentDirection)->getPlayerID() != playerID){
-            hasAdjacentRoad = false;
-            break;
-          }
-          hasAdjacentRoad = true;
-        }
-      }
-    }
-  }
-  else if(structType == StructureType::VILLAGE){
-    for(const auto &[localCoordinate, localDirection] : getAllVertexRepresentations({tileLocation, direction})){
-      int edgeIndex = AxialHexDirection::getVertexIndex(localDirection);
-      Direction d1 = AxialHexDirection::edgeDirections[edgeIndex];
-      Direction d2 = AxialHexDirection::edgeDirections[(edgeIndex+1)%6];
-      if(hasStructure(localCoordinate, d1, StructureType::ROAD)){
-          if(board.getRoad(localCoordinate, d1)->getPlayerID() != playerID){
-            hasAdjacentRoad = false;
-            break;
-          }
-          hasAdjacentRoad = true;
-      }
-      if(hasStructure(localCoordinate, d2, StructureType::ROAD)) {
-          if(board.getRoad(localCoordinate, d2)->getPlayerID() != playerID){
-            hasAdjacentRoad = false;
-            break;
-          }
-          hasAdjacentRoad = true;
-
-      }
-    }
-  }
-  if(!hasAdjacentRoad){
-    throw NoAdjacentRoadException("Error: Must build adjacent to road");
-  }
-  buildStructure(playerID, structType, tileLocation, direction, cost);
-}
-
-void Game::upgradeToCity(Coordinate2D c, Direction d) {
-  if (!hasStructure(c, d, StructureType::VILLAGE))
-    throw NoVillageException("Error: Must build city on village");
-  board.upgradeToCity(c, d);
 }
 
 void Game::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
@@ -200,12 +151,6 @@ void Game::useRoadDevelopmentCard(int playerID,
                                   std::array<Direction, 2> directions) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::BUILDROAD);
-
-  for (int i = 0; i < 2; i++) {
-    if (board.hasStructure(tileLocations[i], directions[i],
-                           StructureType::ROAD))
-      throw SameStructureException("Error: Road already exists");
-  }
   for (int i = 0; i < 2; i++) {
     buildStructure(playerID, StructureType::ROAD, tileLocations[i],
                    directions[i], {0, 0, 0, 0, 0});
