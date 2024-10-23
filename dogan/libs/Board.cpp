@@ -1,8 +1,7 @@
 #include "Board.h"
-#include "ElementHelpers.h"
+#include "AxialHexDirection.h"
 #include "enums.h"
 #include <memory>
-#include "AxialHexDirection.h"
 
 namespace Dogan {
 Board::Board(Config config) {
@@ -33,12 +32,13 @@ Board::Board(Config config) {
   }
 
   // Populate adjacent cells
-  for (const auto& [coords, tile] : this->tiles) {
-    for(auto d : AxialHexDirection::edgeDirections){
-      if(!hasTile(coords + AxialHexDirection::toCoordinate(d))){
+  for (const auto &[coords, tile] : this->tiles) {
+    for (auto d : AxialHexDirection::edgeDirections) {
+      if (!hasTile(coords + AxialHexDirection::toCoordinate(d))) {
         continue;
       }
-      tile->addAdjacentCell(d, this->tiles.at(coords + AxialHexDirection::toCoordinate(d)));
+      tile->addAdjacentCell(
+          d, this->tiles.at(coords + AxialHexDirection::toCoordinate(d)));
     }
   }
 
@@ -46,12 +46,15 @@ Board::Board(Config config) {
   for (size_t i = 0; i < config.getPortLocations().size(); i++) {
     const auto portVertices = portLocations[i];
     for (auto [coordinate, d] : portVertices) {
-      for (auto [travelDirection, vertexDirection] : getAllVertexRepresentations(d)) {
-        Coordinate2D newCoordinate = coordinate + AxialHexDirection::toCoordinate(travelDirection);
+      for (auto [travelDirection, vertexDirection] :
+           AxialHexDirection::getAllVertexRepresentations(d)) {
+        Coordinate2D newCoordinate =
+            coordinate + AxialHexDirection::toCoordinate(travelDirection);
         if (hasTile(newCoordinate)) {
           std::shared_ptr<Port> dp =
               std::make_shared<Port>(Port(portResources[i]));
-          this->tiles.at(newCoordinate)->buildStructure(-1, vertexDirection, dp, false);
+          this->tiles.at(newCoordinate)
+              ->buildStructure(-1, vertexDirection, dp, false);
         }
       }
     }
@@ -60,7 +63,8 @@ Board::Board(Config config) {
 
 size_t Board::getBoardSize(void) const { return boardSize; }
 
-std::shared_ptr<Building> Board::getBuilding(Coordinate2D c, Direction d) const {
+std::shared_ptr<Building> Board::getBuilding(Coordinate2D c,
+                                             Direction d) const {
   checkCoordinateValid(c);
   if (!tiles.at(c)->hasBuilding(d)) {
     throw NoSuchStructureException("Error: No Building at given location");
@@ -85,7 +89,7 @@ Board::getResourceDistribution(int numberRolled) const {
     if (cell->getCoordinate() == robberLocation) {
       continue;
     }
-    for(auto building : cell->getBuildings()){
+    for (auto building : cell->getBuildings()) {
       auto pid = building->getPlayerID();
       if (!playerDistribution.contains(pid)) {
         std::array<size_t, 5> resources{0, 0, 0, 0, 0};
@@ -105,34 +109,39 @@ bool Board::hasBuilding(const Coordinate2D c, const Direction d) const {
 
 bool Board::hasStructure(const Coordinate2D c, const Direction d,
                          StructureType st) const {
-  if(!hasTile(c)) {
+  if (!hasTile(c)) {
     return false;
   }
   return tiles.at(c)->hasStructure(d, st);
 }
 
-bool Board::hasTile(const Coordinate2D c) const {
-  return tiles.contains(c);
-}
+bool Board::hasTile(const Coordinate2D c) const { return tiles.contains(c); }
 
-void Board::buildStructure(int pid, std::shared_ptr<Structure> ds, Coordinate2D c,
-                           Direction d, bool mustBeAdjacent) {
+void Board::buildStructure(int pid, std::shared_ptr<Structure> ds,
+                           Coordinate2D c, Direction d, bool mustBeAdjacent) {
   std::vector<std::pair<Direction, Direction>> elementRepresentations;
-  if(ds->getStructureType() == StructureType::VILLAGE) {
-    auto allVertexRepresentations = getAllVertexRepresentations(d);
-    elementRepresentations.insert(elementRepresentations.end(), allVertexRepresentations.begin(), allVertexRepresentations.end());
-  }
-  else if(ds->getStructureType() == StructureType::ROAD) {
-    auto allEdgeRepresentations = getAllEdgeRepresentations(d);
-    elementRepresentations.insert(elementRepresentations.end(), allEdgeRepresentations.begin(), allEdgeRepresentations.end());
+  if (ds->getStructureType() == StructureType::VILLAGE) {
+    auto allVertexRepresentations =
+        AxialHexDirection::getAllVertexRepresentations(d);
+    elementRepresentations.insert(elementRepresentations.end(),
+                                  allVertexRepresentations.begin(),
+                                  allVertexRepresentations.end());
+  } else if (ds->getStructureType() == StructureType::ROAD) {
+    auto allEdgeRepresentations =
+        AxialHexDirection::getAllEdgeRepresentations(d);
+    elementRepresentations.insert(elementRepresentations.end(),
+                                  allEdgeRepresentations.begin(),
+                                  allEdgeRepresentations.end());
   }
   for (auto [travelDirection, targetDirection] : elementRepresentations) {
-      Coordinate2D newCoordinate = c + AxialHexDirection::toCoordinate(travelDirection);
-      if (!hasTile(newCoordinate)){
-        continue;
-      }
-      tiles.at(newCoordinate)->buildStructure(pid, targetDirection, ds, mustBeAdjacent);
+    Coordinate2D newCoordinate =
+        c + AxialHexDirection::toCoordinate(travelDirection);
+    if (!hasTile(newCoordinate)) {
+      continue;
     }
+    tiles.at(newCoordinate)
+        ->buildStructure(pid, targetDirection, ds, mustBeAdjacent);
+  }
 }
 
 void Board::upgradeToCity(Coordinate2D c, Direction d) {

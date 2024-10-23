@@ -31,8 +31,8 @@ public:
   bool hasTile(const Coordinate2D c) const;
 
   // Game moves
-  void buildStructure(int pid, std::shared_ptr<Structure> ds, Coordinate2D coord,
-                      Direction dir, bool mustBeAdjacent);
+  void buildStructure(int pid, std::shared_ptr<Structure> ds,
+                      Coordinate2D coord, Direction dir, bool mustBeAdjacent);
   void upgradeToCity(Coordinate2D c, Direction d);
   void moveRobber(Coordinate2D nl);
 

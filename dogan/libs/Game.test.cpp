@@ -334,13 +334,12 @@ TEST_F(MidGameFixture, useRoadDevelopmentCardTest) {
   }
 
   std::array<Coordinate2D, 2> tileLocations{{{0, 0}, {-1, 1}}};
-  std::array<Direction, 2> directions{Direction::WEST,
-                                      Direction::NORTHEAST};
+  std::array<Direction, 2> directions{Direction::WEST, Direction::NORTHEAST};
   game.buildStructure(playerID1, StructureType::VILLAGE, {1, 1},
-                       Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
+                      Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
 
   game.useRoadDevelopmentCard(playerID1, tileLocations, directions);
-  for(int i = 0; i < 2; i++) {
+  for (int i = 0; i < 2; i++) {
     EXPECT_EQ(
         game.hasStructure(tileLocations[i], directions[i], StructureType::ROAD),
         true);
@@ -398,49 +397,60 @@ TEST_F(GameFixture, TradePhaseTest) {
   iGame.tradeResources(playerID1, {0, 1, 2, 3, 4}, playerID2, {0, 0, 0, 0, 0});
 }
 
-
 TEST_F(MidGameFixture, BuildAdjacentStructureSuccessTest) {
-    game.buildStructure(playerID1, StructureType::ROAD, {0, 0},
-                        Direction::WEST, {0, 0, 0, 0, 0}, false);
-    game.buildStructure(playerID1, StructureType::VILLAGE, {0, 0},
-                                Direction::SOUTHWEST, {0, 0, 0, 0, 0}, false);
-    EXPECT_EQ(game.hasStructure({-1, 1}, Direction::NORTH, StructureType::VILLAGE),
-              true);
-                                
-    game.buildStructure(playerID1, StructureType::ROAD, {-1, 1},
-                                Direction::NORTHEAST, {0, 0, 0, 0, 0}, false);
-    EXPECT_EQ(game.hasStructure({0, 0}, Direction::SOUTHWEST, StructureType::ROAD),
-              true);
+  game.buildStructure(playerID1, StructureType::ROAD, {0, 0}, Direction::WEST,
+                      {0, 0, 0, 0, 0}, false);
+  game.buildStructure(playerID1, StructureType::VILLAGE, {0, 0},
+                      Direction::SOUTHWEST, {0, 0, 0, 0, 0}, false);
+  EXPECT_EQ(
+      game.hasStructure({-1, 1}, Direction::NORTH, StructureType::VILLAGE),
+      true);
 
-    game.buildStructure(playerID3, StructureType::ROAD, {-1, 3},
-                                Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
-    EXPECT_EQ(game.hasStructure({-1, 2}, Direction::SOUTHEAST, StructureType::ROAD),
-              true);
-    
-    game.buildStructure(playerID3, StructureType::VILLAGE, {-2, 3},
-                                Direction::NORTHEAST, {0, 0, 0, 0, 0}, false);
-    EXPECT_EQ(game.hasStructure({-1, 2}, Direction::SOUTH, StructureType::VILLAGE),
-              true);
+  game.buildStructure(playerID1, StructureType::ROAD, {-1, 1},
+                      Direction::NORTHEAST, {0, 0, 0, 0, 0}, false);
+  EXPECT_EQ(
+      game.hasStructure({0, 0}, Direction::SOUTHWEST, StructureType::ROAD),
+      true);
+
+  game.buildStructure(playerID3, StructureType::ROAD, {-1, 3},
+                      Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
+  EXPECT_EQ(
+      game.hasStructure({-1, 2}, Direction::SOUTHEAST, StructureType::ROAD),
+      true);
+
+  game.buildStructure(playerID3, StructureType::VILLAGE, {-2, 3},
+                      Direction::NORTHEAST, {0, 0, 0, 0, 0}, false);
+  EXPECT_EQ(
+      game.hasStructure({-1, 2}, Direction::SOUTH, StructureType::VILLAGE),
+      true);
 }
 
 TEST_F(MidGameFixture, BuildAdjacentStructureFailTest) {
-    EXPECT_THROW({
-    game.buildStructure(playerID1, StructureType::VILLAGE, {2, 1},
-                                Direction::SOUTHWEST, {0, 0, 0, 0, 0});
-    }, Dogan::NoAdjacentRoadException);
-    EXPECT_EQ(game.hasStructure({2, 1}, Direction::SOUTHWEST, StructureType::VILLAGE),
-              false);
-    EXPECT_EQ(game.hasStructure({1, 2}, Direction::NORTH, StructureType::VILLAGE),
-              false);
-    EXPECT_EQ(game.hasStructure({1, 1}, Direction::SOUTHEAST, StructureType::VILLAGE),
-              false);
+  EXPECT_THROW(
+      {
+        game.buildStructure(playerID1, StructureType::VILLAGE, {2, 1},
+                            Direction::SOUTHWEST, {0, 0, 0, 0, 0});
+      },
+      Dogan::NoAdjacentRoadException);
+  EXPECT_EQ(
+      game.hasStructure({2, 1}, Direction::SOUTHWEST, StructureType::VILLAGE),
+      false);
+  EXPECT_EQ(game.hasStructure({1, 2}, Direction::NORTH, StructureType::VILLAGE),
+            false);
+  EXPECT_EQ(
+      game.hasStructure({1, 1}, Direction::SOUTHEAST, StructureType::VILLAGE),
+      false);
 
-    EXPECT_THROW({
-    game.buildStructure(playerID1, StructureType::ROAD, {-1, 4},
-                                Direction::NORTHEAST, {0, 0, 0, 0, 0});
-    }, Dogan::NoAdjacentRoadException);
-    EXPECT_EQ(game.hasStructure({-1, 4}, Direction::NORTHEAST, StructureType::ROAD),
-              false);
-    EXPECT_EQ(game.hasStructure({0, 3}, Direction::SOUTHWEST, StructureType::ROAD),
-              false);
+  EXPECT_THROW(
+      {
+        game.buildStructure(playerID1, StructureType::ROAD, {-1, 4},
+                            Direction::NORTHEAST, {0, 0, 0, 0, 0});
+      },
+      Dogan::NoAdjacentRoadException);
+  EXPECT_EQ(
+      game.hasStructure({-1, 4}, Direction::NORTHEAST, StructureType::ROAD),
+      false);
+  EXPECT_EQ(
+      game.hasStructure({0, 3}, Direction::SOUTHWEST, StructureType::ROAD),
+      false);
 }

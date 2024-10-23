@@ -1,10 +1,9 @@
+#include "AxialHexDirection.h"
 #include "Building.h"
 #include "DoganExceptions.h"
 #include "DoganGame.h"
 #include "Road.h"
 #include "enums.h"
-#include "AxialHexDirection.h"
-#include "ElementHelpers.h"
 #include <memory>
 #include <sstream>
 
@@ -65,12 +64,12 @@ void Game::buildStructure(int playerID, StructureType structType,
   case StructureType::PORT:
     throw InvalidTypeException("Error: Cannot build a port");
   }
-  
-  if(structType == StructureType::CITY) {
-    board.upgradeToCity(tileLocation, direction); 
-  }
-  else {
-    board.buildStructure(playerID, element, tileLocation, direction, mustBeAdjacent);
+
+  if (structType == StructureType::CITY) {
+    board.upgradeToCity(tileLocation, direction);
+  } else {
+    board.buildStructure(playerID, element, tileLocation, direction,
+                         mustBeAdjacent);
   }
   bank.addResources(cost);
 }

@@ -15,7 +15,8 @@ public:
     os << dp.structureType << "\n";
     return os;
   };
-  protected:
-    ResourceType resource;
+
+protected:
+  ResourceType resource;
 };
 } // namespace Dogan

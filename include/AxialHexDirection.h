@@ -24,14 +24,12 @@ public:
   static const std::array<Direction, 6> vertexDirections;
   static const std::array<Direction, 8> allDirections;
 
-
   // static methods
   static Direction fromString(std::string d);
   static Coordinate2D toCoordinate(Direction d);
 
   static Direction getOppositeDirection(Direction d);
-  static std::array<Direction, 4>
-  getComplementaryDirections(Direction d);
+  static std::array<Direction, 4> getComplementaryDirections(Direction d);
   static std::array<Direction, 2>
   getLocalAdjacentEdgeToEdgeDirections(Direction d);
   static std::array<std::array<Direction, 2>, 4>
@@ -47,6 +45,11 @@ public:
 
   static const int getEdgeIndex(Direction d);
   static const int getVertexIndex(Direction d);
+
+  static std::array<std::pair<Direction, Direction>, 3>
+  getAllVertexRepresentations(Direction d);
+  static std::array<std::pair<Direction, Direction>, 2>
+  getAllEdgeRepresentations(Direction d);
 };
 
 std::ostream &operator<<(std::ostream &os,

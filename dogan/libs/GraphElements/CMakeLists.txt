@@ -1,2 +1,0 @@
-add_library(ElementHelpers ElementHelpers.cpp ElementHelpers.h)
-target_link_libraries(ElementHelpers PUBLIC Coordinate enums)

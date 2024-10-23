@@ -9,7 +9,15 @@ fi
 # Directory to format
 DIRS=$@
 
+ignore_conditions=""
+
+while read -r line; do
+    ignore_conditions+="! -name $line "
+done < ".clang-format-ignore"
+
+echo " IT IS $ignore_conditions"
+
 # Find and format .h, .tpp and .cpp files
-find $DIRS -type f \( -name "*.h" -o -name "*.tpp" -o -name "*.cpp" \) -exec clang-format -i {} +
+find $DIRS -type f \( -name "*.h" -o -name "*.tpp" -o -name "*.cpp" \) $ignore_conditions -exec clang-format -i {} +
 
 echo "Formatting completed for all .h, .tpp and .cpp files"

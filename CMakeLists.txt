@@ -48,7 +48,6 @@ if(BUILD_UNITTESTS)
                   dogan/libs/Bank.test.cpp 
                   dogan/libs/Game.test.cpp
                   dogan/libs/Board.test.cpp
-                  dogan/libs/GraphElements/ElementHelpers.test.cpp
                   src/AxialHexDirection.test.cpp)
     target_link_libraries(Tests 
                   gtest_main 
@@ -57,7 +56,6 @@ if(BUILD_UNITTESTS)
                   Game
                   ConfigBuilder
                   Board
-                  ElementHelpers
                   AxialHexDirection
                   )
     gtest_add_tests(TARGET Tests )

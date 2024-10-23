@@ -113,7 +113,7 @@ private:
 };
 
 class AdjacentBuildingException : std::exception {
-  public:
+public:
   AdjacentBuildingException(std::string m) : message(m){};
   const char *what() const noexcept override { return message.c_str(); }
 
@@ -122,7 +122,7 @@ private:
 };
 
 class NoAdjacentRoadException : std::exception {
-  public:
+public:
   NoAdjacentRoadException(std::string m) : message(m){};
   const char *what() const noexcept override { return message.c_str(); }
 
