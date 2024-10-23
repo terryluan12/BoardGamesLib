@@ -210,7 +210,7 @@ TEST_F(MidGameFixture, TradeDebtTest) {
         game.tradeResources(playerID1, {5, 0, 0, 0, 0}, playerID2,
                             {0, 0, 0, 0, 0});
       },
-      Dogan::InsufficientFundsException);
+      Dogan::InsufficientResourcesException);
 }
 
 // Structures
@@ -224,13 +224,13 @@ TEST_F(GameFixture, BuildExistingStructuresTest) {
         iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 1},
                              Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
   EXPECT_THROW(
       {
         iGame.buildStructure(playerID2, StructureType::VILLAGE, {1, 0},
                              Direction::SOUTH, {0, 0, 0, 0, 0}, false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
 
   // Roads
   iGame.buildStructure(playerID1, StructureType::ROAD, {1, 0},
@@ -240,14 +240,14 @@ TEST_F(GameFixture, BuildExistingStructuresTest) {
         iGame.buildStructure(playerID1, StructureType::ROAD, {1, 0},
                              Direction::SOUTHEAST, {0, 0, 0, 0, 0}, false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
 
   EXPECT_THROW(
       {
         iGame.buildStructure(playerID2, StructureType::ROAD, {1, 1},
                              Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
 }
 
 TEST_F(GameFixture, DistributeResourcesTest) {
@@ -431,7 +431,7 @@ TEST_F(MidGameFixture, BuildAdjacentStructureFailTest) {
         game.buildStructure(playerID1, StructureType::VILLAGE, {2, 1},
                             Direction::SOUTHWEST, {0, 0, 0, 0, 0});
       },
-      Dogan::NoAdjacentRoadException);
+      Dogan::BuildStructureException);
   EXPECT_EQ(
       game.hasStructure({2, 1}, Direction::SOUTHWEST, StructureType::VILLAGE),
       false);
@@ -446,7 +446,7 @@ TEST_F(MidGameFixture, BuildAdjacentStructureFailTest) {
         game.buildStructure(playerID1, StructureType::ROAD, {-1, 4},
                             Direction::NORTHEAST, {0, 0, 0, 0, 0});
       },
-      Dogan::NoAdjacentRoadException);
+      Dogan::BuildStructureException);
   EXPECT_EQ(
       game.hasStructure({-1, 4}, Direction::NORTHEAST, StructureType::ROAD),
       false);
@@ -454,3 +454,49 @@ TEST_F(MidGameFixture, BuildAdjacentStructureFailTest) {
       game.hasStructure({0, 3}, Direction::SOUTHWEST, StructureType::ROAD),
       false);
 }
+
+TEST_F(MidGameFixture, UseRobberNoStealTest) {
+  game.useRobber(playerID1, {0, 0}, Direction::NONE);
+  game.useRobber(playerID1, {-1, 4}, Direction::NONE);
+  game.useRobber(playerID1, {0, 2}, Direction::NONE);
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{4, 4, 4, 4, 4}));
+}
+
+TEST_F(GameFixture, BuildWithoutStructuresTest) {
+  iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 0},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 1},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 2},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 3},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 4},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  EXPECT_THROW(
+      {
+        iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 3},
+                            Direction::NORTH, {0, 0, 0, 0, 0}, false);
+      },
+      Dogan::InsufficientStructuresException);
+  iGame.buildStructure(playerID1, StructureType::CITY, {0, 4},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, true);
+  EXPECT_NO_THROW(
+      {
+        iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 2},
+                            Direction::NORTH, {0, 0, 0, 0, 0}, false);
+      });
+}
+
+TEST_F(GameFixture, UpgradeSomeoneElsesVillageTest) {
+  iGame.buildStructure(playerID2, StructureType::VILLAGE, {0, 0},
+                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  EXPECT_THROW(
+      {
+        iGame.buildStructure(playerID1, StructureType::CITY, {0, 1},
+                            Direction::NORTH, {0, 0, 0, 0, 0}, false);
+      },
+      Dogan::BuildStructureException);
+}
+

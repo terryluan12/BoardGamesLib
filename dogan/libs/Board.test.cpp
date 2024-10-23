@@ -36,7 +36,7 @@ TEST_F(BoardFixture, BuildNonAdjacentStructuresTest) {
             true);
 
   // Cities
-  board.upgradeToCity({1, 0}, Direction::SOUTH);
+  board.upgradeToCity(0, {1, 0}, Direction::SOUTH);
   EXPECT_EQ(
       (board.hasStructure({1, 1}, Direction::NORTHWEST, StructureType::CITY)),
       true);
@@ -69,7 +69,7 @@ TEST_F(BoardFixture, BuildNonAdjacentEdgeStructuresTest) {
       false);
 
   // Edge Cities
-  board.upgradeToCity({0, 0}, Direction::NORTHWEST);
+  board.upgradeToCity(0, {0, 0}, Direction::NORTHWEST);
   EXPECT_EQ(
       (board.hasStructure({0, 0}, Direction::NORTHWEST, StructureType::CITY)),
       true);
@@ -100,13 +100,13 @@ TEST_F(BoardFixture, BuildExistingStructuresTest) {
       {
         board.buildStructure(0, village, {1, 1}, Direction::NORTHWEST, false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
   EXPECT_THROW(
       {
         board.buildStructure(0, existingVillage, {1, 0}, Direction::SOUTH,
                              false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
 
   // Roads
   board.buildStructure(0, road, {1, 0}, Direction::SOUTHEAST, false);
@@ -114,14 +114,14 @@ TEST_F(BoardFixture, BuildExistingStructuresTest) {
       {
         board.buildStructure(0, road, {1, 0}, Direction::SOUTHEAST, false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
 
   EXPECT_THROW(
       {
         board.buildStructure(0, existingRoad, {1, 1}, Direction::NORTHWEST,
                              false);
       },
-      Dogan::SameStructureException);
+      Dogan::BuildStructureException);
 }
 
 TEST_F(BoardFixture, EmptyStructureTest) {
@@ -149,20 +149,20 @@ TEST_F(BoardFixture, EmptyStructureTest) {
 TEST_F(BoardFixture, UpgradeEmptyTest) {
   EXPECT_THROW(
       {
-        board.upgradeToCity({1, 1}, Direction::NORTHWEST);
+        board.upgradeToCity(0, {1, 1}, Direction::NORTHWEST);
       },
-      NoVillageException);
+      BuildStructureException);
 }
 
 TEST_F(BoardFixture, UpgradeCityTest) {
   board.buildStructure(0, std::make_shared<Building>(0, StructureType::VILLAGE),
                        {1, 1}, Direction::NORTHWEST, false);
-  board.upgradeToCity({1, 1}, Direction::NORTHWEST);
+  board.upgradeToCity(0, {1, 1}, Direction::NORTHWEST);
   EXPECT_THROW(
       {
-        board.upgradeToCity({1, 1}, Direction::NORTHWEST);
+        board.upgradeToCity(0, {1, 1}, Direction::NORTHWEST);
       },
-      NoVillageException);
+      BuildStructureException);
 }
 
 TEST_F(BoardFixture, BuildAdjacentBuildingTest) {
@@ -173,21 +173,21 @@ TEST_F(BoardFixture, BuildAdjacentBuildingTest) {
       {
         board.buildStructure(0, village2, {1, 0}, Direction::SOUTHEAST, true);
       },
-      AdjacentBuildingException);
+      BuildStructureException);
 
   EXPECT_THROW(
       {
         board.buildStructure(0, village2, {0, 1}, Direction::SOUTHEAST, true);
       },
-      AdjacentBuildingException);
+      BuildStructureException);
   EXPECT_THROW(
       {
         board.buildStructure(0, village2, {0, 2}, Direction::NORTH, true);
       },
-      AdjacentBuildingException);
+      BuildStructureException);
   EXPECT_THROW(
       {
         board.buildStructure(0, village2, {2, 0}, Direction::SOUTHWEST, true);
       },
-      AdjacentBuildingException);
+      BuildStructureException);
 }

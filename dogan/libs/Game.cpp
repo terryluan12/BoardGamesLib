@@ -65,8 +65,10 @@ void Game::buildStructure(int playerID, StructureType structType,
     throw InvalidTypeException("Error: Cannot build a port");
   }
 
+  players.at(playerID).buildStructure(structType);
+
   if (structType == StructureType::CITY) {
-    board.upgradeToCity(tileLocation, direction);
+    board.upgradeToCity(playerID, tileLocation, direction);
   } else {
     board.buildStructure(playerID, element, tileLocation, direction,
                          mustBeAdjacent);
@@ -105,6 +107,11 @@ void Game::useRobber(int playerID, Coordinate2D tileLocation,
                      Direction direction) {
   checkPlayerExists(playerID);
   checkCoordinateValid(tileLocation);
+  
+  if(direction == Direction::NONE) {
+    return;
+  }
+
   if (!board.hasBuilding(tileLocation, direction))
     throw NoSuchStructureException("Error: No Building at given location");
 
@@ -233,13 +240,13 @@ void Game::checkPlayerExists(int playerID) const {
 }
 void Game::checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const {
   if (!players.at(playerID).canAfford(cost))
-    throw InsufficientFundsException(
-        "Error: Player does not have enough resources to build structure");
+    throw InsufficientResourcesException(
+        "Error: Player does not have enough resources");
 }
 void Game::checkBankCanAfford(ResourceType resourceType, int num) const {
   if (!bank.canAfford(resourceType, num))
-    throw InsufficientFundsException(
-        "Error: Bank does not have enough resources to build structure");
+    throw InsufficientResourcesException(
+        "Error: Bank does not have enough resources");
 }
 void Game::checkPlayerHasDevelopmentCard(int playerID,
                                          DevelopmentType devType) const {
@@ -252,11 +259,6 @@ void Game::checkPlayerHasDevelopmentCard(int playerID,
 void Game::checkCoordinateValid(Coordinate2D coord) const {
   if (!board.hasTile(coord))
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
-}
-void Game::checkStructureExists(Coordinate2D coord, Direction direction,
-                                StructureType structureType) const {
-  if (board.hasStructure(coord, direction, structureType))
-    throw SameStructureException("Error: Structure already exists");
 }
 void Game::checkResourceType(ResourceType resourceType) const {
   if (resourceType == ResourceType::OTHER)

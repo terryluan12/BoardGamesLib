@@ -1,7 +1,6 @@
 Separate out the enums from enums.h
 Add boundary checking for config class
 Decide if I want to return a shared_ptr in [] operator
-Add CppDoc
 Set int to size_t where relevant
 Optimize CMakeFiles
 Add checking to see if a DoganPort is valid
@@ -12,6 +11,5 @@ Fix printing of board by iterating through cell. Each cell should also have a nu
 Determine whether checking should be done everywhere, or only in upper levels (perform performance testing) 
  - for example whether checking should be done in game.upgradeCity, board.upgradeCity, or both
 Make tests more efficient/readable by using helper functions
-** REFACTOR everything
- - Add back Vertex and Edge as Node and Edge
- - change the complex maps to sets
+Check on positives and negatives in cost
+Add checking for purchased development card in turn

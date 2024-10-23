@@ -23,6 +23,8 @@ public:
   void addResources(std::array<int, 5> r);
   void addResource(const ResourceType r, int n);
 
+  void buildStructure(StructureType st);
+
   int getSoldierCount(void) const;
   void increaseSoldierCount(void);
 

@@ -33,7 +33,7 @@ public:
   // Game moves
   void buildStructure(int pid, std::shared_ptr<Structure> ds,
                       Coordinate2D coord, Direction dir, bool mustBeAdjacent);
-  void upgradeToCity(Coordinate2D c, Direction d);
+  void upgradeToCity(int pid, Coordinate2D c, Direction d);
   void moveRobber(Coordinate2D nl);
 
   friend std::ostream &operator<<(std::ostream &os, Board const &db);

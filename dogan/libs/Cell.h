@@ -32,7 +32,7 @@ public:
   bool hasRoad(Direction d) const;
   std::shared_ptr<Road> getRoad(Direction d) const;
 
-  void upgradeToCity(Direction d);
+  void upgradeToCity(int pid, Direction d);
 
   friend std::ostream &operator<<(std::ostream &os, Cell const &dc);
 

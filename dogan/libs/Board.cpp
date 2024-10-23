@@ -119,7 +119,7 @@ bool Board::hasTile(const Coordinate2D c) const { return tiles.contains(c); }
 
 void Board::buildStructure(int pid, std::shared_ptr<Structure> ds,
                            Coordinate2D c, Direction d, bool mustBeAdjacent) {
-  std::vector<std::pair<Direction, Direction>> elementRepresentations;
+  std::vector<elementRepresentation> elementRepresentations;
   if (ds->getStructureType() == StructureType::VILLAGE) {
     auto allVertexRepresentations =
         AxialHexDirection::getAllVertexRepresentations(d);
@@ -144,9 +144,9 @@ void Board::buildStructure(int pid, std::shared_ptr<Structure> ds,
   }
 }
 
-void Board::upgradeToCity(Coordinate2D c, Direction d) {
+void Board::upgradeToCity(int pid, Coordinate2D c, Direction d) {
   checkCoordinateValid(c);
-  tiles.at(c)->upgradeToCity(d);
+  tiles.at(c)->upgradeToCity(pid, d);
 }
 
 void Board::moveRobber(Coordinate2D nl) { robberLocation = nl; }

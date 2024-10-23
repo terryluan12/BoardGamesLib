@@ -103,7 +103,7 @@ TEST(GetLocalAdjacentEdgeToEdgeDirectionsTestSuite,
 TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
      getNorthAdjacentEdgeToVertexDirectionsTest) {
   Direction d = Direction::NORTH;
-  std::array<Direction, 2> expected = {
+  edgeRepresentation expected = {
       {Direction::NORTHWEST, Direction::NORTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
@@ -113,7 +113,7 @@ TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
 TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
      getNorthEastAdjacentEdgeToVertexDirectionsTest) {
   Direction d = Direction::NORTHEAST;
-  std::array<Direction, 2> expected = {{Direction::NORTHEAST, Direction::EAST}};
+  edgeRepresentation expected = {{Direction::NORTHEAST, Direction::EAST}};
   auto representations =
       AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
   EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
@@ -122,7 +122,7 @@ TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
 TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
      getSouthEastAdjacentEdgeToVertexDirectionsTest) {
   Direction d = Direction::SOUTHEAST;
-  std::array<Direction, 2> expected = {{Direction::SOUTHEAST, Direction::EAST}};
+  edgeRepresentation expected = {{Direction::SOUTHEAST, Direction::EAST}};
   auto representations =
       AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
   EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
@@ -131,7 +131,7 @@ TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
 TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
      getNorthAdjacentVertexToVertexDirectionsTest) {
   Direction d = Direction::NORTH;
-  std::array<Direction, 2> expected = {
+  vertexRepresentation expected = {
       {Direction::NORTHWEST, Direction::NORTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentVertexToVertexDirections(d);
@@ -141,7 +141,7 @@ TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
 TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
      getNorthEastAdjacentVertexToVertexDirectionsTest) {
   Direction d = Direction::NORTHEAST;
-  std::array<Direction, 2> expected = {
+  vertexRepresentation expected = {
       {Direction::NORTH, Direction::SOUTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentVertexToVertexDirections(d);
@@ -151,7 +151,7 @@ TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
 TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
      getSouthEastAdjacentVertexToVertexDirectionsTest) {
   Direction d = Direction::SOUTHEAST;
-  std::array<Direction, 2> expected = {
+  vertexRepresentation expected = {
       {Direction::SOUTH, Direction::NORTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentVertexToVertexDirections(d);
@@ -160,7 +160,7 @@ TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
 
 TEST(getVertexRepresentationsTestSuite, getNorthVertexRepresentationsTest) {
   Direction d = Direction::NORTH;
-  std::array<std::pair<Direction, Direction>, 3> expected = {
+  std::array<vertexRepresentation, 3> expected = {
       {{Direction::NONE, Direction::NORTH},
        {Direction::NORTHWEST, Direction::SOUTHEAST},
        {Direction::NORTHEAST, Direction::SOUTHWEST}}};
@@ -169,7 +169,7 @@ TEST(getVertexRepresentationsTestSuite, getNorthVertexRepresentationsTest) {
 }
 TEST(getVertexRepresentationsTestSuite, getNorthEastVertexRepresentationsTest) {
   Direction d = Direction::NORTHEAST;
-  std::array<std::pair<Direction, Direction>, 3> expected = {
+  std::array<vertexRepresentation, 3> expected = {
       {{Direction::NONE, Direction::NORTHEAST},
        {Direction::NORTHEAST, Direction::SOUTH},
        {Direction::EAST, Direction::NORTHWEST}}};
@@ -178,7 +178,7 @@ TEST(getVertexRepresentationsTestSuite, getNorthEastVertexRepresentationsTest) {
 }
 TEST(getVertexRepresentationsTestSuite, getSouthEastVertexRepresentationsTest) {
   Direction d = Direction::SOUTHEAST;
-  std::array<std::pair<Direction, Direction>, 3> expected = {
+  std::array<vertexRepresentation, 3> expected = {
       {{Direction::NONE, Direction::SOUTHEAST},
        {Direction::SOUTHEAST, Direction::NORTH},
        {Direction::EAST, Direction::SOUTHWEST}}};
@@ -187,7 +187,7 @@ TEST(getVertexRepresentationsTestSuite, getSouthEastVertexRepresentationsTest) {
 }
 TEST(getVertexRepresentationsTestSuite, getSouthVertexRepresentationsTest) {
   Direction d = Direction::SOUTH;
-  std::array<std::pair<Direction, Direction>, 3> expected = {
+  std::array<vertexRepresentation, 3> expected = {
       {{Direction::NONE, Direction::SOUTH},
        {Direction::SOUTHEAST, Direction::NORTHWEST},
        {Direction::SOUTHWEST, Direction::NORTHEAST}}};
@@ -196,7 +196,7 @@ TEST(getVertexRepresentationsTestSuite, getSouthVertexRepresentationsTest) {
 }
 TEST(getVertexRepresentationsTestSuite, getSouthWestVertexRepresentationsTest) {
   Direction d = Direction::SOUTHWEST;
-  std::array<std::pair<Direction, Direction>, 3> expected = {
+  std::array<vertexRepresentation, 3> expected = {
       {{Direction::NONE, Direction::SOUTHWEST},
        {Direction::SOUTHWEST, Direction::NORTH},
        {Direction::WEST, Direction::SOUTHEAST}}};
@@ -205,7 +205,7 @@ TEST(getVertexRepresentationsTestSuite, getSouthWestVertexRepresentationsTest) {
 }
 TEST(getVertexRepresentationsTestSuite, getNorthWestVertexRepresentationsTest) {
   Direction d = Direction::NORTHWEST;
-  std::array<std::pair<Direction, Direction>, 3> expected = {
+  std::array<vertexRepresentation, 3> expected = {
       {{Direction::NONE, Direction::NORTHWEST},
        {Direction::NORTHWEST, Direction::SOUTH},
        {Direction::WEST, Direction::NORTHEAST}}};

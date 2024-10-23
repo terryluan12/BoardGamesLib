@@ -31,25 +31,27 @@ include_directories(dogan/libs/Structures)
 
 add_subdirectory(src)
 add_subdirectory(dogan)
+add_subdirectory(docs)
 
 
 option(BUILD_EXECUTABLE "Build the executable" ON)
-option(BUILD_UNITTESTS "Build tests" ON)
 if(BUILD_EXECUTABLE)
     add_executable(Dogan dogan/src/main.cpp)
     target_link_libraries(Dogan PUBLIC Game ConfigBuilder)
     target_include_directories(Dogan PUBLIC dogan/include PRIVATE dogan/libs)
 endif()
 
-
+# Tests
+option(BUILD_UNITTESTS "Build tests" ON)
 if(BUILD_UNITTESTS)
     enable_testing()
-    add_executable(Tests 
+    add_executable(tests 
                   dogan/libs/Bank.test.cpp 
                   dogan/libs/Game.test.cpp
                   dogan/libs/Board.test.cpp
+                  dogan/libs/Cell.test.cpp
                   src/AxialHexDirection.test.cpp)
-    target_link_libraries(Tests 
+    target_link_libraries(tests 
                   gtest_main 
                   gmock
                   Bank 
@@ -58,5 +60,5 @@ if(BUILD_UNITTESTS)
                   Board
                   AxialHexDirection
                   )
-    gtest_add_tests(TARGET Tests )
+    gtest_add_tests(TARGET tests )
 endif()

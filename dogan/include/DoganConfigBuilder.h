@@ -5,6 +5,10 @@
 #include <vector>
 
 namespace Dogan {
+/**
+ * @brief A class to build a Config object
+ * 
+ */
 class ConfigBuilder {
 public:
   ConfigBuilder &setBoardSize(size_t boardSize);

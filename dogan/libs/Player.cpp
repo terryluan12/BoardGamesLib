@@ -18,6 +18,17 @@ void Player::addResource(const ResourceType r, int n) {
   inventory.addResource(r, n);
 }
 
+void Player::buildStructure(StructureType st) {
+  if (availableStructures[static_cast<int>(st)] == 0) {
+    throw InsufficientStructuresException("Error: Not enough structures");
+  }
+  availableStructures[static_cast<int>(st)] -= 1;
+  victoryPoints += 1;
+  if(st == StructureType::CITY){
+    availableStructures[static_cast<int>(StructureType::VILLAGE)] += 1;
+  }
+}
+
 int Player::getSoldierCount(void) const { return soldierCount; }
 void Player::increaseSoldierCount(void) { ++soldierCount; }
 
