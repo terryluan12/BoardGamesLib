@@ -262,114 +262,6 @@ TEST_F(GameFixture, DistributeResourcesTest) {
 
 // Development Card Tests
 
-TEST_F(GameFixture, PurchaseDevelopmentCardTest) {
-  std::array<int, 5> expected{0, 0, 0, 0, 0};
-  for (int i = 0; i < 5; i++) {
-    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
-    expected[i] = 1;
-    std::array<int, 5> actual = iGame.getDevelopmentCount(playerID1);
-    EXPECT_EQ(actual, expected);
-  }
-}
-
-TEST_F(GameFixture, UseDevelopmentCardVictoryTest) {
-  for (int i = 0; i < 5; i++) {
-    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
-  }
-  EXPECT_EQ(iGame.getVictoryPoints(playerID1), 1);
-}
-
-TEST_F(GameFixture, UseDevelopmentCardMonopolyTest) {
-  for (int i = 0; i < 5; i++) {
-    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
-  }
-  iGame.giveResources(playerID2, {5, 4, 3, 2, 1});
-  iGame.giveResources(playerID3, {5, 4, 3, 2, 1});
-  ASSERT_EQ(iGame.getResourceCount(playerID1),
-            (std::array<int, 5>{0, 0, 0, 0, 0}));
-  ASSERT_EQ(iGame.getResourceCount(playerID2),
-            (std::array<int, 5>{5, 4, 3, 2, 1}));
-  ASSERT_EQ(iGame.getResourceCount(playerID3),
-            (std::array<int, 5>{5, 4, 3, 2, 1}));
-  iGame.useMonopolyDevelopmentCard(playerID1, ResourceType::WOOD);
-
-  EXPECT_EQ(iGame.getResourceCount(playerID1),
-            (std::array<int, 5>{10, 0, 0, 0, 0}));
-  EXPECT_EQ(iGame.getResourceCount(playerID2),
-            (std::array<int, 5>{0, 4, 3, 2, 1}));
-  EXPECT_EQ(iGame.getResourceCount(playerID3),
-            (std::array<int, 5>{0, 4, 3, 2, 1}));
-}
-
-TEST_F(GameFixture, useSoldierDevelopmentCardTest) {
-  for (int i = 0; i < 5; i++) {
-    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
-  }
-  iGame.buildStructure(playerID2, StructureType::VILLAGE, {1, 1},
-                       Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
-  iGame.giveResources(playerID2, {0, 1, 2, 3, 4});
-  EXPECT_EQ(iGame.getResourceCount(playerID1),
-            (std::array<int, 5>{0, 0, 0, 0, 0}));
-  EXPECT_EQ(iGame.getResourceCount(playerID2),
-            (std::array<int, 5>{0, 1, 2, 3, 4}));
-
-  iGame.useSoldierDevelopmentCard(playerID1, {1, 1}, Direction::NORTHWEST);
-
-  int totalSum = 0;
-  for (int i = 0; i < 5; i++) {
-    totalSum += iGame.getResourceCount(playerID1)[i];
-  }
-  EXPECT_EQ(totalSum, 1);
-
-  totalSum = 0;
-  for (int i = 0; i < 5; i++) {
-    totalSum += i - iGame.getResourceCount(playerID2)[i];
-  }
-  EXPECT_EQ(totalSum, 1);
-}
-
-TEST_F(MidGameFixture, useRoadDevelopmentCardTest) {
-  for (int i = 0; i < 5; i++) {
-    game.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
-  }
-
-  std::array<Coordinate2D, 2> tileLocations{{{0, 0}, {-1, 1}}};
-  std::array<Direction, 2> directions{Direction::WEST, Direction::NORTHEAST};
-  game.buildStructure(playerID1, StructureType::VILLAGE, {1, 1},
-                      Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
-
-  game.useRoadDevelopmentCard(playerID1, tileLocations, directions);
-  for (int i = 0; i < 2; i++) {
-    EXPECT_EQ(
-        game.hasStructure(tileLocations[i], directions[i], StructureType::ROAD),
-        true);
-  }
-  EXPECT_EQ(
-      game.hasStructure({0, 0}, Direction::SOUTHWEST, StructureType::ROAD),
-      true);
-}
-
-TEST_F(GameFixture, useTakeTwoDevelopmentCardTest) {
-  for (int i = 0; i < 5; i++) {
-    iGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
-  }
-  std::array<ResourceType, 2> resources1{ResourceType::BRICK,
-                                         ResourceType::SHEEP};
-  std::array<ResourceType, 2> resources2{ResourceType::WOOD,
-                                         ResourceType::WOOD};
-
-  EXPECT_EQ(iGame.getResourceCount(playerID1),
-            (std::array<int, 5>{0, 0, 0, 0, 0}));
-
-  iGame.useTakeTwoDevelopmentCard(playerID1, resources1);
-  EXPECT_EQ(iGame.getResourceCount(playerID1),
-            (std::array<int, 5>{0, 1, 0, 1, 0}));
-  iGame.useTakeTwoDevelopmentCard(playerID1, resources2);
-
-  EXPECT_EQ(iGame.getResourceCount(playerID1),
-            (std::array<int, 5>{2, 1, 0, 1, 0}));
-}
-
 TEST_F(GameFixture, CircularEconomyTest) {
   ASSERT_EQ(iGame.getResourceCount(-1),
             (std::array<int, 5>{19, 19, 19, 19, 19}));
@@ -497,4 +389,159 @@ TEST_F(GameFixture, UpgradeSomeoneElsesVillageTest) {
                              Direction::NORTH, {0, 0, 0, 0, 0}, false);
       },
       Dogan::BuildStructureException);
+}
+
+
+class DevelopmentCardTestSuite : public ::testing::Test {
+protected:
+  void SetUp() override {
+    playerID1 = 0;
+    playerID2 = 1;
+    playerID3 = 2;
+
+    Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
+                                       Dogan::ReplaceConfiguration::EXACT};
+    Dogan::Config config =
+        Dogan::ConfigBuilder()
+            .setDevelopmentConfig(generalConfig)
+            .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
+                                      Dogan::DevelopmentType::TAKETWO,
+                                      Dogan::DevelopmentType::BUILDROAD,
+                                      Dogan::DevelopmentType::SOLDIER,
+                                      Dogan::DevelopmentType::MONOPOLY,
+                                      Dogan::DevelopmentType::VICPOINT,
+                                      })
+            .setDevelopmentCount({1, 1, 1, 1, 2})
+            .build();
+    
+    initialGame = Dogan::Game(config);
+    initialGame.addPlayer(playerID1);
+
+    game = Dogan::Game(config);
+    game.addPlayer(playerID1);
+    game.addPlayer(playerID2);
+    game.addPlayer(playerID3);
+
+    game.buildStructure(playerID1, StructureType::VILLAGE, {0, 0},
+                        Dogan::Direction::NORTH, {0, 0, 0, 0, 0}, false);
+    game.buildStructure(playerID2, StructureType::VILLAGE, {-1, 4},
+                        Direction::SOUTH, {0, 0, 0, 0, 0}, false);
+    game.buildStructure(playerID1, StructureType::ROAD, {0, 0},
+                        Direction::NORTHWEST, {0, 0, 0, 0, 0}, false);
+    game.buildStructure(playerID2, StructureType::ROAD, {0, 2},
+                        Direction::SOUTHEAST, {0, 0, 0, 0, 0}, false);
+
+    game.giveResources(playerID1, {4, 4, 4, 4, 4});
+    game.giveResources(playerID2, {1, 2, 3, 4, 5});
+    game.giveResources(playerID3, {1, 2, 3, 4, 5});
+    for(int i = 0; i < 6; i++) {
+      game.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+    }
+  }
+  int playerID1, playerID2, playerID3;
+  Dogan::Game game;
+  Dogan::Game initialGame;
+};
+
+
+TEST_F(DevelopmentCardTestSuite, PurchaseDevelopmentCardTest) {
+  std::array<int, 5> expected{0, 0, 0, 0, 0};
+  for (int i = 0; i < 5; i++) {
+    initialGame.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
+    expected[i] = 1;
+    std::array<int, 5> actual = initialGame.getDevelopmentCount(playerID1);
+    EXPECT_EQ(actual, expected);
+  }
+}
+
+TEST_F(DevelopmentCardTestSuite, UseDevelopmentCardVictoryTest) {
+  EXPECT_EQ(game.getVictoryPoints(playerID1), 2);
+}
+
+TEST_F(DevelopmentCardTestSuite, UseDevelopmentCardMonopolyTest) {
+  game.useMonopolyDevelopmentCard(playerID1, ResourceType::WOOD);
+
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{6, 4, 4, 4, 4}));
+  EXPECT_EQ(game.getResourceCount(playerID2),
+            (std::array<int, 5>{0, 2, 3, 4, 5}));
+  EXPECT_EQ(game.getResourceCount(playerID3),
+            (std::array<int, 5>{0, 2, 3, 4, 5}));
+}
+
+TEST_F(DevelopmentCardTestSuite, useSoldierDevelopmentCardTest) {
+  game.useSoldierDevelopmentCard(playerID1, {-1, 4}, Direction::SOUTH);
+
+  int totalSum = 0;
+  for (int i = 0; i < 5; i++) {
+    totalSum += game.getResourceCount(playerID1)[i];
+  }
+  EXPECT_EQ(totalSum, 21);
+
+  totalSum = 0;
+  for (int i = 0; i < 5; i++) {
+    totalSum += game.getResourceCount(playerID2)[i];
+  }
+  EXPECT_EQ(totalSum, 14);
+}
+
+TEST_F(DevelopmentCardTestSuite, useRoadDevelopmentCardTest) {
+  std::array<Coordinate2D, 2> tileLocations{{{0, 0}, {-1, 1}}};
+  std::array<Direction, 2> directions{Direction::WEST, Direction::NORTHEAST};
+
+  game.useRoadDevelopmentCard(playerID1, tileLocations, directions);
+  for (int i = 0; i < 2; i++) {
+    EXPECT_EQ(
+        game.hasStructure(tileLocations[i], directions[i], StructureType::ROAD),
+        true);
+  }
+  EXPECT_EQ(
+      game.hasStructure({0, 0}, Direction::SOUTHWEST, StructureType::ROAD),
+      true);
+}
+
+TEST_F(DevelopmentCardTestSuite, useTakeTwoDevelopmentCardTest) {
+  std::array<ResourceType, 2> resources1{ResourceType::BRICK,
+                                         ResourceType::SHEEP};
+
+  game.useTakeTwoDevelopmentCard(playerID1, resources1);
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{4, 5, 4, 5, 4}));
+  EXPECT_EQ(game.getResourceCount(-1), (std::array<int, 5>{19, 18, 19, 18, 19}));
+}
+
+TEST_F(DevelopmentCardTestSuite, DoubleUseSameDevelopmentCardsTest) {
+  game.useTakeTwoDevelopmentCard(playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
+  EXPECT_THROW({
+    game.useTakeTwoDevelopmentCard(playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
+  }, Dogan::UsedDevelopmentCardException);
+  
+  EXPECT_EQ(game.getResourceCount(playerID1), (std::array<int, 5>{4, 5, 4, 5, 4}));
+  EXPECT_EQ(game.getResourceCount(playerID2), (std::array<int, 5>{1, 2, 3, 4, 5}));
+}
+
+TEST_F(DevelopmentCardTestSuite, DoubleUseDifferentDevelopmentCardsTest) {
+  game.useTakeTwoDevelopmentCard(playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
+  EXPECT_THROW({
+    game.useMonopolyDevelopmentCard(playerID1, ResourceType::BRICK);
+  }, Dogan::UsedDevelopmentCardException);
+  EXPECT_EQ(game.getResourceCount(playerID1), (std::array<int, 5>{4, 5, 4, 5, 4}));
+  EXPECT_EQ(game.getResourceCount(playerID2), (std::array<int, 5>{1, 2, 3, 4, 5}));
+}
+
+
+TEST_F(DevelopmentCardTestSuite, DevelopmentCardResetTurnTest) {
+  std::array<ResourceType, 2> resources1{ResourceType::BRICK,
+                                         ResourceType::SHEEP};
+  std::array<ResourceType, 2> resources2{ResourceType::WOOD,
+                                         ResourceType::WOOD};
+
+  game.useTakeTwoDevelopmentCard(playerID1, resources1);
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{4, 5, 4, 5, 4}));
+  game.resetTurn();
+  game.useTakeTwoDevelopmentCard(playerID1, resources2);
+
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{6, 5, 4, 5, 4}));
 }

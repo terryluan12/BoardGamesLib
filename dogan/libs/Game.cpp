@@ -10,7 +10,7 @@
 namespace Dogan {
 Game::Game(Config config)
     : config(config), die(1, 6), board(Board(config)),
-      rengine(std::random_device{}()) {
+      rengine(std::random_device{}()), usedDevCard(false) {
   std::array<int, 5> resourceCount{};
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
@@ -124,6 +124,7 @@ void Game::useRobber(int playerID, Coordinate2D tileLocation,
 void Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::MONOPOLY);
+  checkUsedDevCard();
   checkResourceType(resource);
 
   int resourceIndex = static_cast<int>(resource);
@@ -135,11 +136,13 @@ void Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
     players.at(playerID).addResource(resource, stolenCount);
     p.addResource(resource, -1 * stolenCount);
   }
+  usedDevCard = true;
 }
 
 void Game::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
                                      Direction direction) {
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::SOLDIER);
+  checkUsedDevCard();
 
   useRobber(playerID, tileLocation, direction);
 
@@ -150,6 +153,7 @@ void Game::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
     mostSoldiers = {playerID, soldierCount};
     players.at(playerID).addVictoryPoints(2);
   }
+  usedDevCard = true;
 }
 
 void Game::useRoadDevelopmentCard(int playerID,
@@ -157,15 +161,18 @@ void Game::useRoadDevelopmentCard(int playerID,
                                   std::array<Direction, 2> directions) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::BUILDROAD);
+  checkUsedDevCard();
   for (int i = 0; i < 2; i++) {
     buildStructure(playerID, StructureType::ROAD, tileLocations[i],
                    directions[i], {0, 0, 0, 0, 0});
   }
+  usedDevCard = true;
 }
 void Game::useTakeTwoDevelopmentCard(int playerID,
                                      std::array<ResourceType, 2> resources) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::TAKETWO);
+  checkUsedDevCard();
   checkResourceType(resources[0]);
   checkResourceType(resources[1]);
 
@@ -180,6 +187,7 @@ void Game::useTakeTwoDevelopmentCard(int playerID,
     players.at(playerID).addResource(resources[i], 1);
     bank.addResource(resources[i], -1);
   }
+  usedDevCard = true;
 }
 
 const std::array<int, 5> Game::getResourceCount(int playerID) const {
@@ -205,6 +213,10 @@ int Game::getVictoryPoints(int playerID) const {
 bool Game::hasStructure(Coordinate2D coord, Direction direction,
                         StructureType structureType) const {
   return board.hasStructure(coord, direction, structureType);
+}
+
+void Game::resetTurn(void) {
+  usedDevCard = false;
 }
 
 void Game::stealResource(int playerID, int stolenPlayerID) {
@@ -264,6 +276,12 @@ void Game::checkResourceType(ResourceType resourceType) const {
   if (resourceType == ResourceType::OTHER)
     throw InvalidTypeException("Error: Resource type must be set");
 }
+void Game::checkUsedDevCard(void) const {
+  if (usedDevCard) {
+    throw UsedDevelopmentCardException("Error: Development card already used this turn");
+  }
+}
+
 
 std::ostream &operator<<(std::ostream &os, Game const &dg) {
   os << dg.board;

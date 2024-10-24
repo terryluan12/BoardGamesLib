@@ -195,6 +195,7 @@ public:
    */
   bool hasStructure(Coordinate2D coord, Direction direction,
                     StructureType structureType) const;
+  void resetTurn(void);
 
   friend std::ostream &operator<<(std::ostream &os, Game const &dg);
 
@@ -210,6 +211,7 @@ private:
                     //!< soldiers they've played
   std::pair<int, int> longestRoad; //!< The player with the longest road and how
                                    //!< many roads they have
+  bool usedDevCard; //!< Whether a player has used a development card this turn
   std::mt19937 rengine;
 
   void stealResource(int playerID, int stolenPlayerID);
@@ -220,5 +222,6 @@ private:
                                      DevelopmentType devType) const;
   void checkCoordinateValid(Coordinate2D coord) const;
   void checkResourceType(ResourceType resourceType) const;
+  void checkUsedDevCard(void) const;
 };
 } // namespace Dogan
