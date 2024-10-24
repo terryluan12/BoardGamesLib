@@ -37,7 +37,7 @@ public:
   friend std::ostream &operator<<(std::ostream &os, Cell const &dc);
 
 private:
-  std::map<Direction, std::shared_ptr<Cell>> adjacentCells;
+  std::map<Direction, std::weak_ptr<Cell>> adjacentCells;
   std::unordered_map<Direction, std::shared_ptr<Building>> buildings;
   std::unordered_map<Direction, std::shared_ptr<Road>> roads;
   std::map<Direction, std::shared_ptr<Port>> ports;

@@ -19,9 +19,10 @@ bool Cell::hasAdjacentBuildings(Direction d) const {
   for (auto [travelPath, vertexDirection] :
        AxialHexDirection::getSecondDegreeVertex(d)) {
     if (adjacentCells.contains(travelPath)) {
-      if (adjacentCells.at(travelPath)->hasBuilding(vertexDirection)) {
+      auto adjacentCell = adjacentCells.at(travelPath).lock();
+      if (adjacentCell->hasBuilding(vertexDirection)) {
       }
-      return adjacentCells.at(travelPath)->hasBuilding(vertexDirection);
+      return adjacentCell->hasBuilding(vertexDirection);
     }
   }
   return false;
@@ -55,11 +56,13 @@ bool Cell::hasOwnConnectedRoads(int pid, Direction d, StructureType st) const {
     }
   }
   for (auto [travelPath, edgeDirection] : distantPotentialRoads) {
-    if (adjacentCells.contains(travelPath) &&
-        adjacentCells.at(travelPath)->hasRoad(edgeDirection)) {
-      return adjacentCells.at(travelPath)
-                 ->getRoad(edgeDirection)
-                 ->getPlayerID() == pid;
+    if (adjacentCells.contains(travelPath)){
+      auto adjacentCell = adjacentCells.at(travelPath).lock();
+      if(adjacentCell->hasRoad(edgeDirection)){
+        return adjacentCell->getRoad(edgeDirection)
+                  ->getPlayerID() == pid;
+
+      }
     }
   }
   return false;
@@ -120,7 +123,7 @@ void Cell::buildStructure(int pid, Direction direction,
 }
 
 void Cell::addAdjacentCell(Direction direction, std::shared_ptr<Cell> cell) {
-  adjacentCells.emplace(direction, cell);
+  adjacentCells.emplace(direction, std::weak_ptr(cell));
 }
 
 bool Cell::hasBuilding(Direction d) const { return buildings.contains(d); }

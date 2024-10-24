@@ -10,7 +10,7 @@
 namespace Dogan {
 Game::Game(Config config)
     : config(config), die(1, 6), board(Board(config)),
-      rengine(std::random_device{}()), usedDevCard(false) {
+      usedDevCard(false), rengine(std::random_device{}()) {
   std::array<int, 5> resourceCount{};
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
