@@ -103,8 +103,7 @@ TEST(GetLocalAdjacentEdgeToEdgeDirectionsTestSuite,
 TEST(GetAdjacentEdgeToVertexDirectionsTestSuite,
      getNorthAdjacentEdgeToVertexDirectionsTest) {
   Direction d = Direction::NORTH;
-  edgeRepresentation expected = {
-      {Direction::NORTHWEST, Direction::NORTHEAST}};
+  edgeRepresentation expected = {{Direction::NORTHWEST, Direction::NORTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
   EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
@@ -141,8 +140,7 @@ TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
 TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
      getNorthEastAdjacentVertexToVertexDirectionsTest) {
   Direction d = Direction::NORTHEAST;
-  vertexRepresentation expected = {
-      {Direction::NORTH, Direction::SOUTHEAST}};
+  vertexRepresentation expected = {{Direction::NORTH, Direction::SOUTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentVertexToVertexDirections(d);
   EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));
@@ -151,8 +149,7 @@ TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
 TEST(GetAdjacentVertexToVertexDirectionsTestSuite,
      getSouthEastAdjacentVertexToVertexDirectionsTest) {
   Direction d = Direction::SOUTHEAST;
-  vertexRepresentation expected = {
-      {Direction::SOUTH, Direction::NORTHEAST}};
+  vertexRepresentation expected = {{Direction::SOUTH, Direction::NORTHEAST}};
   auto representations =
       AxialHexDirection::getAdjacentVertexToVertexDirections(d);
   EXPECT_THAT(representations, ::testing::UnorderedElementsAreArray(expected));

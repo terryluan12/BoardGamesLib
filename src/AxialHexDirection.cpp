@@ -68,7 +68,7 @@ AxialHexDirection::getComplementaryVertexRepresentations(Direction d) {
   Direction firstDirection = vertexDirections[(vertexIndex + 2) % 6];
   Direction secondTravelDirection = edgeDirections[(vertexIndex + 1) % 6];
   Direction secondDirection = vertexDirections[(vertexIndex + 4) % 6];
-  return {{{firstTravelDirection, firstDirection}, 
+  return {{{firstTravelDirection, firstDirection},
            {secondTravelDirection, secondDirection}}};
 }
 
@@ -162,9 +162,9 @@ AxialHexDirection::getAllVertexRepresentations(Direction d) {
   auto [vertexRepresentation1, vertexRepresentation2] =
       AxialHexDirection::getComplementaryVertexRepresentations(d);
   std::array<vertexRepresentation, 3> corrVertices{{
-    {Direction::NONE, d},
-    vertexRepresentation1,
-    vertexRepresentation2,
+      {Direction::NONE, d},
+      vertexRepresentation1,
+      vertexRepresentation2,
   }};
   return corrVertices;
 }

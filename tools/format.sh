@@ -11,11 +11,14 @@ DIRS=$@
 
 ignore_conditions=""
 
+parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+cd "$parent_path"
+cd ..
+
 while read -r line; do
+    echo "Ignoring $line"
     ignore_conditions+="! -name $line "
 done < ".clang-format-ignore"
-
-echo " IT IS $ignore_conditions"
 
 # Find and format .h, .tpp and .cpp files
 find $DIRS -type f \( -name "*.h" -o -name "*.tpp" -o -name "*.cpp" \) $ignore_conditions -exec clang-format -i {} +

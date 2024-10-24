@@ -465,38 +465,36 @@ TEST_F(MidGameFixture, UseRobberNoStealTest) {
 
 TEST_F(GameFixture, BuildWithoutStructuresTest) {
   iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 0},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                       Direction::NORTH, {0, 0, 0, 0, 0}, false);
   iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 1},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                       Direction::NORTH, {0, 0, 0, 0, 0}, false);
   iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 2},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                       Direction::NORTH, {0, 0, 0, 0, 0}, false);
   iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 3},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                       Direction::NORTH, {0, 0, 0, 0, 0}, false);
   iGame.buildStructure(playerID1, StructureType::VILLAGE, {0, 4},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                       Direction::NORTH, {0, 0, 0, 0, 0}, false);
   EXPECT_THROW(
       {
         iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 3},
-                            Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                             Direction::NORTH, {0, 0, 0, 0, 0}, false);
       },
       Dogan::InsufficientStructuresException);
-  iGame.buildStructure(playerID1, StructureType::CITY, {0, 4},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, true);
-  EXPECT_NO_THROW(
-      {
-        iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 2},
-                            Direction::NORTH, {0, 0, 0, 0, 0}, false);
-      });
+  iGame.buildStructure(playerID1, StructureType::CITY, {0, 4}, Direction::NORTH,
+                       {0, 0, 0, 0, 0}, true);
+  EXPECT_NO_THROW({
+    iGame.buildStructure(playerID1, StructureType::VILLAGE, {1, 2},
+                         Direction::NORTH, {0, 0, 0, 0, 0}, false);
+  });
 }
 
 TEST_F(GameFixture, UpgradeSomeoneElsesVillageTest) {
   iGame.buildStructure(playerID2, StructureType::VILLAGE, {0, 0},
-                      Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                       Direction::NORTH, {0, 0, 0, 0, 0}, false);
   EXPECT_THROW(
       {
         iGame.buildStructure(playerID1, StructureType::CITY, {0, 1},
-                            Direction::NORTH, {0, 0, 0, 0, 0}, false);
+                             Direction::NORTH, {0, 0, 0, 0, 0}, false);
       },
       Dogan::BuildStructureException);
 }
-

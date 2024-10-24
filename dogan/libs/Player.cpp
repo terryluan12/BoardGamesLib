@@ -24,7 +24,7 @@ void Player::buildStructure(StructureType st) {
   }
   availableStructures[static_cast<int>(st)] -= 1;
   victoryPoints += 1;
-  if(st == StructureType::CITY){
+  if (st == StructureType::CITY) {
     availableStructures[static_cast<int>(StructureType::VILLAGE)] += 1;
   }
 }

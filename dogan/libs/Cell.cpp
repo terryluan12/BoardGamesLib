@@ -31,24 +31,22 @@ bool Cell::hasOwnConnectedRoads(int pid, Direction d, StructureType st) const {
   std::array<Direction, 2> localPotentialRoads{};
   std::array<edgeRepresentation, 2> distantPotentialRoads{};
   if (st == StructureType::ROAD) {
-    auto tempLocalDirections = AxialHexDirection::getLocalAdjacentEdgeToEdgeDirections(d);
-    auto tempDistantDirections = AxialHexDirection::getDistantAdjacentEdgeToEdgeDirections(d);
-    std::copy(
-        tempLocalDirections.begin(),
-        tempLocalDirections.end(),
-        localPotentialRoads.begin());
-    std::copy(
-        tempDistantDirections.begin(),
-        tempDistantDirections.end(),
-        distantPotentialRoads.begin());
-  } else if (st == StructureType::VILLAGE || st == StructureType::CITY) {
-    auto tempLocalDirections = AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
-    auto tempDistantDirections = AxialHexDirection::getDistantAdjacentEdgeToEdgeDirections(d);
-    std::copy(tempLocalDirections.begin(),
-              tempLocalDirections.end(),
+    auto tempLocalDirections =
+        AxialHexDirection::getLocalAdjacentEdgeToEdgeDirections(d);
+    auto tempDistantDirections =
+        AxialHexDirection::getDistantAdjacentEdgeToEdgeDirections(d);
+    std::copy(tempLocalDirections.begin(), tempLocalDirections.end(),
               localPotentialRoads.begin());
-    std::copy(tempDistantDirections.begin(),
-              tempDistantDirections.end(),
+    std::copy(tempDistantDirections.begin(), tempDistantDirections.end(),
+              distantPotentialRoads.begin());
+  } else if (st == StructureType::VILLAGE || st == StructureType::CITY) {
+    auto tempLocalDirections =
+        AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
+    auto tempDistantDirections =
+        AxialHexDirection::getDistantAdjacentEdgeToEdgeDirections(d);
+    std::copy(tempLocalDirections.begin(), tempLocalDirections.end(),
+              localPotentialRoads.begin());
+    std::copy(tempDistantDirections.begin(), tempDistantDirections.end(),
               distantPotentialRoads.begin());
   }
   for (auto direction : localPotentialRoads) {
@@ -87,7 +85,7 @@ void Cell::buildStructure(int pid, Direction direction,
                           std::shared_ptr<Structure> ds, bool mustBeAdjacent) {
   if (ds->getStructureType() == StructureType::CITY) {
     throw BuildStructureException("Error: Cannot build city on its own. Must "
-                               "upgrade using upgradeToCity");
+                                  "upgrade using upgradeToCity");
   }
   if (hasStructure(direction, ds->getStructureType())) {
     throw BuildStructureException("Error: Cannot build on existing structure");
@@ -105,7 +103,8 @@ void Cell::buildStructure(int pid, Direction direction,
   switch (ds->getStructureType()) {
   case StructureType::VILLAGE:
     if (hasStructure(direction, StructureType::CITY)) {
-      throw BuildStructureException("Error: Cannot build on existing structure");
+      throw BuildStructureException(
+          "Error: Cannot build on existing structure");
     }
     buildings.emplace(direction, std::dynamic_pointer_cast<Building>(ds));
     break;
@@ -143,8 +142,9 @@ void Cell::upgradeToCity(int pid, Direction d) {
   if (!hasStructure(d, StructureType::VILLAGE)) {
     throw BuildStructureException("Error: Must build city on village");
   }
-  if(buildings.at(d)->getPlayerID() != pid){
-    throw BuildStructureException("Error: Cannot upgrade another player's building");
+  if (buildings.at(d)->getPlayerID() != pid) {
+    throw BuildStructureException(
+        "Error: Cannot upgrade another player's building");
   }
   buildings.at(d)->upgradeToCity();
 }

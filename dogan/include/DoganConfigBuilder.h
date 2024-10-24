@@ -7,7 +7,7 @@
 namespace Dogan {
 /**
  * @brief A class to build a Config object
- * 
+ *
  */
 class ConfigBuilder {
 public:

@@ -107,8 +107,8 @@ void Game::useRobber(int playerID, Coordinate2D tileLocation,
                      Direction direction) {
   checkPlayerExists(playerID);
   checkCoordinateValid(tileLocation);
-  
-  if(direction == Direction::NONE) {
+
+  if (direction == Direction::NONE) {
     return;
   }
 

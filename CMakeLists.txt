@@ -62,3 +62,8 @@ if(BUILD_UNITTESTS)
                   )
     gtest_add_tests(TARGET tests )
 endif()
+
+add_custom_target(format 
+  COMMAND ${CMAKE_COMMAND} -E echo "Formatting using tools/format.sh"
+  COMMAND ${PROJECT_SOURCE_DIR}/tools/format.sh ${PROJECT_SOURCE_DIR}/dogan ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/include
+)
