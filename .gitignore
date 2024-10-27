@@ -134,3 +134,5 @@ install_manifest.txt
 compile_commands.json
 _deps
 CMakeUserPresets.json
+
+__pycache__

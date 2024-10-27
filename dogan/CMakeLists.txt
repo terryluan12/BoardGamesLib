@@ -20,4 +20,8 @@ add_library(Game libs/Game.cpp include/DoganGame.h)
 target_link_libraries(Game PUBLIC Exceptions)
 target_link_libraries(Game PRIVATE Bank Board Building Player Config enums)
 
+add_library(CGame libs/CGame.cpp include/CDoganGame.h)
+target_link_libraries(CGame PUBLIC Exceptions)
+target_link_libraries(CGame PRIVATE Bank Board Building Player Config enums)
+
 add_subdirectory(libs)

@@ -44,7 +44,7 @@ bool Cell::hasOwnConnectedRoads(int pid, Direction d, StructureType st) const {
     auto tempLocalDirections =
         AxialHexDirection::getAdjacentEdgeToVertexDirections(d);
     auto tempDistantDirections =
-        AxialHexDirection::getDistantAdjacentEdgeToEdgeDirections(d);
+        AxialHexDirection::getEdgeFromVertexDirection(d);
     std::copy(tempLocalDirections.begin(), tempLocalDirections.end(),
               localPotentialRoads.begin());
     std::copy(tempDistantDirections.begin(), tempDistantDirections.end(),

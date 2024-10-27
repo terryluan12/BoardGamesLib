@@ -54,6 +54,9 @@ protected:
 class MidGameFixture : public ::testing::Test {
 protected:
   void SetUp() override {
+    StructureType villageInput = StructureType::VILLAGE;
+    StructureType roadInput = StructureType::ROAD; 
+    
     playerID1 = 0;
     playerID2 = 1;
     playerID3 = 2;
@@ -102,6 +105,49 @@ protected:
   int playerID1, playerID2, playerID3;
   Dogan::Game game;
 };
+
+class BuildingParameterizedTestFixture: public ::testing::TestWithParam<Direction> {
+  protected:
+    void SetUp() override {
+      auto config = Dogan::ConfigBuilder().build();
+      game = Dogan::Game(config);
+      game.addPlayer(0);
+      game.giveResources(0, {10, 10, 10, 10, 10});
+    }
+    Dogan::Game game;
+
+};
+
+TEST_P(BuildingParameterizedTestFixture, BuildingBuildingOnVertexTest) {
+  Direction d = GetParam();
+  EXPECT_NO_THROW({
+  game.buildStructure(0, StructureType::VILLAGE, {0, 0}, d,
+                      {0, 0, 0, 0, 0}, false);
+  });
+}
+
+INSTANTIATE_TEST_SUITE_P(AllVertexBuildingTests, BuildingParameterizedTestFixture, ::testing::ValuesIn(AxialHexDirection::vertexDirections));
+
+class RoadParameterizedTestFixture: public ::testing::TestWithParam<Direction> {
+  protected:
+    void SetUp() override {
+      auto config = Dogan::ConfigBuilder().build();
+      game = Dogan::Game(config);
+      game.addPlayer(0);
+    }
+    Dogan::Game game;
+};
+
+TEST_P(RoadParameterizedTestFixture, BuildRoadTest) {
+  Direction d = GetParam();
+  EXPECT_NO_THROW({
+  game.buildStructure(0, StructureType::ROAD, {1, 1}, d,
+                      {0, 0, 0, 0, 0}, false);
+  });
+}
+
+INSTANTIATE_TEST_SUITE_P(AllEdgeRoadTests, RoadParameterizedTestFixture, ::testing::ValuesIn(AxialHexDirection::edgeDirections));
+
 
 TEST_F(GameFixture, AddExistingPlayersTest) {
   nGame.addPlayer(0);
@@ -544,4 +590,9 @@ TEST_F(DevelopmentCardTestSuite, DevelopmentCardResetTurnTest) {
 
   EXPECT_EQ(game.getResourceCount(playerID1),
             (std::array<int, 5>{6, 5, 4, 5, 4}));
+}
+
+int main(int argc, char** argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

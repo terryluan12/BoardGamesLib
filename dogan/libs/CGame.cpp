@@ -1,7 +1,7 @@
 #include "AxialHexDirection.h"
 #include "Building.h"
 #include "DoganExceptions.h"
-#include "DoganGame.h"
+#include "CDoganGame.h"
 #include "Road.h"
 #include "enums.h"
 #include <memory>
@@ -52,16 +52,18 @@ void Game::distributeResources(int numberRolled) {
   }
 }
 
-void Game::buildStructure(int playerID, StructureType structType,
-                          Coordinate2D tileLocation, Direction direction,
+void Game::buildStructure(int playerID, int structType,
+                          Coordinate2D tileLocation, int direction,
                           std::array<int, 5> cost, bool mustBeAdjacent) {
   std::shared_ptr<Structure> element;
+  StructureType st = static_cast<StructureType>(structType);
+  Direction d = static_cast<Direction>(direction);
   checkPlayerExists(playerID);
   checkPlayerCanAfford(playerID, cost);
   checkCoordinateValid(tileLocation);
-  switch (structType) {
+  switch (st) {
   case StructureType::VILLAGE:
-    element = std::make_shared<Building>(Building(playerID, structType));
+    element = std::make_shared<Building>(Building(playerID, st));
   case StructureType::CITY:
     break;
   case StructureType::ROAD:
@@ -71,12 +73,12 @@ void Game::buildStructure(int playerID, StructureType structType,
     throw InvalidTypeException("Error: Cannot build a port");
   }
 
-  players.at(playerID).buildStructure(structType);
+  players.at(playerID).buildStructure(st);
 
-  if (structType == StructureType::CITY) {
-    board.upgradeToCity(playerID, tileLocation, direction);
+  if (st == StructureType::CITY) {
+    board.upgradeToCity(playerID, tileLocation, d);
   } else {
-    board.buildStructure(playerID, element, tileLocation, direction,
+    board.buildStructure(playerID, element, tileLocation, d,
                          mustBeAdjacent);
   }
   bank.addResources(cost);
@@ -110,28 +112,30 @@ void Game::tradeResources(int playerID1, std::array<int, 5> resources1,
 }
 
 void Game::useRobber(int playerID, Coordinate2D tileLocation,
-                     Direction direction) {
+                     int direction) {
+  Direction d = static_cast<Direction>(direction);
   checkPlayerExists(playerID);
   checkCoordinateValid(tileLocation);
 
-  if (direction == Direction::NONE) {
+  if (d == Direction::NONE) {
     return;
   }
 
-  if (!board.hasBuilding(tileLocation, direction))
+  if (!board.hasBuilding(tileLocation, d))
     throw NoSuchStructureException("Error: No Building at given location");
 
   board.moveRobber(tileLocation);
 
-  int stolenPID = board.getBuilding(tileLocation, direction)->getPlayerID();
+  int stolenPID = board.getBuilding(tileLocation, d)->getPlayerID();
   stealResource(playerID, stolenPID);
 }
 
-void Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
+void Game::useMonopolyDevelopmentCard(int playerID, int resource) {
+  ResourceType rt = static_cast<ResourceType>(resource);
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::MONOPOLY);
   checkUsedDevCard();
-  checkResourceType(resource);
+  checkResourceType(rt);
 
   int resourceIndex = static_cast<int>(resource);
 
@@ -139,14 +143,14 @@ void Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
     if (pid == playerID)
       continue;
     int stolenCount = p.getResourceCount()[resourceIndex];
-    players.at(playerID).addResource(resource, stolenCount);
-    p.addResource(resource, -1 * stolenCount);
+    players.at(playerID).addResource(rt, stolenCount);
+    p.addResource(rt, -1 * stolenCount);
   }
   usedDevCard = true;
 }
 
 void Game::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
-                                     Direction direction) {
+                                     int direction) {
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::SOLDIER);
   checkUsedDevCard();
 
@@ -164,34 +168,36 @@ void Game::useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
 
 void Game::useRoadDevelopmentCard(int playerID,
                                   std::array<Coordinate2D, 2> tileLocations,
-                                  std::array<Direction, 2> directions) {
+                                  std::array<int, 2> directions) {
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::BUILDROAD);
   checkUsedDevCard();
   for (int i = 0; i < 2; i++) {
-    buildStructure(playerID, StructureType::ROAD, tileLocations[i],
+    buildStructure(playerID, static_cast<int>(StructureType::ROAD), tileLocations[i],
                    directions[i], {0, 0, 0, 0, 0});
   }
   usedDevCard = true;
 }
 void Game::useTakeTwoDevelopmentCard(int playerID,
-                                     std::array<ResourceType, 2> resources) {
+                                     std::array<int, 2> resources) {
+  std::array<ResourceType, 2> r = {static_cast<ResourceType>(resources[0]),
+                                           static_cast<ResourceType>(resources[1])};
   checkPlayerExists(playerID);
   checkPlayerHasDevelopmentCard(playerID, DevelopmentType::TAKETWO);
   checkUsedDevCard();
-  checkResourceType(resources[0]);
-  checkResourceType(resources[1]);
+  checkResourceType(r[0]);
+  checkResourceType(r[1]);
 
-  if (resources[0] == resources[1]) {
-    checkBankCanAfford(resources[0], 2);
+  if (r[0] == r[1]) {
+    checkBankCanAfford(r[0], 2);
   } else {
-    checkBankCanAfford(resources[0], 1);
-    checkBankCanAfford(resources[1], 1);
+    checkBankCanAfford(r[0], 1);
+    checkBankCanAfford(r[1], 1);
   }
 
   for (int i = 0; i < 2; i++) {
-    players.at(playerID).addResource(resources[i], 1);
-    bank.addResource(resources[i], -1);
+    players.at(playerID).addResource(r[i], 1);
+    bank.addResource(r[i], -1);
   }
   usedDevCard = true;
 }
@@ -216,9 +222,10 @@ int Game::getVictoryPoints(int playerID) const {
   return players.at(playerID).getVictoryPoints();
 }
 
-bool Game::hasStructure(Coordinate2D coord, Direction direction,
-                        StructureType structureType) const {
-  return board.hasStructure(coord, direction, structureType);
+bool Game::hasStructure(Coordinate2D coord, int direction,
+                        int structureType) const {
+  return board.hasStructure(coord, static_cast<Direction>(direction),
+                            static_cast<StructureType>(structureType));
 }
 
 void Game::resetTurn(void) {
