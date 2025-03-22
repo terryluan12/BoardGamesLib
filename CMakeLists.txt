@@ -15,7 +15,8 @@ include(FetchContent)
 FetchContent_Declare(
   googletest
   # Specify the commit you depend on and update it regularly.
-  URL https://github.com/google/googletest/archive/5376968f6948923e2411081fd9372e71a59d8e77.zip
+  URL https://github.com/google/googletest/archive/6910c9d9165801d8827d628cb72eb7ea9dd538c5.zip
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -70,38 +71,54 @@ if(BUILD_UNITTESTS)
     gtest_add_tests(TARGET tests )
 endif()
 
-find_package(SWIG 4.0 COMPONENTS python)
+# Set to local swig executable if necessary
+set(SWIG_EXECUTABLE "/usr/local/bin/swig")
+
+find_package(SWIG 4.4.0 COMPONENTS python go)
 
 if(SWIG_FOUND)
-  message("Found SWIG")
+  message("Found SWIG v${SWIG_VERSION}")
   include(${SWIG_USE_FILE})
   find_package(PythonLibs)
   include_directories(${PYTHON_INCLUDE_PATH})
 
-  set_source_files_properties(dogan/extras/Dogan.i PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties(dogan/extras/python/dogan.i PROPERTIES CPLUSPLUS ON)
   swig_add_library( doganpython 
                     LANGUAGE python 
                     OUTPUT_DIR ${CMAKE_BINARY_DIR}/languages/python
                     OUTFILE_DIR ${CMAKE_BINARY_DIR}/languages/python
                     SOURCES 
-                    dogan/extras/Dogan.i)
+                    dogan/extras/python/dogan.i)
   
   # target_include_directories(doganpython PUBLIC ${PROJECT_SOURCE_DIR}/dogan/include PUBLIC ${PROJECT_SOURCE_DIR}/include)
   set_target_properties(doganpython PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/languages/python)
-  target_link_libraries(doganpython ${PYTHON_LIBRARIES} ConfigBuilder CGame Config)
-
-  
-  set_source_files_properties(dogan/extras/enums.i PROPERTIES CPLUSPLUS ON)
-  swig_add_library(dogan_enums 
-                    LANGUAGE python 
-                    OUTPUT_DIR ${CMAKE_BINARY_DIR}/languages/python
-                    OUTFILE_DIR ${CMAKE_BINARY_DIR}/languages/python
-                    SOURCES  
-                    dogan/extras/enums.i)
-    set_target_properties(dogan_enums PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/languages/python)
-    target_link_libraries(dogan_enums ${PYTHON_LIBRARIES} enums)
+  target_link_libraries(doganpython ${PYTHON_LIBRARIES} ConfigBuilder Game Config AxialHexDirection)
 
   file(WRITE ${CMAKE_BINARY_DIR}/languages/python/__init__.py "")
+
+  # Golang conversion
+  find_program(GO_EXECUTABLE go)
+
+  if (GO_EXECUTABLE)
+    message("Using ${GO_EXECUTABLE} for generating Go Bindings")
+
+    set_property(SOURCE dogan/extras/go/dogan.i PROPERTY CPLUSPLUS ON)
+
+    swig_add_library(dogango
+      TYPE SHARED
+      LANGUAGE go
+      OUTPUT_DIR ${CMAKE_BINARY_DIR}/languages/go
+      OUTFILE_DIR ${CMAKE_BINARY_DIR}/languages/go
+      SOURCES dogan/extras/go/dogan.i
+      )
+      target_link_libraries(dogango enums ConfigBuilder Game Config)
+
+      execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink 
+        /path/to/target_directory ${CMAKE_BINARY_DIR}/languages/go/src)
+
+      file(WRITE ${CMAKE_BINARY_DIR}/languages/go/go.mod "module dogan\n\ngo 1.23.2")
+  endif()
+
 endif()
 
 add_custom_target(format 

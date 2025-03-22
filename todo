@@ -12,4 +12,6 @@ Determine whether checking should be done everywhere, or only in upper levels (p
  - for example whether checking should be done in game.upgradeCity, board.upgradeCity, or both
 Make tests more efficient/readable by using helper functions
 Check on positives and negatives in cost
-Add checking for purchased development card in turn
+Fix swig/python memory leak
+Fix deprecation warning on SWIG Generation
+Fix portability issue with cgo commands

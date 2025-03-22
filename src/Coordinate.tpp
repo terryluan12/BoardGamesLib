@@ -87,14 +87,14 @@ template <size_t N> int Coordinate<N>::getY(void) const {
   return coordinates[1];
 }
 
-template <size_t N>
-template <size_t M>
-decltype(auto) Coordinate<N>::get(void) const {
-  if (M > N - 1) {
-    throw std::out_of_range("Error: maximum amount of coordinates is " + N);
-  }
-  return coordinates[M];
-}
+// template <size_t N>
+// template <size_t M>
+// decltype(auto) Coordinate<N>::get(void) const {
+//   if (M > N - 1) {
+//     throw std::out_of_range("Error: maximum amount of coordinates is " + N);
+//   }
+//   return coordinates[M];
+// }
 
 template <size_t N>
 std::ostream &operator<<(std::ostream &os, Coordinate<N> const &c) {

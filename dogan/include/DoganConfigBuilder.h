@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Config.h"
+#include "Coordinate.h"
 #include <array>
 #include <vector>
 

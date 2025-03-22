@@ -1,25 +1,29 @@
 %module dogan
+
 %{
-#include "DoganConfigBuilder.h"
-#include "DoganExceptions.h"
-#include "CDoganGame.h"
-#include "AxialHexDirection.h"
 #include "Coordinate.h"
+#include "DoganConfigBuilder.h"
+#include "DoganGame.h"
+
+
+#include "DoganExceptions.h"
+#include "AxialHexDirection.h"
 #include "enums.h"
 using namespace Dogan;
+using StructureType = DoganStructureType::Type;
 %}
 
-
 %include <std_array.i>
-%template(IntArray5) std::array<int, 5>;
-%template(IntArray2) std::array<int, 2>;
+%include <std_vector.i>
 
-%include "Config.h"
+%template(IntArray2) std::array<int, 2>;
+%template(IntArray5) std::array<int, 5>;
+
 %include "Coordinate.h"
-%include "DoganConfigBuilder.h"
-%include "CDoganGame.h"
+%template(Coordinate2D) Coordinate<2>;
+
 %include "AxialHexDirection.h"
-%include "DoganExceptions.h"
 %include "enums.h"
 
-%template(Coordinate2D) Coordinate<2>;
+%include "DoganConfigBuilder.h"
+%include "DoganGame.h"

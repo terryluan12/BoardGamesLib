@@ -1,11 +1,10 @@
 import sys
 import os
 
-path_to_python_module = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../build/languages/python'))
+path_to_python_module = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../build/languages/python'))
 sys.path.insert(0, path_to_python_module)
 
 import dogan
-import dogan_enums
 
 if __name__ == "__main__":
     config = dogan.ConfigBuilder().build()
