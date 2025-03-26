@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AxialHexDirection.h"
+#include "AxialDirection.h"
 #include "common.h"
 #include <ostream>
 
@@ -31,7 +31,7 @@ extern "C" {
   };
 
   using StructureType = DoganStructureType::Type;
-  using Direction = AxialHexDirection::Direction;
+  using Direction = AxialDirection::Direction;
 } // namespace Dogan
 
 std::ostream &operator<<(std::ostream &os, Dogan::ResourceType const &d);

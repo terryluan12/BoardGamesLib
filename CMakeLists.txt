@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 23)									# Set C++ standard
 set(CMAKE_CXX_STANDARD_REQUIRED ON)							# If the compiler does not support the standard, throw an error
 set(CMAKE_CXX_EXTENSIONS OFF)								# Set C++ standard instead of G++
 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)				# Use folders in IDEs
 
  # Add Google Test
@@ -54,11 +55,12 @@ option(BUILD_UNITTESTS "Build tests" ON)
 if(BUILD_UNITTESTS)
     enable_testing()
     add_executable(tests 
+                  src/HexGame/Edge.test.cpp
+                  src/HexGame/Vertex.test.cpp
                   dogan/libs/Bank.test.cpp 
                   dogan/libs/Game.test.cpp
                   dogan/libs/Board.test.cpp
-                  dogan/libs/Cell.test.cpp
-                  src/AxialHexDirection.test.cpp)
+                  dogan/libs/Cell.test.cpp)
     target_link_libraries(tests 
                   gtest_main 
                   gmock
@@ -66,7 +68,6 @@ if(BUILD_UNITTESTS)
                   Game
                   ConfigBuilder
                   Board
-                  AxialHexDirection
                   )
     gtest_add_tests(TARGET tests )
 endif()
@@ -92,7 +93,7 @@ if(SWIG_FOUND)
   
   # target_include_directories(doganpython PUBLIC ${PROJECT_SOURCE_DIR}/dogan/include PUBLIC ${PROJECT_SOURCE_DIR}/include)
   set_target_properties(doganpython PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/languages/python)
-  target_link_libraries(doganpython ${PYTHON_LIBRARIES} ConfigBuilder Game Config AxialHexDirection)
+  target_link_libraries(doganpython ${PYTHON_LIBRARIES} ConfigBuilder Game Config AxialDirection)
 
   file(WRITE ${CMAKE_BINARY_DIR}/languages/python/__init__.py "")
 

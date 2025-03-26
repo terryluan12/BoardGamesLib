@@ -1,4 +1,4 @@
-#include "AxialHexDirection.h"
+#include "AxialDirection.h"
 #include "Building.h"
 #include "DoganExceptions.h"
 #include "DoganGame.h"
@@ -61,11 +61,11 @@ void Game::buildStructure(int playerID, StructureType structType,
   checkCoordinateValid(tileLocation);
   switch (structType) {
   case StructureType::VILLAGE:
-    element = std::make_shared<Building>(Building(playerID, structType));
+    element = std::make_shared<Building>(playerID, structType);
   case StructureType::CITY:
     break;
   case StructureType::ROAD:
-    element = std::make_shared<Road>(Road(playerID));
+    element = std::make_shared<Road>(playerID);
     break;
   case StructureType::PORT:
     throw InvalidTypeException("Error: Cannot build a port");
@@ -76,7 +76,7 @@ void Game::buildStructure(int playerID, StructureType structType,
   if (structType == StructureType::CITY) {
     board.upgradeToCity(playerID, tileLocation, direction);
   } else {
-    board.buildStructure(playerID, element, tileLocation, direction,
+  board.buildStructure(playerID, element, tileLocation, direction,
                          mustBeAdjacent);
   }
   bank.addResources(cost);

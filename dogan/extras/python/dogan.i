@@ -7,7 +7,7 @@
 
 
 #include "DoganExceptions.h"
-#include "AxialHexDirection.h"
+#include "AxialDirection.h"
 #include "enums.h"
 using namespace Dogan;
 using StructureType = DoganStructureType::Type;
@@ -22,7 +22,7 @@ using StructureType = DoganStructureType::Type;
 %include "Coordinate.h"
 %template(Coordinate2D) Coordinate<2>;
 
-%include "AxialHexDirection.h"
+%include "AxialDirection.h"
 %include "enums.h"
 
 %include "DoganConfigBuilder.h"

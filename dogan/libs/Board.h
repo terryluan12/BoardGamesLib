@@ -20,6 +20,7 @@ public:
   std::shared_ptr<Building> getBuilding(Coordinate2D c, Direction d) const;
   std::shared_ptr<Road> getRoad(Coordinate2D c, Direction d) const;
   const std::vector<Port> getPorts(void) const;
+  std::shared_ptr<Cell> &getTile(Coordinate2D c);
   Coordinate2D getRobberLocation(void) const;
   std::map<int, std::array<size_t, 5>>
   getResourceDistribution(int numberRolled) const;
@@ -37,7 +38,7 @@ public:
   void moveRobber(Coordinate2D nl);
 
   friend std::ostream &operator<<(std::ostream &os, Board const &db);
-
+  Board& operator=(const Board& B);
 private:
   size_t boardSize;
   Coordinate2D robberLocation;

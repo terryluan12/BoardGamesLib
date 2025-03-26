@@ -17,5 +17,5 @@ if __name__ == "__main__":
                         0, \
                         dogan.DoganStructureType.Type_VILLAGE, \
                         coordinate, \
-                        dogan.AxialHexDirection.Direction_NORTH, [0, 0, 0, 0, 0], False)
+                        dogan.AxialDirection.Direction_NORTH, [0, 0, 0, 0, 0], False)
     print(game.getResourceCount(0))

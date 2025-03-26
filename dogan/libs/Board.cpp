@@ -1,5 +1,7 @@
 #include "Board.h"
-#include "AxialHexDirection.h"
+#include "Edge.h"
+#include "Vertex.h"
+#include "AxialDirection.h"
 #include "enums.h"
 #include <memory>
 
@@ -21,7 +23,7 @@ Board::Board(Config config) {
       throw std::invalid_argument("Error: Cell already exists");
     }
     std::shared_ptr<Cell> dc =
-        std::make_shared<Cell>(Cell(false, c, numberOrder[i], resources[i]));
+        std::make_shared<Cell>(*this, false, c, numberOrder[i], resources[i]);
     this->tiles.insert(std::make_pair(c, dc));
     if (numbers.find(numberOrder[i]) == numbers.end()) {
       this->numbers.emplace(numberOrder[i],
@@ -31,28 +33,17 @@ Board::Board(Config config) {
     ++i;
   }
 
-  // Populate adjacent cells
-  for (const auto &[coords, tile] : this->tiles) {
-    for (auto d : AxialHexDirection::edgeDirections) {
-      if (!hasTile(coords + AxialHexDirection::toCoordinate(d))) {
-        continue;
-      }
-      tile->addAdjacentCell(
-          d, this->tiles.at(coords + AxialHexDirection::toCoordinate(d)));
-    }
-  }
-
   // Add all Ports
   for (size_t i = 0; i < config.getPortLocations().size(); i++) {
     const auto portVertices = portLocations[i];
     for (auto [coordinate, d] : portVertices) {
       for (auto [travelDirection, vertexDirection] :
-           AxialHexDirection::getAllVertexRepresentations(d)) {
+           Vertex::getAllVertexRepresentations(d)) {
         Coordinate2D newCoordinate =
-            coordinate + AxialHexDirection::toCoordinate(travelDirection);
+            coordinate + AxialDirection::toCoordinate(travelDirection);
         if (hasTile(newCoordinate)) {
           std::shared_ptr<Port> dp =
-              std::make_shared<Port>(Port(portResources[i]));
+              std::make_shared<Port>(portResources[i]);
           this->tiles.at(newCoordinate)
               ->buildStructure(-1, vertexDirection, dp, false);
         }
@@ -78,6 +69,10 @@ std::shared_ptr<Road> Board::getRoad(Coordinate2D c, Direction d) const {
     throw NoSuchStructureException("Error: No Building at given location");
   }
   return tiles.at(c)->getRoad(d);
+}
+
+std::shared_ptr<Cell> &Board::getTile(Coordinate2D c) {
+  return tiles.at(c);
 }
 
 Coordinate2D Board::getRobberLocation(void) const { return robberLocation; }
@@ -119,23 +114,23 @@ bool Board::hasTile(const Coordinate2D c) const { return tiles.contains(c); }
 
 void Board::buildStructure(int pid, std::shared_ptr<Structure> ds,
                            Coordinate2D c, Direction d, bool mustBeAdjacent) {
-  std::vector<elementRepresentation> elementRepresentations;
+  std::vector<HexPath> elementRepresentations;
   if (ds->getStructureType() == StructureType::VILLAGE) {
     auto allVertexRepresentations =
-        AxialHexDirection::getAllVertexRepresentations(d);
+        Vertex::getAllVertexRepresentations(d);
     elementRepresentations.insert(elementRepresentations.end(),
                                   allVertexRepresentations.begin(),
                                   allVertexRepresentations.end());
   } else if (ds->getStructureType() == StructureType::ROAD) {
-    auto allEdgeRepresentations =
-        AxialHexDirection::getAllEdgeRepresentations(d);
+  auto allEdgeRepresentations =
+      Edge::getAllEdgeRepresentations(d);
     elementRepresentations.insert(elementRepresentations.end(),
                                   allEdgeRepresentations.begin(),
                                   allEdgeRepresentations.end());
   }
   for (auto [travelDirection, targetDirection] : elementRepresentations) {
-    Coordinate2D newCoordinate =
-        c + AxialHexDirection::toCoordinate(travelDirection);
+  Coordinate2D newCoordinate =
+        c + AxialDirection::toCoordinate(travelDirection);
     if (!hasTile(newCoordinate)) {
       continue;
     }
@@ -162,4 +157,18 @@ std::ostream &operator<<(std::ostream &os, Board const &db) {
   }
   return os;
 }
+  Board& Board::operator=(const Board& B) {
+    if (this != &B) {
+      this->boardSize = B.boardSize;
+      this->robberLocation = B.robberLocation;
+      this->numbers = B.numbers;
+      this->tiles = B.tiles;
+
+      for(const auto &[key, cell] : B.tiles) {
+        cell->setBoard(*this);
+      }
+    }
+    return *this;
+  }
+
 } // namespace Dogan

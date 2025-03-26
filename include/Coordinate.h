@@ -22,8 +22,8 @@ public:
   int getX(void) const;
   int getY(void) const;
 
-  // template <size_t M> decltype(auto) get(void) const;
   // Ignored for SWIG
+  // template <size_t M> decltype(auto) get(void) const;
 
 private:
   static const size_t coordSize = N;

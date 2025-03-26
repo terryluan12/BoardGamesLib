@@ -6,15 +6,16 @@ target_link_libraries(Bank PRIVATE Exceptions enums)
 
 add_library(Board Board.cpp Board.h)
 target_link_libraries(Board PUBLIC Bank Cell Config Player Building Structure)
-target_link_libraries(Board PRIVATE Common Cell)
+target_link_libraries(Board PRIVATE Common Cell Edge Vertex)
 
 add_library(Cell Cell.cpp Cell.h)
 target_link_libraries(Cell PUBLIC Coordinate enums)
+target_link_libraries(Cell PRIVATE Edge Vertex)
 
 add_library(Player Player.cpp Player.h)
 target_link_libraries(Player PUBLIC Bank Building Structure)
 target_link_libraries(Player PRIVATE Exceptions)
 
 add_library(enums enums.cpp)
-target_link_libraries(enums PUBLIC AxialHexDirection Common)
+target_link_libraries(enums PUBLIC AxialDirection Common)
 

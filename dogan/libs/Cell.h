@@ -12,17 +12,21 @@
 #include <vector>
 
 namespace Dogan {
+
+class Board;
+
 class Cell {
 public:
-  Cell(bool cr, Coordinate2D c, int n, ResourceType t);
+  Cell(Board &b, bool cr, Coordinate2D c, int n, ResourceType t);
   Coordinate2D getCoordinate(void) const;
   ResourceType getResource(void) const;
+
+  void setBoard(Board &b);
 
   bool hasAdjacentBuildings(Direction d) const;
   bool hasOwnConnectedRoads(int pid, Direction d, StructureType st) const;
   void buildStructure(int pid, Direction direction,
                       std::shared_ptr<Structure> ds, bool mustBeAdjacent);
-  void addAdjacentCell(Direction direction, std::shared_ptr<Cell> cell);
   bool hasStructure(Direction d, StructureType st) const;
 
   bool hasBuilding(Direction d) const;
@@ -32,12 +36,13 @@ public:
   bool hasRoad(Direction d) const;
   std::shared_ptr<Road> getRoad(Direction d) const;
 
+
   void upgradeToCity(int pid, Direction d);
 
   friend std::ostream &operator<<(std::ostream &os, Cell const &dc);
 
-private:
-  std::map<Direction, std::weak_ptr<Cell>> adjacentCells;
+  private:
+  Board &board;
   std::unordered_map<Direction, std::shared_ptr<Building>> buildings;
   std::unordered_map<Direction, std::shared_ptr<Road>> roads;
   std::map<Direction, std::shared_ptr<Port>> ports;

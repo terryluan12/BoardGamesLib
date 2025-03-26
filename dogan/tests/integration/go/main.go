@@ -25,7 +25,7 @@ func main() {
 	coord := dogan.NewCoordinate2D(0, 0)
 
 
-	game.BuildStructure(0, dogan.DoganStructureTypeType_VILLAGE, coord, dogan.AxialHexDirectionDirection_NORTH, zeroArrays, false)
+	game.BuildStructure(0, dogan.DoganStructureTypeType_VILLAGE, coord, dogan.AxialDirectionDirection_NORTH, zeroArrays, false)
 	for resourceCount, i := game.GetResourceCount(0), 0; i < int(resourceCount.Size()); i++ {
 		fmt.Printf("There are %d of resource %d for player 0\n", resourceCount.Get(i), i)
 	}
