@@ -77,8 +77,13 @@ ConfigBuilder::setNumberLocations(std::vector<int> numberLocations) {
 }
 
 ConfigBuilder &ConfigBuilder::setPortLocations(
-    std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
-        portLocations) {
+    std::vector<std::set<VertexPrimitive>> portLocations) {
+  config.setPortLocations(portLocations);
+  return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setPortLocations(
+    std::vector<std::vector<VertexPrimitive>> portLocations) {
   config.setPortLocations(portLocations);
   return *this;
 }

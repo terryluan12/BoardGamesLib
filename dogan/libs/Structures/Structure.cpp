@@ -7,5 +7,6 @@ void Structure::setPlayerID(int pid) { playerID = pid; }
 
 void Structure::setStructureType(StructureType t) { structureType = t; }
 
-int Structure::getPlayerID(void) const { return playerID; }
+const int Structure::getPlayerID(void) const { return playerID; }
+
 } // namespace Dogan

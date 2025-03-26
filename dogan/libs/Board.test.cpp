@@ -20,11 +20,16 @@ TEST(BoardTest, AddDuplicateCellTest) {
 }
 
 TEST_F(BoardFixture, BuildNonAdjacentStructuresTest) {
-  auto villageNormal = std::make_shared<Building>(0, StructureType::VILLAGE);
-  auto roadNormal = std::make_shared<Road>(0);
+  auto Coordinate_1_1 = Coordinate2D(1, 1);
+  auto Coordinate_1_0 = Coordinate2D(1, 0);
+
+  auto villageNormal = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_1_1, Direction::NORTHWEST);
+  auto roadNormal =
+      std::make_shared<Road>(0, Coordinate_1_0, Direction::SOUTHEAST);
 
   // Villages
-  board.buildStructure(0, villageNormal, {1, 1}, Direction::NORTHWEST, false);
+  board.buildStructure(0, villageNormal, false);
   EXPECT_EQ((board.hasStructure({1, 1}, Direction::NORTHWEST,
                                 StructureType::VILLAGE)),
             true);
@@ -47,7 +52,7 @@ TEST_F(BoardFixture, BuildNonAdjacentStructuresTest) {
       true);
 
   // Roads
-  board.buildStructure(0, roadNormal, {1, 0}, Direction::SOUTHEAST, false);
+  board.buildStructure(0, roadNormal, false);
   EXPECT_EQ(
       (board.hasStructure({1, 0}, Direction::SOUTHEAST, StructureType::ROAD)),
       true);
@@ -57,10 +62,13 @@ TEST_F(BoardFixture, BuildNonAdjacentStructuresTest) {
 }
 
 TEST_F(BoardFixture, BuildNonAdjacentEdgeStructuresTest) {
-  auto villageEdge = std::make_shared<Building>(0, StructureType::VILLAGE);
-  auto roadEdge = std::make_shared<Road>(0);
+  auto Coordinate_0_0 = Coordinate2D(0, 0);
+  auto villageEdge = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_0_0, Direction::NORTHWEST);
+  auto roadEdge =
+      std::make_shared<Road>(0, Coordinate_0_0, Direction::NORTHWEST);
   // Edge Villages
-  board.buildStructure(0, villageEdge, {0, 0}, Direction::NORTHWEST, false);
+  board.buildStructure(0, villageEdge, false);
   EXPECT_EQ((board.hasStructure({0, 0}, Direction::NORTHWEST,
                                 StructureType::VILLAGE)),
             true);
@@ -78,7 +86,7 @@ TEST_F(BoardFixture, BuildNonAdjacentEdgeStructuresTest) {
       false);
 
   // Edge Roads
-  board.buildStructure(0, roadEdge, {0, 0}, Direction::NORTHWEST, false);
+  board.buildStructure(0, roadEdge, false);
   EXPECT_EQ(
       (board.hasStructure({0, 0}, Direction::NORTHWEST, StructureType::ROAD)),
       true);
@@ -89,39 +97,30 @@ TEST_F(BoardFixture, BuildNonAdjacentEdgeStructuresTest) {
 
 // Structures
 TEST_F(BoardFixture, BuildExistingStructuresTest) {
-  auto village = std::make_shared<Building>(0, StructureType::VILLAGE);
-  auto existingVillage = std::make_shared<Building>(0, StructureType::VILLAGE);
-  auto road = std::make_shared<Road>(0);
-  auto existingRoad = std::make_shared<Road>(0);
+  auto Coordinate_1_1 = Coordinate2D(1, 1);
+  auto Coordinate_1_0 = Coordinate2D(1, 0);
+  auto village = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_1_1, Direction::NORTHWEST);
+  auto existingVillage = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_1_0, Direction::SOUTH);
+  auto road = std::make_shared<Road>(0, Coordinate_1_0, Direction::SOUTHEAST);
+  auto existingRoad =
+      std::make_shared<Road>(0, Coordinate_1_1, Direction::NORTHWEST);
 
   // Buildings
-  board.buildStructure(0, village, {1, 1}, Direction::NORTHWEST, false);
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, village, {1, 1}, Direction::NORTHWEST, false);
-      },
-      Dogan::BuildStructureException);
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, existingVillage, {1, 0}, Direction::SOUTH,
-                             false);
-      },
-      Dogan::BuildStructureException);
+  board.buildStructure(0, village, false);
+  EXPECT_THROW({ board.buildStructure(0, village, false); },
+               Dogan::BuildStructureException);
+  EXPECT_THROW({ board.buildStructure(0, existingVillage, false); },
+               Dogan::BuildStructureException);
 
   // Roads
-  board.buildStructure(0, road, {1, 0}, Direction::SOUTHEAST, false);
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, road, {1, 0}, Direction::SOUTHEAST, false);
-      },
-      Dogan::BuildStructureException);
+  board.buildStructure(0, road, false);
+  EXPECT_THROW({ board.buildStructure(0, road, false); },
+               Dogan::BuildStructureException);
 
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, existingRoad, {1, 1}, Direction::NORTHWEST,
-                             false);
-      },
-      Dogan::BuildStructureException);
+  EXPECT_THROW({ board.buildStructure(0, existingRoad, false); },
+               Dogan::BuildStructureException);
 }
 
 TEST_F(BoardFixture, EmptyStructureTest) {
@@ -155,8 +154,10 @@ TEST_F(BoardFixture, UpgradeEmptyTest) {
 }
 
 TEST_F(BoardFixture, UpgradeCityTest) {
-  board.buildStructure(0, std::make_shared<Building>(0, StructureType::VILLAGE),
-                       {1, 1}, Direction::NORTHWEST, false);
+  auto Coordinate_1_1 = Coordinate2D(1, 1);
+  auto building = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_1_1, Direction::NORTHWEST);
+  board.buildStructure(0, building, false);
   board.upgradeToCity(0, {1, 1}, Direction::NORTHWEST);
   EXPECT_THROW(
       {
@@ -166,28 +167,26 @@ TEST_F(BoardFixture, UpgradeCityTest) {
 }
 
 TEST_F(BoardFixture, BuildAdjacentBuildingTest) {
-  auto village1 = std::make_shared<Building>(0, StructureType::VILLAGE);
-  auto village2 = std::make_shared<Building>(0, StructureType::VILLAGE);
-  board.buildStructure(0, village1, {1, 1}, Direction::NORTHWEST, false);
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, village2, {1, 0}, Direction::SOUTHEAST, true);
-      },
-      BuildStructureException);
+  auto Coordinate_1_1 = Coordinate2D(1, 1);
+  auto Coordinate_1_0 = Coordinate2D(1, 0);
+  auto Coordinate_0_2 = Coordinate2D(0, 2);
+  auto Coordinate_2_0 = Coordinate2D(2, 0);
+  auto village1 = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_1_1, Direction::NORTHWEST);
+  auto village2 = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_1_0, Direction::SOUTHEAST);
+  auto identical_village2 = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_0_2, Direction::NORTH);
+  auto identical1_village2 = std::make_shared<Building>(
+      0, StructureType::VILLAGE, Coordinate_2_0, Direction::SOUTHWEST);
+  board.buildStructure(0, village1, false);
+  EXPECT_THROW({ board.buildStructure(0, village2, true); },
+               BuildStructureException);
 
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, village2, {0, 1}, Direction::SOUTHEAST, true);
-      },
-      BuildStructureException);
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, village2, {0, 2}, Direction::NORTH, true);
-      },
-      BuildStructureException);
-  EXPECT_THROW(
-      {
-        board.buildStructure(0, village2, {2, 0}, Direction::SOUTHWEST, true);
-      },
-      BuildStructureException);
+  EXPECT_THROW({ board.buildStructure(0, village2, true); },
+               BuildStructureException);
+  EXPECT_THROW({ board.buildStructure(0, village2, true); },
+               BuildStructureException);
+  EXPECT_THROW({ board.buildStructure(0, village2, true); },
+               BuildStructureException);
 }

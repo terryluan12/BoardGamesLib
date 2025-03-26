@@ -1,7 +1,7 @@
 #include "Board.h"
+#include "AxialDirection.h"
 #include "Edge.h"
 #include "Vertex.h"
-#include "AxialDirection.h"
 #include "enums.h"
 #include <memory>
 
@@ -13,8 +13,7 @@ Board::Board(Config config) {
   this->robberLocation = config.getRobberLocation();
   std::vector<pip> numberOrder = config.getNumbers(rengine);
   std::vector<ResourceType> resources = config.getResources(rengine);
-  auto portLocations = config.getPortLocations();
-  auto portResources = config.getPortResources(rengine);
+  auto ports = config.getPorts(rengine);
 
   // create all tiles
   size_t i = 0;
@@ -34,18 +33,13 @@ Board::Board(Config config) {
   }
 
   // Add all Ports
-  for (size_t i = 0; i < config.getPortLocations().size(); i++) {
-    const auto portVertices = portLocations[i];
-    for (auto [coordinate, d] : portVertices) {
-      for (auto [travelDirection, vertexDirection] :
-           Vertex::getAllVertexRepresentations(d)) {
-        Coordinate2D newCoordinate =
-            coordinate + AxialDirection::toCoordinate(travelDirection);
-        if (hasTile(newCoordinate)) {
-          std::shared_ptr<Port> dp =
-              std::make_shared<Port>(portResources[i]);
-          this->tiles.at(newCoordinate)
-              ->buildStructure(-1, vertexDirection, dp, false);
+  for (const auto &port : ports) {
+    for (const auto &dock : port->getLocations()) {
+      for (const auto &portRep : dock.getAllRepresentations()) {
+        auto coordinate = portRep.getCoordinate();
+        auto direction = portRep.getDirection();
+        if (hasTile(coordinate)) {
+          this->getTile(coordinate)->addPort(direction, port);
         }
       }
     }
@@ -71,9 +65,7 @@ std::shared_ptr<Road> Board::getRoad(Coordinate2D c, Direction d) const {
   return tiles.at(c)->getRoad(d);
 }
 
-std::shared_ptr<Cell> &Board::getTile(Coordinate2D c) {
-  return tiles.at(c);
-}
+std::shared_ptr<Cell> &Board::getTile(Coordinate2D c) { return tiles.at(c); }
 
 Coordinate2D Board::getRobberLocation(void) const { return robberLocation; }
 
@@ -113,29 +105,27 @@ bool Board::hasStructure(const Coordinate2D c, const Direction d,
 bool Board::hasTile(const Coordinate2D c) const { return tiles.contains(c); }
 
 void Board::buildStructure(int pid, std::shared_ptr<Structure> ds,
-                           Coordinate2D c, Direction d, bool mustBeAdjacent) {
-  std::vector<HexPath> elementRepresentations;
-  if (ds->getStructureType() == StructureType::VILLAGE) {
-    auto allVertexRepresentations =
-        Vertex::getAllVertexRepresentations(d);
-    elementRepresentations.insert(elementRepresentations.end(),
-                                  allVertexRepresentations.begin(),
-                                  allVertexRepresentations.end());
-  } else if (ds->getStructureType() == StructureType::ROAD) {
-  auto allEdgeRepresentations =
-      Edge::getAllEdgeRepresentations(d);
-    elementRepresentations.insert(elementRepresentations.end(),
-                                  allEdgeRepresentations.begin(),
-                                  allEdgeRepresentations.end());
-  }
-  for (auto [travelDirection, targetDirection] : elementRepresentations) {
-  Coordinate2D newCoordinate =
-        c + AxialDirection::toCoordinate(travelDirection);
-    if (!hasTile(newCoordinate)) {
-      continue;
+                           bool mustBeAdjacent) {
+  if (ds->getStructureType() == StructureType::ROAD) {
+    for (const auto &location : std::static_pointer_cast<Road>(ds)
+                                    ->getLocation()
+                                    .getAllRepresentations()) {
+      if (!hasTile(location.getCoordinate())) {
+        continue;
+      }
+      tiles.at(location.getCoordinate())
+          ->buildStructure(pid, location.getDirection(), ds, mustBeAdjacent);
     }
-    tiles.at(newCoordinate)
-        ->buildStructure(pid, targetDirection, ds, mustBeAdjacent);
+  } else {
+    for (const auto &location : std::static_pointer_cast<Building>(ds)
+                                    ->getLocation()
+                                    .getAllRepresentations()) {
+      if (!hasTile(location.getCoordinate())) {
+        continue;
+      }
+      tiles.at(location.getCoordinate())
+          ->buildStructure(pid, location.getDirection(), ds, mustBeAdjacent);
+    }
   }
 }
 
@@ -157,18 +147,18 @@ std::ostream &operator<<(std::ostream &os, Board const &db) {
   }
   return os;
 }
-  Board& Board::operator=(const Board& B) {
-    if (this != &B) {
-      this->boardSize = B.boardSize;
-      this->robberLocation = B.robberLocation;
-      this->numbers = B.numbers;
-      this->tiles = B.tiles;
+Board &Board::operator=(const Board &B) {
+  if (this != &B) {
+    this->boardSize = B.boardSize;
+    this->robberLocation = B.robberLocation;
+    this->numbers = B.numbers;
+    this->tiles = B.tiles;
 
-      for(const auto &[key, cell] : B.tiles) {
-        cell->setBoard(*this);
-      }
+    for (const auto &[key, cell] : B.tiles) {
+      cell->setBoard(*this);
     }
-    return *this;
   }
+  return *this;
+}
 
 } // namespace Dogan

@@ -57,8 +57,8 @@ class MidGameFixture : public ::testing::Test {
 protected:
   void SetUp() override {
     StructureType villageInput = StructureType::VILLAGE;
-    StructureType roadInput = StructureType::ROAD; 
-    
+    StructureType roadInput = StructureType::ROAD;
+
     playerID1 = 0;
     playerID2 = 1;
     playerID3 = 2;
@@ -108,48 +108,51 @@ protected:
   Dogan::Game game;
 };
 
-class BuildingParameterizedTestFixture: public ::testing::TestWithParam<Direction> {
-  protected:
-    void SetUp() override {
-      auto config = Dogan::ConfigBuilder().build();
-      game = Dogan::Game(config);
-      game.addPlayer(0);
-      game.giveResources(0, {10, 10, 10, 10, 10});
-    }
-    Dogan::Game game;
-
+class BuildingParameterizedTestFixture
+    : public ::testing::TestWithParam<Direction> {
+protected:
+  void SetUp() override {
+    auto config = Dogan::ConfigBuilder().build();
+    game = Dogan::Game(config);
+    game.addPlayer(0);
+    game.giveResources(0, {10, 10, 10, 10, 10});
+  }
+  Dogan::Game game;
 };
 
 TEST_P(BuildingParameterizedTestFixture, BuildingBuildingOnVertexTest) {
   Direction d = GetParam();
   EXPECT_NO_THROW({
-  game.buildStructure(0, StructureType::VILLAGE, {0, 0}, d,
-                      {0, 0, 0, 0, 0}, false);
+    game.buildStructure(0, StructureType::VILLAGE, {0, 0}, d, {0, 0, 0, 0, 0},
+                        false);
   });
 }
 
-INSTANTIATE_TEST_SUITE_P(AllVertexBuildingTests, BuildingParameterizedTestFixture, ::testing::ValuesIn(Vertex::directions));
+INSTANTIATE_TEST_SUITE_P(AllVertexBuildingTests,
+                         BuildingParameterizedTestFixture,
+                         ::testing::ValuesIn(Vertex::directions));
 
-class RoadParameterizedTestFixture: public ::testing::TestWithParam<Direction> {
-  protected:
-    void SetUp() override {
-      auto config = Dogan::ConfigBuilder().build();
-      game = Dogan::Game(config);
-      game.addPlayer(0);
-    }
-    Dogan::Game game;
+class RoadParameterizedTestFixture
+    : public ::testing::TestWithParam<Direction> {
+protected:
+  void SetUp() override {
+    auto config = Dogan::ConfigBuilder().build();
+    game = Dogan::Game(config);
+    game.addPlayer(0);
+  }
+  Dogan::Game game;
 };
 
 TEST_P(RoadParameterizedTestFixture, BuildRoadTest) {
   Direction d = GetParam();
   EXPECT_NO_THROW({
-  game.buildStructure(0, StructureType::ROAD, {1, 1}, d,
-                      {0, 0, 0, 0, 0}, false);
+    game.buildStructure(0, StructureType::ROAD, {1, 1}, d, {0, 0, 0, 0, 0},
+                        false);
   });
 }
 
-INSTANTIATE_TEST_SUITE_P(AllEdgeRoadTests, RoadParameterizedTestFixture, ::testing::ValuesIn(Edge::directions));
-
+INSTANTIATE_TEST_SUITE_P(AllEdgeRoadTests, RoadParameterizedTestFixture,
+                         ::testing::ValuesIn(Edge::directions));
 
 TEST_F(GameFixture, AddExistingPlayersTest) {
   nGame.addPlayer(0);
@@ -439,7 +442,6 @@ TEST_F(GameFixture, UpgradeSomeoneElsesVillageTest) {
       Dogan::BuildStructureException);
 }
 
-
 class DevelopmentCardTestSuite : public ::testing::Test {
 protected:
   void SetUp() override {
@@ -449,19 +451,19 @@ protected:
 
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
-    Dogan::Config config =
-        Dogan::ConfigBuilder()
-            .setDevelopmentConfig(generalConfig)
-            .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
-                                      Dogan::DevelopmentType::TAKETWO,
-                                      Dogan::DevelopmentType::BUILDROAD,
-                                      Dogan::DevelopmentType::SOLDIER,
-                                      Dogan::DevelopmentType::MONOPOLY,
-                                      Dogan::DevelopmentType::VICPOINT,
-                                      })
-            .setDevelopmentCount({1, 1, 1, 1, 2})
-            .build();
-    
+    Dogan::Config config = Dogan::ConfigBuilder()
+                               .setDevelopmentConfig(generalConfig)
+                               .setDevelopmentLocations({
+                                   Dogan::DevelopmentType::TAKETWO,
+                                   Dogan::DevelopmentType::TAKETWO,
+                                   Dogan::DevelopmentType::BUILDROAD,
+                                   Dogan::DevelopmentType::SOLDIER,
+                                   Dogan::DevelopmentType::MONOPOLY,
+                                   Dogan::DevelopmentType::VICPOINT,
+                               })
+                               .setDevelopmentCount({1, 1, 1, 1, 2})
+                               .build();
+
     // initialGame = Dogan::Game(config);
     // initialGame.addPlayer(playerID1);
 
@@ -482,7 +484,7 @@ protected:
     game.giveResources(playerID1, {4, 4, 4, 4, 4});
     game.giveResources(playerID2, {1, 2, 3, 4, 5});
     game.giveResources(playerID3, {1, 2, 3, 4, 5});
-    for(int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++) {
       game.purchaseDevelopmentCard(playerID1, {0, 0, 0, 0, 0});
     }
   }
@@ -490,7 +492,6 @@ protected:
   Dogan::Game game;
   // Dogan::Game initialGame;
 };
-
 
 // TEST_F(DevelopmentCardTestSuite, PurchaseDevelopmentCardTest) {
 //   std::array<int, 5> expected{0, 0, 0, 0, 0};
@@ -539,7 +540,7 @@ TEST_F(DevelopmentCardTestSuite, useRoadDevelopmentCardTest) {
 
   game.useRoadDevelopmentCard(playerID1, tileLocations, directions);
   for (int i = 0; i < 2; i++) {
-  EXPECT_EQ(
+    EXPECT_EQ(
         game.hasStructure(tileLocations[i], directions[i], StructureType::ROAD),
         true);
   }
@@ -555,28 +556,37 @@ TEST_F(DevelopmentCardTestSuite, useTakeTwoDevelopmentCardTest) {
   game.useTakeTwoDevelopmentCard(playerID1, resources1);
   EXPECT_EQ(game.getResourceCount(playerID1),
             (std::array<int, 5>{4, 5, 4, 5, 4}));
-  EXPECT_EQ(game.getResourceCount(-1), (std::array<int, 5>{19, 18, 19, 18, 19}));
+  EXPECT_EQ(game.getResourceCount(-1),
+            (std::array<int, 5>{19, 18, 19, 18, 19}));
 }
 
 TEST_F(DevelopmentCardTestSuite, DoubleUseSameDevelopmentCardsTest) {
-  game.useTakeTwoDevelopmentCard(playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
-  EXPECT_THROW({
-    game.useTakeTwoDevelopmentCard(playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
-  }, Dogan::UsedDevelopmentCardException);
-  
-  EXPECT_EQ(game.getResourceCount(playerID1), (std::array<int, 5>{4, 5, 4, 5, 4}));
-  EXPECT_EQ(game.getResourceCount(playerID2), (std::array<int, 5>{1, 2, 3, 4, 5}));
+  game.useTakeTwoDevelopmentCard(playerID1,
+                                 {ResourceType::BRICK, ResourceType::SHEEP});
+  EXPECT_THROW(
+      {
+        game.useTakeTwoDevelopmentCard(
+            playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
+      },
+      Dogan::UsedDevelopmentCardException);
+
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{4, 5, 4, 5, 4}));
+  EXPECT_EQ(game.getResourceCount(playerID2),
+            (std::array<int, 5>{1, 2, 3, 4, 5}));
 }
 
 TEST_F(DevelopmentCardTestSuite, DoubleUseDifferentDevelopmentCardsTest) {
-  game.useTakeTwoDevelopmentCard(playerID1, {ResourceType::BRICK, ResourceType::SHEEP});
-  EXPECT_THROW({
-    game.useMonopolyDevelopmentCard(playerID1, ResourceType::BRICK);
-  }, Dogan::UsedDevelopmentCardException);
-  EXPECT_EQ(game.getResourceCount(playerID1), (std::array<int, 5>{4, 5, 4, 5, 4}));
-  EXPECT_EQ(game.getResourceCount(playerID2), (std::array<int, 5>{1, 2, 3, 4, 5}));
+  game.useTakeTwoDevelopmentCard(playerID1,
+                                 {ResourceType::BRICK, ResourceType::SHEEP});
+  EXPECT_THROW(
+      { game.useMonopolyDevelopmentCard(playerID1, ResourceType::BRICK); },
+      Dogan::UsedDevelopmentCardException);
+  EXPECT_EQ(game.getResourceCount(playerID1),
+            (std::array<int, 5>{4, 5, 4, 5, 4}));
+  EXPECT_EQ(game.getResourceCount(playerID2),
+            (std::array<int, 5>{1, 2, 3, 4, 5}));
 }
-
 
 TEST_F(DevelopmentCardTestSuite, DevelopmentCardResetTurnTest) {
   std::array<ResourceType, 2> resources1{ResourceType::BRICK,
@@ -594,7 +604,7 @@ TEST_F(DevelopmentCardTestSuite, DevelopmentCardResetTurnTest) {
             (std::array<int, 5>{6, 5, 4, 5, 4}));
 }
 
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

@@ -1,14 +1,12 @@
 #include "Vertex.h"
 #include "Edge.h"
 #include <algorithm>
-      
-Vertex::Vertex(Coordinate2D c, HexDirection d) : coordinate(c) {
-    if (d == HexDirection::EAST || d == HexDirection::WEST ) {
-        throw std::invalid_argument("Direction cannot be East or West for a vertex");
-    }
-    else {
-        direction = d;
-    }
+
+Vertex::Vertex(Coordinate2D c, HexDirection d) : Element(c, d) {
+  if (d == HexDirection::EAST || d == HexDirection::WEST) {
+    throw std::invalid_argument(
+        "Direction cannot be East or West for a vertex");
+  }
 }
 
 const std::array<HexDirection, 6> Vertex::directions{
@@ -16,15 +14,15 @@ const std::array<HexDirection, 6> Vertex::directions{
     HexDirection::SOUTH, HexDirection::SOUTHWEST, HexDirection::NORTHWEST};
 
 const int Vertex::getIndex(HexDirection d) {
-    if (d == HexDirection::EAST || d == HexDirection::WEST) {
-      throw std::invalid_argument(
+  if (d == HexDirection::EAST || d == HexDirection::WEST) {
+    throw std::invalid_argument(
         "Error: Invalid Direction. Vertex Cannot be East or West");
-    }
-    auto it = std::find(directions.begin(), directions.end(), d);
-    return std::distance(directions.begin(), it);
+  }
+  auto it = std::find(directions.begin(), directions.end(), d);
+  return std::distance(directions.begin(), it);
 }
-std::array<HexPath, 3>
-Vertex::getAllVertexRepresentations(HexDirection d) {
+
+std::array<HexPath, 3> Vertex::getAllVertexRepresentations(HexDirection d) {
   if (d == HexDirection::EAST || d == HexDirection::WEST) {
     throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
                                 "are invalid directions for vertices");
@@ -40,6 +38,21 @@ Vertex::getAllVertexRepresentations(HexDirection d) {
   return corrVertices;
 }
 
+const std::vector<Vertex> Vertex::getOtherRepresentations() const {
+  auto paths = getComplementaryVertexRepresentations(direction);
+  std::array<Coordinate2D, 2> coords;
+  for (int i = 0; i < 2; i++) {
+    coords[i] = coordinate + AxialDirection::toCoordinate(paths[i][0]);
+  }
+  return {{coords[0], paths[0][1]}, {coords[1], paths[1][1]}};
+}
+
+const std::vector<Vertex> Vertex::getAllRepresentations() const {
+  std::vector<Vertex> vertices = getOtherRepresentations();
+
+  return {*this, vertices[0], vertices[1]};
+}
+
 std::array<HexPath, 2>
 Vertex::getComplementaryVertexRepresentations(HexDirection d) {
   int vertexIndex = getIndex(d);
@@ -51,8 +64,7 @@ Vertex::getComplementaryVertexRepresentations(HexDirection d) {
            {secondTravelDirection, secondDirection}}};
 }
 
-std::array<HexPath, 4>
-Vertex::getAdjacentEdges(HexDirection d) {
+std::array<HexPath, 4> Vertex::getAdjacentEdges(HexDirection d) {
   if (d == HexDirection::EAST || d == HexDirection::WEST) {
     throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
                                 "are invalid directions for vertices");
@@ -63,69 +75,63 @@ Vertex::getAdjacentEdges(HexDirection d) {
   std::copy(localEdges.begin(), localEdges.end(), paths.begin());
 
   auto distantEdge = getDistantAdjacentEdge(d);
-  std::copy(distantEdge.begin(), distantEdge.end(), paths.begin()+2);
+  std::copy(distantEdge.begin(), distantEdge.end(), paths.begin() + 2);
   return paths;
 }
 
-std::array<HexPath, 2>
-      Vertex::getLocalAdjacentEdges(HexDirection d) {
-        int edgeIndex = getIndex(d);
-        HexDirection d1 = Edge::directions[edgeIndex];
-        HexDirection d2 = Edge::directions[(edgeIndex + 1) % 6];
-        return {{
-          {HexDirection::NONE, d1},
-          {HexDirection::NONE, d2}, 
-        }};
-      }
+std::array<HexPath, 2> Vertex::getLocalAdjacentEdges(HexDirection d) {
+  int edgeIndex = getIndex(d);
+  HexDirection d1 = Edge::directions[edgeIndex];
+  HexDirection d2 = Edge::directions[(edgeIndex + 1) % 6];
+  return {{
+      {HexDirection::NONE, d1},
+      {HexDirection::NONE, d2},
+  }};
+}
 
 std::array<HexPath, 2> Vertex::getDistantAdjacentEdge(HexDirection d) {
-    
+
   if (d == HexDirection::EAST || d == HexDirection::WEST) {
     throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
                                 "are invalid directions for vertices");
   }
   int vertexIndex = getIndex(d);
-  return {{{Edge::directions[vertexIndex], Edge::directions[(vertexIndex + 2) % 6]},
-           {Edge::directions[(vertexIndex + 1) % 6], Edge::directions[(vertexIndex + 5) % 6]}}};
+  return {
+      {{Edge::directions[vertexIndex], Edge::directions[(vertexIndex + 2) % 6]},
+       {Edge::directions[(vertexIndex + 1) % 6],
+        Edge::directions[(vertexIndex + 5) % 6]}}};
 }
 
-std::array<HexPath, 4>
-Vertex::getAdjacentVertices(HexDirection d) {
-    if (d == HexDirection::EAST || d == HexDirection::WEST) {
-      throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
-                                  "are invalid directions for vertices");
-    }
-    std::array<HexPath, 4> paths{};
-    auto localVertices = getLocalAdjacentVertices(d);
-    auto distantVertices = getDistantAdjacentVertex(d);
-    std::copy(localVertices.begin(), localVertices.end(), paths.begin());
-    std::copy(distantVertices.begin(), distantVertices.end(), paths.begin()+2);
-    return paths;
-
+std::array<HexPath, 4> Vertex::getAdjacentVertices(HexDirection d) {
+  if (d == HexDirection::EAST || d == HexDirection::WEST) {
+    throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
+                                "are invalid directions for vertices");
+  }
+  std::array<HexPath, 4> paths{};
+  auto localVertices = getLocalAdjacentVertices(d);
+  auto distantVertices = getDistantAdjacentVertex(d);
+  std::copy(localVertices.begin(), localVertices.end(), paths.begin());
+  std::copy(distantVertices.begin(), distantVertices.end(), paths.begin() + 2);
+  return paths;
 }
 
-std::array<HexPath, 2>
-Vertex::getLocalAdjacentVertices(HexDirection d) {
-    if (d == HexDirection::EAST || d == HexDirection::WEST) {
-      throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
-                                  "are invalid directions for vertices");
-    }
+std::array<HexPath, 2> Vertex::getLocalAdjacentVertices(HexDirection d) {
+  if (d == HexDirection::EAST || d == HexDirection::WEST) {
+    throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
+                                "are invalid directions for vertices");
+  }
   int vertexIndex = getIndex(d);
-  return {{
-    {HexDirection::NONE, directions[(vertexIndex + 1) % 6]},
-    {HexDirection::NONE, directions[(vertexIndex + 5) % 6]}
-    }};
+  return {{{HexDirection::NONE, directions[(vertexIndex + 1) % 6]},
+           {HexDirection::NONE, directions[(vertexIndex + 5) % 6]}}};
 }
 
-std::array<HexPath, 2>
-Vertex::getDistantAdjacentVertex(HexDirection d) {
-    if (d == HexDirection::EAST || d == HexDirection::WEST) {
-        throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
-                                    "are invalid directions for vertices");
-    }
-    int vertexIndex = getIndex(d);
-    return {
-        {{Edge::directions[vertexIndex], directions[(vertexIndex + 1) % 6]},
-        {Edge::directions[(vertexIndex + 1) % 6],
+std::array<HexPath, 2> Vertex::getDistantAdjacentVertex(HexDirection d) {
+  if (d == HexDirection::EAST || d == HexDirection::WEST) {
+    throw std::invalid_argument("Error: Direction::EAST and Direction::WEST "
+                                "are invalid directions for vertices");
+  }
+  int vertexIndex = getIndex(d);
+  return {{{Edge::directions[vertexIndex], directions[(vertexIndex + 1) % 6]},
+           {Edge::directions[(vertexIndex + 1) % 6],
             directions[(vertexIndex + 5) % 6]}}};
 }

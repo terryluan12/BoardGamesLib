@@ -10,6 +10,7 @@
 #include <vector>
 
 namespace Dogan {
+using VertexPrimitive = std::pair<Coordinate2D, Direction>;
 class Config {
 public:
   // add port locations
@@ -42,7 +43,7 @@ public:
   std::vector<pip> getNumbers(std::mt19937 rengine);
   std::vector<ResourceType> getPortResources(std::mt19937 rengine);
   std::vector<ResourceType> getResources(std::mt19937 rengine);
-  std::vector<Port> getPorts(std::mt19937 rengine);
+  std::vector<std::shared_ptr<Port>> getPorts(std::mt19937 rengine);
   std::vector<DevelopmentType> getDevelopments(std::mt19937 rengine);
 
   // Getters
@@ -51,8 +52,7 @@ public:
 
   Coordinate2D getRobberLocation(void) const;
   const std::vector<Coordinate2D> getTileLocations(void) const;
-  const std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
-  getPortLocations(void) const;
+  const std::vector<std::set<VertexPrimitive>> getPortLocations(void) const;
   const std::array<size_t, 5> getResourceCount(void) const;
   const std::array<size_t, 5> getDevelopmentCount(void) const;
 
@@ -70,8 +70,8 @@ public:
 
   void setDevelopmentLocations(std::vector<DevelopmentType> dl);
   void setNumberLocations(std::vector<pip> nl);
-  void setPortLocations(
-      std::vector<std::vector<std::pair<Coordinate2D, Direction>>> pls);
+  void setPortLocations(std::vector<std::set<VertexPrimitive>> pls);
+  void setPortLocations(std::vector<std::vector<VertexPrimitive>> pls);
   void setRobberLocation(Coordinate2D irl);
   void setTileLocations(std::vector<Coordinate2D> tl);
 
@@ -95,8 +95,7 @@ private:
   // Initial Locations
   std::vector<DevelopmentType> initialDevelopmentLocations;
   std::vector<pip> initialNumberLocations;
-  std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
-      initialPortLocations;
+  std::vector<std::set<VertexPrimitive>> initialPortLocations;
   Coordinate2D initialRobberLocation;
   // Coordinate System is based on
   // https://www.redblobgames.com/grids/hexagons/

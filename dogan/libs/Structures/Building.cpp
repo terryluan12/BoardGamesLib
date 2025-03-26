@@ -2,9 +2,9 @@
 #include <cassert>
 
 namespace Dogan {
-Building::Building(int pid, StructureType t) : Structure(t) {
-  playerID = pid;
-  if (t == StructureType::ROAD || t == StructureType::PORT) {
+Building::Building(int pid, StructureType t, Coordinate2D c, HexDirection d)
+    : Structure(t, pid), location(Vertex(c, d)) {
+  if (t == StructureType::ROAD) {
     throw InvalidTypeException("Error: Invalid Building Type");
   }
 };
@@ -22,4 +22,16 @@ int Building::getWorth() const {
     throw InvalidTypeException("Error: Invalid Building Type");
   }
 }
+
+bool Building::operator==(const Building &other) const {
+  return this->location == other.location &&
+         this->structureType == other.structureType;
+}
+bool Building::operator<(const Building &other) const {
+  if (this->location != other.location) {
+    return this->structureType < other.structureType;
+  }
+  return this->location < other.location;
+}
+
 } // namespace Dogan

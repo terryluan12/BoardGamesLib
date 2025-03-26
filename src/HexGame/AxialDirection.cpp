@@ -87,7 +87,6 @@ std::ostream &operator<<(std::ostream &os, HexDirection const &d) {
   return os;
 }
 
-bool operator<(AxialDirection::Direction lhs,
-               AxialDirection::Direction rhs) {
+bool operator<(AxialDirection::Direction lhs, AxialDirection::Direction rhs) {
   return static_cast<int>(lhs) < static_cast<int>(rhs);
 }

@@ -208,13 +208,21 @@ std::vector<DevelopmentType> Config::getDevelopments(std::mt19937 rengine) {
   return initialDevelopmentLocations;
 }
 
-std::vector<Port> Config::getPorts(std::mt19937 rengine) {
-  std::vector<Port> ports;
+std::vector<std::shared_ptr<Port>> Config::getPorts(std::mt19937 rengine) {
+  std::vector<std::shared_ptr<Port>> ports;
   std::vector<ResourceType> portConfiguration = getPortResources(rengine);
+  auto portLocations = getPortLocations();
 
-  for (size_t i = 0; i < portConfiguration.size(); i++) {
-    ports.emplace_back(portConfiguration[i]);
+  int i = 0;
+  for (const auto &portLocation : portLocations) {
+    std::set<Vertex> docks;
+    for (const auto &[coordinate, direction] : portLocation) {
+      docks.emplace(coordinate, direction);
+    }
+    ports.push_back(std::make_shared<Port>(portConfiguration[i], docks));
+    ++i;
   }
+
   return ports;
 }
 
@@ -234,7 +242,7 @@ const std::vector<Coordinate2D> Config::getTileLocations(void) const {
   return initialTileLocations;
 }
 
-const std::vector<std::vector<std::pair<Coordinate2D, Direction>>>
+const std::vector<std::set<VertexPrimitive>>
 Config::getPortLocations(void) const {
   return initialPortLocations;
 }
@@ -282,9 +290,23 @@ void Config::setNumberLocations(std::vector<pip> nl) {
   initialNumberLocations = nl;
 }
 
-void Config::setPortLocations(
-    std::vector<std::vector<std::pair<Coordinate2D, Direction>>> pls) {
+void Config::setPortLocations(std::vector<std::set<VertexPrimitive>> pls) {
   initialPortLocations = pls;
+}
+
+void Config::setPortLocations(std::vector<std::vector<VertexPrimitive>> pls) {
+  std::vector<std::set<VertexPrimitive>> sets;
+
+  for (const auto &v : pls) {
+    auto set = std::set(v.begin(), v.end());
+    if (set.size() != pls.size()) {
+      std::cerr << "WARNING: Duplicate Port locations. please check your "
+                   "configuration or data for errors."
+                << std::endl;
+    }
+    sets.push_back(set);
+  }
+  initialPortLocations = sets;
 }
 
 void Config::setRobberLocation(Coordinate2D irl) {

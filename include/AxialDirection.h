@@ -56,8 +56,6 @@ public:
 using HexDirection = AxialDirection::Direction;
 using HexPath = std::array<HexDirection, 2>;
 
-std::ostream &operator<<(std::ostream &os,
-                         AxialDirection::Direction const &d);
+std::ostream &operator<<(std::ostream &os, AxialDirection::Direction const &d);
 
-bool operator<(AxialDirection::Direction lhs,
-               AxialDirection::Direction rhs);
+bool operator<(AxialDirection::Direction lhs, AxialDirection::Direction rhs);

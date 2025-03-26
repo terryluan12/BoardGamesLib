@@ -9,8 +9,8 @@
 
 namespace Dogan {
 Game::Game(Config config)
-    : config(config), die(1, 6), board(Board(config)),
-      usedDevCard(false), rengine(std::random_device{}()) {
+    : config(config), die(1, 6), board(Board(config)), usedDevCard(false),
+      rengine(std::random_device{}()) {
   std::array<int, 5> resourceCount{};
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
@@ -31,7 +31,6 @@ void Game::removePlayer(int pid) {
   checkPlayerExists(pid);
   players.erase(pid);
 }
-
 
 void Game::giveResources(int playerID, std::array<int, 5> resources) {
   checkPlayerExists(playerID);
@@ -61,14 +60,13 @@ void Game::buildStructure(int playerID, StructureType structType,
   checkCoordinateValid(tileLocation);
   switch (structType) {
   case StructureType::VILLAGE:
-    element = std::make_shared<Building>(playerID, structType);
+    element = std::make_shared<Building>(playerID, structType, tileLocation,
+                                         direction);
   case StructureType::CITY:
     break;
   case StructureType::ROAD:
-    element = std::make_shared<Road>(playerID);
+    element = std::make_shared<Road>(playerID, tileLocation, direction);
     break;
-  case StructureType::PORT:
-    throw InvalidTypeException("Error: Cannot build a port");
   }
 
   players.at(playerID).buildStructure(structType);
@@ -76,8 +74,7 @@ void Game::buildStructure(int playerID, StructureType structType,
   if (structType == StructureType::CITY) {
     board.upgradeToCity(playerID, tileLocation, direction);
   } else {
-  board.buildStructure(playerID, element, tileLocation, direction,
-                         mustBeAdjacent);
+    board.buildStructure(playerID, element, mustBeAdjacent);
   }
   bank.addResources(cost);
 }
@@ -221,9 +218,7 @@ bool Game::hasStructure(Coordinate2D coord, Direction direction,
   return board.hasStructure(coord, direction, structureType);
 }
 
-void Game::resetTurn(void) {
-  usedDevCard = false;
-}
+void Game::resetTurn(void) { usedDevCard = false; }
 
 void Game::stealResource(int playerID, int stolenPlayerID) {
   checkPlayerExists(playerID);
@@ -284,10 +279,10 @@ void Game::checkResourceType(ResourceType resourceType) const {
 }
 void Game::checkUsedDevCard(void) const {
   if (usedDevCard) {
-    throw UsedDevelopmentCardException("Error: Development card already used this turn");
+    throw UsedDevelopmentCardException(
+        "Error: Development card already used this turn");
   }
 }
-
 
 std::ostream &operator<<(std::ostream &os, Game const &dg) {
   os << dg.board;

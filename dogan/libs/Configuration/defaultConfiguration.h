@@ -39,7 +39,7 @@ namespace configDefault {
                                                                             };
     inline const std::vector<pip> initialNumberLocations = {2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12};
 
-    inline std::vector<std::vector<std::pair<Coordinate2D, Direction>>> initialPortLocations = {
+    inline std::vector<std::set<std::pair<Coordinate2D, Direction>>> initialPortLocations = {
     {{{1, 0}, Direction::NORTH},        {{1, 0}, Direction::NORTHWEST}},
     {{{2, 0}, Direction::NORTH},        {{2, 0}, Direction::NORTHWEST}},
     {{{0, 1}, Direction::NORTHWEST},    {{0, 1}, Direction::SOUTHWEST}},

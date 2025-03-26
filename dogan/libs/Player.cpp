@@ -23,10 +23,9 @@ void Player::buildStructure(StructureType st) {
     throw InsufficientStructuresException("Error: Not enough structures");
   }
   availableStructures[static_cast<int>(st)] -= 1;
-  if(st == StructureType::ROAD) {
+  if (st == StructureType::ROAD) {
     return;
-  }
-  else if(st == StructureType::CITY){
+  } else if (st == StructureType::CITY) {
     availableStructures[static_cast<int>(StructureType::VILLAGE)] += 1;
   }
   victoryPoints += 1;

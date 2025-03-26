@@ -29,6 +29,10 @@ public:
                       std::shared_ptr<Structure> ds, bool mustBeAdjacent);
   bool hasStructure(Direction d, StructureType st) const;
 
+  bool hasPort(Direction d) const;
+  void addPort(Direction d, std::shared_ptr<Port> p);
+  std::shared_ptr<Port> getPort(Direction d) const;
+
   bool hasBuilding(Direction d) const;
   std::shared_ptr<Building> getBuilding(Direction d) const;
   std::vector<std::shared_ptr<Building>> getBuildings(void) const;
@@ -36,12 +40,11 @@ public:
   bool hasRoad(Direction d) const;
   std::shared_ptr<Road> getRoad(Direction d) const;
 
-
   void upgradeToCity(int pid, Direction d);
 
   friend std::ostream &operator<<(std::ostream &os, Cell const &dc);
 
-  private:
+private:
   Board &board;
   std::unordered_map<Direction, std::shared_ptr<Building>> buildings;
   std::unordered_map<Direction, std::shared_ptr<Road>> roads;
