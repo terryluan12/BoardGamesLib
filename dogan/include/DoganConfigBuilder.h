@@ -14,25 +14,25 @@ namespace Dogan {
 class ConfigBuilder {
 public:
   ConfigBuilder(void) : rengine(std::random_device{}()){};
-  ConfigBuilder &setRobberLocation(Coordinate2D robberLocations);
-  ConfigBuilder &
-  setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount);
   ConfigBuilder &setTileLocations(std::vector<Coordinate2D> tileLocations);
-  ConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
-  ConfigBuilder &setDevelopmentCount(std::array<size_t, 5> developmentCount);
-  ConfigBuilder &setDevelopmentConfig(Configuration developmentConfig);
-  ConfigBuilder &setNumberConfig(Configuration numberConfig);
-  ConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
-  ConfigBuilder &setBoardResourceConfig(Configuration boardResourceConfig);
-  ConfigBuilder &
-  setDevelopmentOrder(std::vector<DevelopmentType> developmentConfigurations);
-  ConfigBuilder &setNumberOrder(std::vector<int> numberOrder);
   ConfigBuilder &
   setPortLocations(std::vector<std::set<VertexPrimitive>> portLocations);
   ConfigBuilder &
   setPortLocations(std::vector<std::vector<VertexPrimitive>> portLocations);
+  ConfigBuilder &setRobberLocation(Coordinate2D robberLocations);
+  ConfigBuilder &
+  setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount);
+  ConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
+  ConfigBuilder &setDevelopmentCount(std::array<size_t, 5> developmentCount);
   ConfigBuilder &setBoardResourceOrder(std::vector<int> boardResourceOrder);
   ConfigBuilder &setPortResourceOrder(std::vector<int> portResourceOrder);
+  ConfigBuilder &setNumberOrder(std::vector<int> numberOrder);
+  ConfigBuilder &
+  setDevelopmentOrder(std::vector<DevelopmentType> developmentConfigurations);
+  ConfigBuilder &setBoardResourceConfig(Configuration boardResourceConfig);
+  ConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
+  ConfigBuilder &setNumberConfig(Configuration numberConfig);
+  ConfigBuilder &setDevelopmentConfig(Configuration developmentConfig);
   Response validate(bool throwError = true);
   Config build();
 

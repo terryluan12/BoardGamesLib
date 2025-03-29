@@ -6,16 +6,6 @@
 #include <sstream>
 
 namespace Dogan {
-ConfigBuilder &ConfigBuilder::setRobberLocation(Coordinate2D robberLocations) {
-  config.setRobberLocation(robberLocations);
-  return *this;
-}
-
-ConfigBuilder &ConfigBuilder::setTotalStructureCount(
-    std::array<int, 3> totalPlayerStructureCount) {
-  config.setTotalStructureCount(totalPlayerStructureCount);
-  return *this;
-}
 
 ConfigBuilder &
 ConfigBuilder::setTileLocations(std::vector<Coordinate2D> tileLocations) {
@@ -27,6 +17,29 @@ ConfigBuilder::setTileLocations(std::vector<Coordinate2D> tileLocations) {
   return *this;
 }
 
+ConfigBuilder &ConfigBuilder::setPortLocations(
+  std::vector<std::set<VertexPrimitive>> portLocations) {
+config.setPortLocations(portLocations);
+return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setPortLocations(
+  std::vector<std::vector<VertexPrimitive>> portLocations) {
+config.setPortLocations(portLocations);
+return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setRobberLocation(Coordinate2D robberLocations) {
+  config.setRobberLocation(robberLocations);
+  return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setTotalStructureCount(
+    std::array<int, 3> totalPlayerStructureCount) {
+  config.setTotalStructureCount(totalPlayerStructureCount);
+  return *this;
+}
+
 ConfigBuilder &ConfigBuilder::setResourceCount(std::array<size_t, 5> rc) {
   config.setResourceCount(rc);
   return *this;
@@ -34,53 +47,6 @@ ConfigBuilder &ConfigBuilder::setResourceCount(std::array<size_t, 5> rc) {
 
 ConfigBuilder &ConfigBuilder::setDevelopmentCount(std::array<size_t, 5> dc) {
   config.setDevelopmentCount(dc);
-  return *this;
-}
-
-ConfigBuilder &
-ConfigBuilder::setDevelopmentConfig(Configuration developmentConfiguration) {
-  config.setDevelopmentConfig(developmentConfiguration);
-  return *this;
-}
-
-ConfigBuilder &
-ConfigBuilder::setNumberConfig(Configuration numberConfiguration) {
-  config.setNumberConfig(numberConfiguration);
-  return *this;
-}
-
-ConfigBuilder &
-ConfigBuilder::setPortResourceConfig(Configuration portResourceConfig) {
-  config.setPortResourceConfig(portResourceConfig);
-  return *this;
-}
-
-ConfigBuilder &
-ConfigBuilder::setBoardResourceConfig(Configuration boardResourceConfig) {
-  config.setBoardResourceConfig(boardResourceConfig);
-  return *this;
-}
-
-ConfigBuilder &ConfigBuilder::setDevelopmentOrder(
-    std::vector<DevelopmentType> developmentOrder) {
-  config.setDevelopmentOrder(developmentOrder);
-  return *this;
-}
-
-ConfigBuilder &ConfigBuilder::setNumberOrder(std::vector<int> numberOrder) {
-  config.setNumberOrder(numberOrder);
-  return *this;
-}
-
-ConfigBuilder &ConfigBuilder::setPortLocations(
-    std::vector<std::set<VertexPrimitive>> portLocations) {
-  config.setPortLocations(portLocations);
-  return *this;
-}
-
-ConfigBuilder &ConfigBuilder::setPortLocations(
-    std::vector<std::vector<VertexPrimitive>> portLocations) {
-  config.setPortLocations(portLocations);
   return *this;
 }
 
@@ -102,6 +68,41 @@ ConfigBuilder::setPortResourceOrder(std::vector<int> portResourceOrder) {
   }
   config.setPortResourceOrder(pr);
   auto &[_, replaceConfig] = config.portResourceConfig;
+  return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setNumberOrder(std::vector<int> numberOrder) {
+  config.setNumberOrder(numberOrder);
+  return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setDevelopmentOrder(
+    std::vector<DevelopmentType> developmentOrder) {
+  config.setDevelopmentOrder(developmentOrder);
+  return *this;
+}
+
+ConfigBuilder &
+ConfigBuilder::setBoardResourceConfig(Configuration boardResourceConfig) {
+  config.setBoardResourceConfig(boardResourceConfig);
+  return *this;
+}
+
+ConfigBuilder &
+ConfigBuilder::setPortResourceConfig(Configuration portResourceConfig) {
+  config.setPortResourceConfig(portResourceConfig);
+  return *this;
+}
+
+ConfigBuilder &
+ConfigBuilder::setNumberConfig(Configuration numberConfiguration) {
+  config.setNumberConfig(numberConfiguration);
+  return *this;
+}
+
+ConfigBuilder &
+ConfigBuilder::setDevelopmentConfig(Configuration developmentConfiguration) {
+  config.setDevelopmentConfig(developmentConfiguration);
   return *this;
 }
 
