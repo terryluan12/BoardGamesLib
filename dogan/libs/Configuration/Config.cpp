@@ -5,90 +5,48 @@
 #include <random>
 
 namespace Dogan {
-std::vector<pip> Config::getNumbers() {
-  return initialNumberLocations;
+const std::vector<Coordinate2D> Config::getTileLocations(void) const {
+  return tileLocations;
 }
-
-std::vector<ResourceType> Config::getPortResources() {
-  return initialPortResources;
+const std::vector<std::set<VertexPrimitive>>
+Config::getPortLocations(void) const {
+  return portLocations;
 }
-
-std::vector<ResourceType> Config::getResources() {
-  return initialResources;
+Coordinate2D Config::getRobberLocation(void) const {
+  return robberLocation;
 }
-
-std::vector<DevelopmentType> Config::getDevelopments() {
-  return initialDevelopmentLocations;
-}
-
-std::vector<std::set<VertexPrimitive>> Config::getPortLocations() {
-  return initialPortLocations;
-}
-
-// Getters
 
 std::array<int, 3> Config::getTotalStructureCount(void) const {
   return totalStructureCount;
 }
-
-Coordinate2D Config::getRobberLocation(void) const {
-  return initialRobberLocation;
-}
-
-const std::vector<Coordinate2D> Config::getTileLocations(void) const {
-  return initialTileLocations;
-}
-
-const std::vector<std::set<VertexPrimitive>>
-Config::getPortLocations(void) const {
-  return initialPortLocations;
-}
-
 const std::array<size_t, 5> Config::getResourceCount(void) const {
-  return initialResourceCount;
+  return resourceCount;
 }
 const std::array<size_t, 5> Config::getDevelopmentCount(void) const {
-  return initialDevelopmentCount;
+  return developmentCount;
+}
+
+std::vector<ResourceType> Config::getBoardResourceOrder() {
+  return boardResourceOrder;
+}
+std::vector<ResourceType> Config::getPortResourceOrder() {
+  return portResourceOrder;
+}
+std::vector<pip> Config::getNumberOrder() {
+  return numberOrder;
+}
+std::vector<DevelopmentType> Config::getDevelopmentOrder() {
+  return developmentOrder;
 }
 
 // Setters
 
-void Config::setTotalStructureCount(std::array<int, 3> tsc) {
-  totalStructureCount = tsc;
+void Config::setTileLocations(std::vector<Coordinate2D> tl) {
+  tileLocations = tl;
 }
-
-void Config::setResourceCount(std::array<size_t, 5> rc) {
-  initialResourceCount = rc;
-}
-
-void Config::setDevelopmentCount(std::array<size_t, 5> dc) {
-  initialDevelopmentCount = dc;
-}
-
-void Config::setDevelopmentConfig(Configuration dc) {
-  initialDevelopmentConfig = dc;
-}
-
-void Config::setNumberConfig(Configuration nc) { initialNumberConfig = nc; }
-
-void Config::setPortResourceConfig(Configuration prc) {
-  initialPortResourceConfig = prc;
-}
-
-void Config::setResourceConfig(Configuration rc) { initialResourceConfig = rc; }
-
-void Config::setDevelopmentLocations(std::vector<DevelopmentType> dl) {
-  initialDevelopmentLocations = dl;
-}
-
-void Config::setNumberLocations(std::vector<pip> nl) {
-  initialNumberLocations = nl;
-}
-
 void Config::setPortLocations(std::vector<std::set<VertexPrimitive>> pls) {
-  initialPortLocations = pls;
+  portLocations = pls;
 }
-
 void Config::setPortLocations(std::vector<std::vector<VertexPrimitive>> pls) {
   std::vector<std::set<VertexPrimitive>> sets;
 
@@ -101,20 +59,45 @@ void Config::setPortLocations(std::vector<std::vector<VertexPrimitive>> pls) {
     }
     sets.push_back(set);
   }
-  initialPortLocations = sets;
+  portLocations = sets;
 }
-
 void Config::setRobberLocation(Coordinate2D irl) {
-  initialRobberLocation = irl;
+  robberLocation = irl;
 }
 
-void Config::setTileLocations(std::vector<Coordinate2D> tl) {
-  initialTileLocations = tl;
+void Config::setTotalStructureCount(std::array<int, 3> tsc) {
+  totalStructureCount = tsc;
+}
+void Config::setResourceCount(std::array<size_t, 5> rc) {
+  resourceCount = rc;
+}
+void Config::setDevelopmentCount(std::array<size_t, 5> dc) {
+  developmentCount = dc;
 }
 
-void Config::setResources(std::vector<ResourceType> r) { initialResources = r; }
+void Config::setBoardResourceOrder(std::vector<ResourceType> r) { 
+  boardResourceOrder = r; 
+}
+void Config::setPortResourceOrder(std::vector<ResourceType> pr) {
+  portResourceOrder = pr;
+}
+void Config::setNumberOrder(std::vector<pip> nl) {
+  numberOrder = nl;
+}
+void Config::setDevelopmentOrder(std::vector<DevelopmentType> dl) {
+  developmentOrder = dl;
+}
 
-void Config::setPortResources(std::vector<ResourceType> pr) {
-  initialPortResources = pr;
+void Config::setBoardResourceConfig(Configuration brc) { 
+  boardResourceConfig = brc; 
+}
+void Config::setPortResourceConfig(Configuration prc) {
+  portResourceConfig = prc;
+}
+void Config::setNumberConfig(Configuration nc) { 
+  numberConfig = nc; 
+}
+void Config::setDevelopmentConfig(Configuration dc) {
+  developmentConfig = dc;
 }
 } // namespace Dogan

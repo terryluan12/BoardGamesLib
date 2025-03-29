@@ -22,16 +22,16 @@ public:
   ConfigBuilder &setDevelopmentConfig(Configuration developmentConfig);
   ConfigBuilder &setNumberConfig(Configuration numberConfig);
   ConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
-  ConfigBuilder &setResourceConfig(Configuration resourceConfig);
-  ConfigBuilder &setDevelopmentLocations(
+  ConfigBuilder &setBoardResourceConfig(Configuration boardResourceConfig);
+  ConfigBuilder &setDevelopmentOrder(
       std::vector<DevelopmentType> developmentConfigurations);
-  ConfigBuilder &setNumberLocations(std::vector<int> numberLocations);
+  ConfigBuilder &setNumberOrder(std::vector<int> numberOrder);
   ConfigBuilder &
   setPortLocations(std::vector<std::set<VertexPrimitive>> portLocations);
   ConfigBuilder &
   setPortLocations(std::vector<std::vector<VertexPrimitive>> portLocations);
-  ConfigBuilder &setResources(std::vector<int> resourceLocations);
-  ConfigBuilder &setPortResources(std::vector<int> portResources);
+  ConfigBuilder &setBoardResourceOrder(std::vector<int> boardResourceOrder);
+  ConfigBuilder &setPortResourceOrder(std::vector<int> portResourceOrder);
   void validate(void);
   Config build();
 

@@ -17,8 +17,8 @@ TEST(BoardTest, AddDuplicateCellTest) {
   ConfigBuilder builder = ConfigBuilder();
   builder.setTileLocations({{0, 0}, {0, 0}});
   builder.setRobberLocation({2, 2});
-  builder.setResources({1});
-  builder.setNumberLocations({1});
+  builder.setBoardResourceOrder({1});
+  builder.setNumberOrder({1});
   auto config = builder.build();
   EXPECT_THROW({ Board board = Board(config); }, std::invalid_argument);
 }

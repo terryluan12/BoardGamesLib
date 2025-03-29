@@ -12,12 +12,12 @@ TEST(BuildConfigReplaceExactTestSuite, NumberConfigSuccessTest) {
   std::mt19937 rengine{std::random_device{}()};
   builder.setNumberConfig(c);
   builder.setTileLocations(board);
-  builder.setNumberLocations(numbers);
-  builder.setResources(numbers);
+  builder.setNumberOrder(numbers);
+  builder.setBoardResourceOrder(numbers);
   EXPECT_NO_THROW(builder.validate());
 }
 
-TEST(BuildConfigReplaceExactTestSuite, PortResourceSuccessTest) {
+TEST(BuildConfigReplaceExactTestSuite, PortResourceOrderSuccessTest) {
   ConfigBuilder builder{};
   Configuration c{OrderConfiguration::DEFAULT, ReplaceConfiguration::EXACT};
   std::vector<std::set<VertexPrimitive>> ports{
@@ -30,7 +30,7 @@ TEST(BuildConfigReplaceExactTestSuite, PortResourceSuccessTest) {
 
   builder.setPortResourceConfig(c);
   builder.setPortLocations(ports);
-  builder.setPortResources(pr);
+  builder.setPortResourceOrder(pr);
   EXPECT_NO_THROW(builder.validate());
 }
 
@@ -43,10 +43,10 @@ TEST(BuildConfigReplaceExactTestSuite, ResourceSuccessTest) {
 
   std::mt19937 rengine{std::random_device{}()};
 
-  builder.setResourceConfig(c);
+  builder.setBoardResourceConfig(c);
   builder.setTileLocations(board);
-  builder.setNumberLocations(numbers);
-  builder.setResources(numbers);
+  builder.setNumberOrder(numbers);
+  builder.setBoardResourceOrder(numbers);
   EXPECT_NO_THROW(builder.validate());
 }
 
@@ -61,7 +61,7 @@ TEST(BuildConfigReplaceExactTestSuite, DevelopmentSuccessTest) {
 
   builder.setDevelopmentConfig(c);
   builder.setDevelopmentCount(developmentCount);
-  builder.setDevelopmentLocations(dl);
+  builder.setDevelopmentOrder(dl);
   EXPECT_NO_THROW(builder.validate());
 }
 
@@ -84,13 +84,13 @@ TEST(BuildConfigReplaceExactTestSuite, NumberConfigFailTest) {
   std::mt19937 rengine{std::random_device{}()};
 
   builder.setNumberConfig(c);
-  builder.setResources(numbers2);
+  builder.setBoardResourceOrder(numbers2);
   builder.setTileLocations(board);
 
-  builder.setNumberLocations(numbers1);
+  builder.setNumberOrder(numbers1);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore number location size: 1 must equal to board size: 2\n"), std::invalid_argument);
 
-  builder.setNumberLocations(numbers3);
+  builder.setNumberOrder(numbers3);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore number location size: 3 must equal to board size: 2\n"), std::invalid_argument);
 }
 
@@ -108,10 +108,10 @@ TEST(BuildConfigReplaceExactTestSuite, PortResourceFailTest) {
 
   builder.setPortResourceConfig(c);
   builder.setPortLocations(ports);
-  builder.setPortResources(numbers1);
+  builder.setPortResourceOrder(numbers1);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Port Resources size: 1 must equal to Port locations size: 2\n"), std::invalid_argument);
 
-  builder.setPortResources(numbers3);
+  builder.setPortResourceOrder(numbers3);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Port Resources size: 3 must equal to Port locations size: 2\n"), std::invalid_argument);
 }
 
@@ -125,13 +125,13 @@ TEST(BuildConfigReplaceExactTestSuite, ResourceFailTest) {
 
   std::mt19937 rengine{std::random_device{}()};
 
-  builder.setResourceConfig(c);
-  builder.setNumberLocations(numbers2);
+  builder.setBoardResourceConfig(c);
+  builder.setNumberOrder(numbers2);
   builder.setTileLocations(board);
-  builder.setResources(numbers1);
+  builder.setBoardResourceOrder(numbers1);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Resources size: 1 must equal to board size: 2\n"), std::invalid_argument);
 
-  builder.setResources(numbers3);
+  builder.setBoardResourceOrder(numbers3);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Resources size: 3 must equal to board size: 2\n"), std::invalid_argument);
 }
 
@@ -151,15 +151,15 @@ TEST(BuildConfigReplaceExactTestSuite, DevelopmentFailTest) {
 
   builder.setDevelopmentConfig(c);
   builder.setDevelopmentCount(developmentCount);
-  builder.setDevelopmentLocations(dl1);
+  builder.setDevelopmentOrder(dl1);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Victory Point must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Monopoly must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Soldier must equal to 0\n"), std::invalid_argument);
 
-  builder.setDevelopmentLocations(dl2);
+  builder.setDevelopmentOrder(dl2);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Monopoly must equal to 1\n"), std::invalid_argument);
 
-  builder.setDevelopmentLocations(dl3);
+  builder.setDevelopmentOrder(dl3);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Build Road must equal to 0\n"), std::invalid_argument);
 
-  builder.setDevelopmentLocations(dl4);
+  builder.setDevelopmentOrder(dl4);
   EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Victory Point must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Monopoly must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Build Road must equal to 0\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Take Two must equal to 0\n"), std::invalid_argument);
 }

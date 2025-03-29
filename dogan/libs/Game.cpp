@@ -15,7 +15,7 @@ Game::Game(Config config)
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
   }
-  std::vector<DevelopmentType> developments = config.getDevelopments();
+  std::vector<DevelopmentType> developments = config.getDevelopmentOrder();
   bank = Bank(resourceCount, developments);
 }
 

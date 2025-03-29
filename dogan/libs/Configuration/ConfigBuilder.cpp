@@ -50,26 +50,26 @@ ConfigBuilder::setNumberConfig(Configuration numberConfiguration) {
 }
 
 ConfigBuilder &
-ConfigBuilder::setPortResourceConfig(Configuration portResourceConfigurations) {
-  config.setPortResourceConfig(portResourceConfigurations);
+ConfigBuilder::setPortResourceConfig(Configuration portResourceConfig) {
+  config.setPortResourceConfig(portResourceConfig);
   return *this;
 }
 
 ConfigBuilder &
-ConfigBuilder::setResourceConfig(Configuration resourceConfigurations) {
-  config.setResourceConfig(resourceConfigurations);
+ConfigBuilder::setBoardResourceConfig(Configuration boardResourceConfig) {
+  config.setBoardResourceConfig(boardResourceConfig);
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setDevelopmentLocations(
-    std::vector<DevelopmentType> developmentLocations) {
-  config.setDevelopmentLocations(developmentLocations);
+ConfigBuilder &ConfigBuilder::setDevelopmentOrder(
+    std::vector<DevelopmentType> developmentOrder) {
+  config.setDevelopmentOrder(developmentOrder);
   return *this;
 }
 
 ConfigBuilder &
-ConfigBuilder::setNumberLocations(std::vector<int> numberLocations) {
-  config.setNumberLocations(numberLocations);
+ConfigBuilder::setNumberOrder(std::vector<int> numberOrder) {
+  config.setNumberOrder(numberOrder);
   return *this;
 }
 
@@ -85,22 +85,22 @@ ConfigBuilder &ConfigBuilder::setPortLocations(
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setResources(std::vector<int> resources) {
+ConfigBuilder &ConfigBuilder::setBoardResourceOrder(std::vector<int> resources) {
   std::vector<ResourceType> r;
   for (int resource : resources) {
     r.emplace_back(static_cast<ResourceType>(resource));
   }
-  config.setResources(r);
+  config.setBoardResourceOrder(r);
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setPortResources(std::vector<int> portResources) {
+ConfigBuilder &ConfigBuilder::setPortResourceOrder(std::vector<int> portResourceOrder) {
   std::vector<ResourceType> pr;
-  for (int resource : portResources) {
+  for (int resource : portResourceOrder) {
     pr.emplace_back(static_cast<ResourceType>(resource));
   }
-  config.setPortResources(pr);
-  auto &[_, replaceConfig] = config.initialPortResourceConfig;
+  config.setPortResourceOrder(pr);
+  auto &[_, replaceConfig] = config.portResourceConfig;
   return *this;
 }
 
@@ -118,57 +118,57 @@ void ConfigBuilder::validate(void) {
   std::stringstream ss;
   std::string message{};
   int sizeDifference =
-      config.initialTileLocations.size() - config.initialNumberLocations.size();
-  if (followsReplaceExactConfiguration(config.initialNumberConfig,
+      config.tileLocations.size() - config.numberOrder.size();
+  if (followsReplaceExactConfiguration(config.numberConfig,
                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
        << "Therefore number location size: "
-       << config.initialNumberLocations.size()
+       << config.numberOrder.size()
        << " must equal to board size: "
-       << config.initialTileLocations.size() << std::endl;
+       << config.tileLocations.size() << std::endl;
   }
 
   sizeDifference =
-      config.initialPortLocations.size() - config.initialPortResources.size();
-  if (followsReplaceExactConfiguration(config.initialPortResourceConfig,
+      config.portLocations.size() - config.portResourceOrder.size();
+  if (followsReplaceExactConfiguration(config.portResourceConfig,
                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
        << "Therefore Port Resources size: "
-       << config.initialPortResources.size()
+       << config.portResourceOrder.size()
        << " must equal to Port locations size: "
-       << config.initialPortLocations.size() << std::endl;
+       << config.portLocations.size() << std::endl;
   }
 
   sizeDifference =
-      config.initialTileLocations.size() - config.initialResources.size();
-  if (followsReplaceExactConfiguration(config.initialResourceConfig,
+      config.tileLocations.size() - config.boardResourceOrder.size();
+  if (followsReplaceExactConfiguration(config.boardResourceConfig,
                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
-       << "Therefore Resources size: " << config.initialResources.size()
+       << "Therefore Resources size: " << config.boardResourceOrder.size()
        << " must equal to board size: "
-       << config.initialTileLocations.size() << std::endl;
+       << config.tileLocations.size() << std::endl;
   }
 
   for (int i = 0; i < 5; i++) {
-    sizeDifferences[i] = static_cast<int>(config.initialDevelopmentCount[i]);
+    sizeDifferences[i] = static_cast<int>(config.developmentCount[i]);
   }
-  for (auto &d : config.initialDevelopmentLocations) {
+  for (auto &d : config.developmentOrder) {
     sizeDifferences[static_cast<int>(d)] -= 1;
   }
   for (int i = 0; i < 5; i++) {
-    if (followsReplaceExactConfiguration(config.initialDevelopmentConfig,
+    if (followsReplaceExactConfiguration(config.developmentConfig,
                                          sizeDifferences[i])) {
       ss << "Error: ReplaceConfiguration::EXACT set. "
          << "Therefore Amount of DevelopmentCard type: "
          << static_cast<DevelopmentType>(i) << " must equal to "
-         << config.initialDevelopmentCount[i] << std::endl;
+         << config.developmentCount[i] << std::endl;
     }
   }
 
-  const auto &it = std::find(config.initialTileLocations.begin(),
-                             config.initialTileLocations.end(),
-                             config.initialRobberLocation);
-  if (it != config.initialTileLocations.end()) {
+  const auto &it = std::find(config.tileLocations.begin(),
+                             config.tileLocations.end(),
+                             config.robberLocation);
+  if (it != config.tileLocations.end()) {
     ss << "Error: Robber location must be separate from TileLocations";
   }
 
@@ -214,43 +214,43 @@ Config ConfigBuilder::build() {
 
   // Initialize Port Resource with Configuration
   int sizeDifference =
-      config.initialPortLocations.size() - config.initialPortResources.size();
-  initialize<ResourceType>(config.initialPortResourceConfig, sizeDifference,
-                           config.initialPortResources, ResourceType::OTHER,
+      config.portLocations.size() - config.portResourceOrder.size();
+  initialize<ResourceType>(config.portResourceConfig, sizeDifference,
+                           config.portResourceOrder, ResourceType::OTHER,
                            rengine, resourceRand);
                       
   // Initialize Board Numbers with Configuration
-  sizeDifference = config.initialTileLocations.size() -
-                       config.initialNumberLocations.size();
-  initialize(config.initialNumberConfig, sizeDifference,
-             config.initialNumberLocations, 7, rengine, pipRand);
+  sizeDifference = config.tileLocations.size() -
+                       config.numberOrder.size();
+  initialize(config.numberConfig, sizeDifference,
+             config.numberOrder, 7, rengine, pipRand);
 
   // Initialize Board Resources with Configuration
   sizeDifference =
-      config.initialTileLocations.size() - config.initialResources.size();
-  initialize(config.initialResourceConfig, sizeDifference,
-             config.initialResources, ResourceType::OTHER, rengine,
-             resourceRand);
+      config.tileLocations.size() - config.boardResourceOrder.size();
+  initialize(config.boardResourceConfig, sizeDifference,
+          config.boardResourceOrder, ResourceType::OTHER, rengine,
+          resourceRand);
 
   // Initialize Development with Configuration
   for(int i = 0; i < 5; i++) {
     if(sizeDifferences[i] < 0) {
       for(int i = 0; i < -1 * sizeDifferences[i]; i++) {
-        config.initialDevelopmentLocations.erase(
-          std::find(config.initialDevelopmentLocations.begin(),
-                    config.initialDevelopmentLocations.end(),
+        config.developmentOrder.erase(
+          std::find(config.developmentOrder.begin(),
+                    config.developmentOrder.end(),
                     static_cast<DevelopmentType>(i)));
       }
     }
     std::uniform_int_distribution<size_t> developRand(i, i);
-    initialize(config.initialDevelopmentConfig, sizeDifferences[i],
-          config.initialDevelopmentLocations, DevelopmentType::OTHER, rengine,
+    initialize(config.developmentConfig, sizeDifferences[i],
+          config.developmentOrder, DevelopmentType::OTHER, rengine,
           developRand);
   }
 
-  config.initialNumberLocations.push_back(7);
-  config.initialResources.push_back(ResourceType::OTHER);
-  config.initialTileLocations.push_back(config.initialRobberLocation);
+  config.numberOrder.push_back(7);
+  config.boardResourceOrder.push_back(ResourceType::OTHER);
+  config.tileLocations.push_back(config.robberLocation);
   return config;
 }
 } // namespace Dogan

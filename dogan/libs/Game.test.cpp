@@ -21,17 +21,17 @@ protected:
     Dogan::Config config1 = Dogan::ConfigBuilder().build();
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
-    std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6,
+    std::vector<int> numberOrder{2, 3, 3, 4, 4,  5,  5,  6,  6,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config2 =
         Dogan::ConfigBuilder()
             .setNumberConfig(generalConfig)
-            .setNumberLocations(numberLocations)
-            .setResourceConfig(generalConfig)
-            .setResources(
+            .setNumberOrder(numberOrder)
+            .setBoardResourceConfig(generalConfig)
+            .setBoardResourceOrder(
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
-            .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
+            .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
                                       Dogan::DevelopmentType::BUILDROAD,
                                       Dogan::DevelopmentType::SOLDIER,
                                       Dogan::DevelopmentType::MONOPOLY,
@@ -65,17 +65,17 @@ protected:
 
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
-    std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6,
+    std::vector<int> numberOrder{2, 3, 3, 4, 4,  5,  5,  6,  6,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config =
         Dogan::ConfigBuilder()
             .setNumberConfig(generalConfig)
-            .setNumberLocations(numberLocations)
-            .setResourceConfig(generalConfig)
-            .setResources(
+            .setNumberOrder(numberOrder)
+            .setBoardResourceConfig(generalConfig)
+            .setBoardResourceOrder(
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
-            .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
+            .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
                                       Dogan::DevelopmentType::BUILDROAD,
                                       Dogan::DevelopmentType::SOLDIER,
                                       Dogan::DevelopmentType::MONOPOLY,
@@ -453,7 +453,7 @@ protected:
                                        Dogan::ReplaceConfiguration::EXACT};
     Dogan::Config config = Dogan::ConfigBuilder()
                                .setDevelopmentConfig(generalConfig)
-                               .setDevelopmentLocations({
+                               .setDevelopmentOrder({
                                    Dogan::DevelopmentType::TAKETWO,
                                    Dogan::DevelopmentType::TAKETWO,
                                    Dogan::DevelopmentType::BUILDROAD,

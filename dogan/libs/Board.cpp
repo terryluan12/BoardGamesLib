@@ -10,12 +10,12 @@ namespace Dogan {
 Board::Board(Config config) {
 
   this->robberLocation = config.getRobberLocation();
-  std::vector<pip> numberOrder = config.getNumbers();
-  std::vector<ResourceType> resources = config.getResources();
+  std::vector<pip> numberOrder = config.getNumberOrder();
+  std::vector<ResourceType> resources = config.getBoardResourceOrder();
   auto portPrimitives = config.getPortLocations();
   std::vector<std::shared_ptr<Port>> ports;
 
-  std::vector<ResourceType> portConfiguration = config.getPortResources();
+  std::vector<ResourceType> portConfiguration = config.getPortResourceOrder();
   auto portLocations = config.getPortLocations();
 
   size_t i = 0;

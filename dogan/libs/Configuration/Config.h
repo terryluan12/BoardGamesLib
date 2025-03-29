@@ -16,81 +16,80 @@ class Config {
 public:
   // add port locations
   Config(void)
-      : totalStructureCount(configDefault::totalStructureCount),
-        initialResourceCount(configDefault::initialResourceCount),
-        initialDevelopmentCount(configDefault::initialDevelopmentCount),
-        initialDevelopmentConfig(configDefault::initialDevelopmentConfig),
-        initialNumberConfig(configDefault::initialNumberConfig),
-        initialPortResourceConfig(configDefault::initialPortResourceConfig),
-        initialResourceConfig(configDefault::initialResourceConfig),
-        initialDevelopmentLocations(configDefault::initialDevelopmentLocations),
-        initialNumberLocations(configDefault::initialNumberLocations),
-        initialPortLocations(configDefault::initialPortLocations),
-        initialRobberLocation(configDefault::initialRobberLocation),
-        initialTileLocations(configDefault::initialTileLocations),
-        initialResources(configDefault::initialResources),
-        initialPortResources(configDefault::initialPortResources){};
+      : tileLocations(configDefault::tileLocations),
+        portLocations(configDefault::portLocations),
+        robberLocation(configDefault::robberLocation),
+        totalStructureCount(configDefault::totalStructureCount),
+        resourceCount(configDefault::resourceCount),
+        developmentCount(configDefault::developmentCount),
+        boardResourceOrder(configDefault::boardResourceOrder),
+        portResourceOrder(configDefault::portResourceOrder),
+        numberOrder(configDefault::numberOrder), 
+        developmentOrder(configDefault::developmentOrder),
+        boardResourceConfig(configDefault::boardResourceConfig),
+        portResourceConfig(configDefault::portResourceConfig),
+        numberConfig(configDefault::numberConfig),
+        developmentConfig(configDefault::developmentConfig){};
 
-  std::vector<pip> getNumbers();
-  std::vector<ResourceType> getPortResources();
-  std::vector<ResourceType> getResources();
-  std::vector<std::set<VertexPrimitive>> getPortLocations();
-  std::vector<DevelopmentType> getDevelopments();
-
-  // Getters
-  std::array<int, 3> getTotalStructureCount(void) const;
-
-  Coordinate2D getRobberLocation(void) const;
   const std::vector<Coordinate2D> getTileLocations(void) const;
   const std::vector<std::set<VertexPrimitive>> getPortLocations(void) const;
+  Coordinate2D getRobberLocation(void) const;
+
+  std::array<int, 3> getTotalStructureCount(void) const;
   const std::array<size_t, 5> getResourceCount(void) const;
   const std::array<size_t, 5> getDevelopmentCount(void) const;
+
+  std::vector<DevelopmentType> getDevelopmentOrder();
+  std::vector<ResourceType> getBoardResourceOrder();
+  std::vector<ResourceType> getPortResourceOrder();
+  std::vector<pip> getNumberOrder();
+
+
   friend class ConfigBuilder;
 
 private:
-  // Setters
-  void setTotalStructureCount(std::array<int, 3> tsc);
-
-  void setResourceCount(std::array<size_t, 5> rc);
-  void setDevelopmentCount(std::array<size_t, 5> dc);
-
-  void setDevelopmentConfig(Configuration dc);
-  void setNumberConfig(Configuration nc);
-  void setPortResourceConfig(Configuration prc);
-  void setResourceConfig(Configuration rc);
-
-  void setDevelopmentLocations(std::vector<DevelopmentType> dl);
-  void setNumberLocations(std::vector<pip> nl);
+  void setTileLocations(std::vector<Coordinate2D> tl);
   void setPortLocations(std::vector<std::set<VertexPrimitive>> pls);
   void setPortLocations(std::vector<std::vector<VertexPrimitive>> pls);
   void setRobberLocation(Coordinate2D irl);
-  void setTileLocations(std::vector<Coordinate2D> tl);
 
-  void setResources(std::vector<ResourceType> r);
-  void setPortResources(std::vector<ResourceType> pr);
-  std::array<int, 3> totalStructureCount; // {Villages, Cities, Roads}
+  void setTotalStructureCount(std::array<int, 3> tsc);
+  void setResourceCount(std::array<size_t, 5> rc);
+  void setDevelopmentCount(std::array<size_t, 5> dc);
 
-  // Initial Counts
-  std::array<size_t, 5> initialResourceCount;
-  std::array<size_t, 5> initialDevelopmentCount;
+  void setBoardResourceOrder(std::vector<ResourceType> r);
+  void setPortResourceOrder(std::vector<ResourceType> pr);
+  void setNumberOrder(std::vector<pip> nl);
+  void setDevelopmentOrder(std::vector<DevelopmentType> dl);
 
-  // Initial Configurations
-  Configuration initialDevelopmentConfig;
-  Configuration initialNumberConfig;
-  Configuration initialPortResourceConfig;
-  Configuration initialResourceConfig;
+  void setBoardResourceConfig(Configuration rc);
+  void setPortResourceConfig(Configuration prc);
+  void setNumberConfig(Configuration nc);
+  void setDevelopmentConfig(Configuration dc);
 
-  // Initial Locations
-  std::vector<DevelopmentType> initialDevelopmentLocations;
-  std::vector<pip> initialNumberLocations;
-  std::vector<std::set<VertexPrimitive>> initialPortLocations;
-  Coordinate2D initialRobberLocation;
   // Coordinate System is based on
   // https://www.redblobgames.com/grids/hexagons/
-  std::vector<Coordinate2D> initialTileLocations;
+  std::vector<Coordinate2D> tileLocations;
+  std::vector<std::set<VertexPrimitive>> portLocations;
+  Coordinate2D robberLocation;
 
-  // Initial Resources
-  std::vector<ResourceType> initialResources;
-  std::vector<ResourceType> initialPortResources;
+  // Counts
+  std::array<int, 3> totalStructureCount; // {Villages, Cities, Roads}
+  std::array<size_t, 5> resourceCount;
+  std::array<size_t, 5> developmentCount;
+
+
+  // Orders
+  std::vector<ResourceType> boardResourceOrder;
+  std::vector<ResourceType> portResourceOrder;
+  std::vector<pip> numberOrder;
+  std::vector<DevelopmentType> developmentOrder;
+
+  // Configurations
+  Configuration boardResourceConfig;
+  Configuration portResourceConfig;
+  Configuration numberConfig;
+  Configuration developmentConfig;
+
 };
 } // namespace Dogan
