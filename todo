@@ -15,3 +15,4 @@ Check on positives and negatives in cost
 Fix swig/python memory leak
 Fix deprecation warning on SWIG Generation
 Fix portability issue with cgo commands
+Add a better way to generate numbers in ConfigBuilder::build

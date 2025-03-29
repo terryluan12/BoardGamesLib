@@ -10,13 +10,17 @@ using namespace Dogan;
 class BoardFixture : public ::testing::Test {
 protected:
   void SetUp() override {}
-  Board board{Config()};
+  Board board{ConfigBuilder().build()};
 };
 
 TEST(BoardTest, AddDuplicateCellTest) {
-  ConfigBuilder config = ConfigBuilder();
-  config.setTileLocations({{0, 0}, {0, 0}});
-  EXPECT_THROW({ Board board = Board(config.build()); }, std::invalid_argument);
+  ConfigBuilder builder = ConfigBuilder();
+  builder.setTileLocations({{0, 0}, {0, 0}});
+  builder.setRobberLocation({2, 2});
+  builder.setResources({1});
+  builder.setNumberLocations({1});
+  auto config = builder.build();
+  EXPECT_THROW({ Board board = Board(config); }, std::invalid_argument);
 }
 
 TEST_F(BoardFixture, BuildNonAdjacentStructuresTest) {

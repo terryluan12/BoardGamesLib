@@ -15,7 +15,7 @@ Game::Game(Config config)
   for (size_t i = 0; i < 5; i++) {
     resourceCount[i] = config.getResourceCount()[i];
   }
-  std::vector<DevelopmentType> developments = config.getDevelopments(rengine);
+  std::vector<DevelopmentType> developments = config.getDevelopments();
   bank = Bank(resourceCount, developments);
 }
 

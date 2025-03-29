@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Port.h"
 #include "common.h"
 #include "defaultConfiguration.h"
 #include "enums.h"
@@ -11,12 +10,13 @@
 
 namespace Dogan {
 using VertexPrimitive = std::pair<Coordinate2D, Direction>;
+
+class ConfigBuilder;
 class Config {
 public:
   // add port locations
   Config(void)
-      : boardSize(configDefault::initialTileLocations.size()),
-        totalStructureCount(configDefault::totalStructureCount),
+      : totalStructureCount(configDefault::totalStructureCount),
         initialResourceCount(configDefault::initialResourceCount),
         initialDevelopmentCount(configDefault::initialDevelopmentCount),
         initialDevelopmentConfig(configDefault::initialDevelopmentConfig),
@@ -29,25 +29,15 @@ public:
         initialRobberLocation(configDefault::initialRobberLocation),
         initialTileLocations(configDefault::initialTileLocations),
         initialResources(configDefault::initialResources),
-        initialPortResources(configDefault::initialPortResources) {
-    const auto &it =
-        std::find(initialTileLocations.begin(), initialTileLocations.end(),
-                  initialRobberLocation);
-    if (it == initialTileLocations.end()) {
-      throw std::invalid_argument(
-          "Robber location must be a valid tile location");
-    }
-    robberIndex = std::distance(initialTileLocations.begin(), it);
-  };
+        initialPortResources(configDefault::initialPortResources){};
 
-  std::vector<pip> getNumbers(std::mt19937 rengine);
-  std::vector<ResourceType> getPortResources(std::mt19937 rengine);
-  std::vector<ResourceType> getResources(std::mt19937 rengine);
-  std::vector<std::shared_ptr<Port>> getPorts(std::mt19937 rengine);
-  std::vector<DevelopmentType> getDevelopments(std::mt19937 rengine);
+  std::vector<pip> getNumbers();
+  std::vector<ResourceType> getPortResources();
+  std::vector<ResourceType> getResources();
+  std::vector<std::set<VertexPrimitive>> getPortLocations();
+  std::vector<DevelopmentType> getDevelopments();
 
   // Getters
-  size_t getBoardSize(void) const;
   std::array<int, 3> getTotalStructureCount(void) const;
 
   Coordinate2D getRobberLocation(void) const;
@@ -55,9 +45,10 @@ public:
   const std::vector<std::set<VertexPrimitive>> getPortLocations(void) const;
   const std::array<size_t, 5> getResourceCount(void) const;
   const std::array<size_t, 5> getDevelopmentCount(void) const;
+  friend class ConfigBuilder;
 
+private:
   // Setters
-  void setBoardSize(size_t s);
   void setTotalStructureCount(std::array<int, 3> tsc);
 
   void setResourceCount(std::array<size_t, 5> rc);
@@ -77,9 +68,6 @@ public:
 
   void setResources(std::vector<ResourceType> r);
   void setPortResources(std::vector<ResourceType> pr);
-
-private:
-  size_t boardSize;
   std::array<int, 3> totalStructureCount; // {Villages, Cities, Roads}
 
   // Initial Counts
@@ -104,7 +92,5 @@ private:
   // Initial Resources
   std::vector<ResourceType> initialResources;
   std::vector<ResourceType> initialPortResources;
-
-  size_t robberIndex;
 };
 } // namespace Dogan

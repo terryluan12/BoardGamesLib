@@ -12,7 +12,7 @@ namespace Dogan {
  */
 class ConfigBuilder {
 public:
-  ConfigBuilder &setBoardSize(size_t boardSize);
+  ConfigBuilder(void) : rengine(std::random_device{}()){};
   ConfigBuilder &setRobberLocation(Coordinate2D robberLocations);
   ConfigBuilder &
   setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount);
@@ -32,9 +32,12 @@ public:
   setPortLocations(std::vector<std::vector<VertexPrimitive>> portLocations);
   ConfigBuilder &setResources(std::vector<int> resourceLocations);
   ConfigBuilder &setPortResources(std::vector<int> portResources);
+  void validate(void);
   Config build();
 
 private:
   Config config;
+  std::mt19937 rengine;
+  std::array<int, 5> sizeDifferences;
 };
 } // namespace Dogan

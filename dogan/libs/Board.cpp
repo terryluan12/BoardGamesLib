@@ -3,20 +3,33 @@
 #include "Edge.h"
 #include "Vertex.h"
 #include "enums.h"
+#include <iostream>
 #include <memory>
 
 namespace Dogan {
 Board::Board(Config config) {
-  rengine.seed(std::random_device{}());
 
-  this->boardSize = config.getBoardSize();
   this->robberLocation = config.getRobberLocation();
-  std::vector<pip> numberOrder = config.getNumbers(rengine);
-  std::vector<ResourceType> resources = config.getResources(rengine);
-  auto ports = config.getPorts(rengine);
+  std::vector<pip> numberOrder = config.getNumbers();
+  std::vector<ResourceType> resources = config.getResources();
+  auto portPrimitives = config.getPortLocations();
+  std::vector<std::shared_ptr<Port>> ports;
 
-  // create all tiles
+  std::vector<ResourceType> portConfiguration = config.getPortResources();
+  auto portLocations = config.getPortLocations();
+
   size_t i = 0;
+  for (const auto &portLocation : portLocations) {
+    std::set<Vertex> docks;
+    for (const auto &[coordinate, direction] : portLocation) {
+      docks.emplace(coordinate, direction);
+    }
+    ports.push_back(std::make_shared<Port>(portConfiguration[i], docks));
+    ++i;
+  }
+  
+  i = 0;
+  // create all tiles
   for (const auto &c : config.getTileLocations()) {
     if (this->hasTile(c)) {
       throw std::invalid_argument("Error: Cell already exists");
@@ -45,8 +58,6 @@ Board::Board(Config config) {
     }
   }
 }
-
-size_t Board::getBoardSize(void) const { return boardSize; }
 
 std::shared_ptr<Building> Board::getBuilding(Coordinate2D c,
                                              Direction d) const {
@@ -149,7 +160,6 @@ std::ostream &operator<<(std::ostream &os, Board const &db) {
 }
 Board &Board::operator=(const Board &B) {
   if (this != &B) {
-    this->boardSize = B.boardSize;
     this->robberLocation = B.robberLocation;
     this->numbers = B.numbers;
     this->tiles = B.tiles;

@@ -2,7 +2,7 @@
 
 #include "Bank.h"
 #include "Board.h"
-#include "Config.h"
+#include "DoganConfigBuilder.h"
 #include "Player.h"
 #include <random>
 

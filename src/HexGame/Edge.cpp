@@ -1,5 +1,4 @@
 #include "Edge.h"
-#include "Vertex.h"
 #include <algorithm>
 
 Edge::Edge(Coordinate2D c, HexDirection d) : Element(c, d) {

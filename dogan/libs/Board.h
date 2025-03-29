@@ -16,10 +16,8 @@ public:
   Board(Config config);
 
   // Getters
-  size_t getBoardSize(void) const;
   std::shared_ptr<Building> getBuilding(Coordinate2D c, Direction d) const;
   std::shared_ptr<Road> getRoad(Coordinate2D c, Direction d) const;
-  const std::vector<Port> getPorts(void) const;
   std::shared_ptr<Cell> &getTile(Coordinate2D c);
   Coordinate2D getRobberLocation(void) const;
   std::map<int, std::array<size_t, 5>>
@@ -41,11 +39,9 @@ public:
   Board &operator=(const Board &B);
 
 private:
-  size_t boardSize;
   Coordinate2D robberLocation;
   std::map<Coordinate2D, std::shared_ptr<Cell>> tiles;
   std::map<pip, std::vector<std::shared_ptr<Cell>>> numbers;
-  std::mt19937 rengine;
   void checkCoordinateValid(Coordinate2D coord) const;
 };
 } // namespace Dogan

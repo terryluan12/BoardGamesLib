@@ -60,13 +60,15 @@ if(BUILD_UNITTESTS)
                   dogan/libs/Bank.test.cpp 
                   dogan/libs/Game.test.cpp
                   dogan/libs/Board.test.cpp
-                  dogan/libs/Cell.test.cpp)
+                  dogan/libs/Cell.test.cpp
+                  dogan/libs/Configuration/ConfigBuilder.test.cpp)
     target_link_libraries(tests 
                   gtest_main 
                   gmock
                   Bank 
                   Game
                   ConfigBuilder
+                  Config
                   Board
                   )
     gtest_add_tests(TARGET tests )

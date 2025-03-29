@@ -21,7 +21,7 @@ protected:
     Dogan::Config config1 = Dogan::ConfigBuilder().build();
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
-    std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6, 7,
+    std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config2 =
         Dogan::ConfigBuilder()
@@ -29,7 +29,7 @@ protected:
             .setNumberLocations(numberLocations)
             .setResourceConfig(generalConfig)
             .setResources(
-                {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
+                {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
             .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
                                       Dogan::DevelopmentType::BUILDROAD,
@@ -65,7 +65,7 @@ protected:
 
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
-    std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6, 7,
+    std::vector<int> numberLocations{2, 3, 3, 4, 4,  5,  5,  6,  6,
                                      8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config =
         Dogan::ConfigBuilder()
@@ -73,7 +73,7 @@ protected:
             .setNumberLocations(numberLocations)
             .setResourceConfig(generalConfig)
             .setResources(
-                {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
+                {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
             .setDevelopmentLocations({Dogan::DevelopmentType::TAKETWO,
                                       Dogan::DevelopmentType::BUILDROAD,

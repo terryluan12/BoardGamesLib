@@ -9,7 +9,7 @@ add_library(Edge Edge.cpp)
 target_link_libraries(Edge AxialDirection)
 
 add_library(Vertex Vertex.cpp)
-target_link_libraries(Vertex AxialDirection)
+target_link_libraries(Vertex Edge AxialDirection)
 
 add_library(Common INTERFACE)
 target_include_directories(Common INTERFACE .)
