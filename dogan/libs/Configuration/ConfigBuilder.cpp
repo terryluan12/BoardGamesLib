@@ -2,8 +2,8 @@
 #include "DoganConfigBuilder.h"
 #include "DoganExceptions.h"
 #include "config.enum.h"
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
 namespace Dogan {
 ConfigBuilder &ConfigBuilder::setRobberLocation(Coordinate2D robberLocations) {
@@ -67,8 +67,7 @@ ConfigBuilder &ConfigBuilder::setDevelopmentOrder(
   return *this;
 }
 
-ConfigBuilder &
-ConfigBuilder::setNumberOrder(std::vector<int> numberOrder) {
+ConfigBuilder &ConfigBuilder::setNumberOrder(std::vector<int> numberOrder) {
   config.setNumberOrder(numberOrder);
   return *this;
 }
@@ -85,7 +84,8 @@ ConfigBuilder &ConfigBuilder::setPortLocations(
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setBoardResourceOrder(std::vector<int> resources) {
+ConfigBuilder &
+ConfigBuilder::setBoardResourceOrder(std::vector<int> resources) {
   std::vector<ResourceType> r;
   for (int resource : resources) {
     r.emplace_back(static_cast<ResourceType>(resource));
@@ -94,7 +94,8 @@ ConfigBuilder &ConfigBuilder::setBoardResourceOrder(std::vector<int> resources) 
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setPortResourceOrder(std::vector<int> portResourceOrder) {
+ConfigBuilder &
+ConfigBuilder::setPortResourceOrder(std::vector<int> portResourceOrder) {
   std::vector<ResourceType> pr;
   for (int resource : portResourceOrder) {
     pr.emplace_back(static_cast<ResourceType>(resource));
@@ -114,18 +115,16 @@ bool followsReplaceExactConfiguration(Configuration c, int sizeDifference) {
   return false;
 }
 
-void ConfigBuilder::validate(void) {
+Response ConfigBuilder::validate(bool throwError) {
   std::stringstream ss;
   std::string message{};
-  int sizeDifference =
-      config.tileLocations.size() - config.numberOrder.size();
-  if (followsReplaceExactConfiguration(config.numberConfig,
-                                       sizeDifference)) {
+  Response answer{};
+  int sizeDifference = config.tileLocations.size() - config.numberOrder.size();
+  if (followsReplaceExactConfiguration(config.numberConfig, sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
-       << "Therefore number location size: "
-       << config.numberOrder.size()
-       << " must equal to board size: "
-       << config.tileLocations.size() << std::endl;
+       << "Therefore number location size: " << config.numberOrder.size()
+       << " must equal to board size: " << config.tileLocations.size()
+       << std::endl;
   }
 
   sizeDifference =
@@ -133,10 +132,9 @@ void ConfigBuilder::validate(void) {
   if (followsReplaceExactConfiguration(config.portResourceConfig,
                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
-       << "Therefore Port Resources size: "
-       << config.portResourceOrder.size()
-       << " must equal to Port locations size: "
-       << config.portLocations.size() << std::endl;
+       << "Therefore Port Resources size: " << config.portResourceOrder.size()
+       << " must equal to Port locations size: " << config.portLocations.size()
+       << std::endl;
   }
 
   sizeDifference =
@@ -145,8 +143,8 @@ void ConfigBuilder::validate(void) {
                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
        << "Therefore Resources size: " << config.boardResourceOrder.size()
-       << " must equal to board size: "
-       << config.tileLocations.size() << std::endl;
+       << " must equal to board size: " << config.tileLocations.size()
+       << std::endl;
   }
 
   for (int i = 0; i < 5; i++) {
@@ -166,15 +164,27 @@ void ConfigBuilder::validate(void) {
   }
 
   const auto &it = std::find(config.tileLocations.begin(),
-                             config.tileLocations.end(),
-                             config.robberLocation);
+                             config.tileLocations.end(), config.robberLocation);
   if (it != config.tileLocations.end()) {
-    ss << "Error: Robber location must be separate from TileLocations";
+    for (auto it : config.tileLocations) {
+      ss << "IT IS " << it << std::endl;
+    }
+    ss << "Error: Robber location " << config.robberLocation
+       << " must be separate from TileLocations";
   }
 
   if (!ss.str().empty()) {
-    throw std::invalid_argument(ss.str());
+    if (throwError) {
+      throw std::invalid_argument(ss.str());
+    } else {
+      answer.succeeded = false;
+      answer.message = ss.str();
+      return answer;
+    }
   }
+
+  answer.succeeded = true;
+  return answer;
 }
 
 template <class T>
@@ -218,34 +228,32 @@ Config ConfigBuilder::build() {
   initialize<ResourceType>(config.portResourceConfig, sizeDifference,
                            config.portResourceOrder, ResourceType::OTHER,
                            rengine, resourceRand);
-                      
+
   // Initialize Board Numbers with Configuration
-  sizeDifference = config.tileLocations.size() -
-                       config.numberOrder.size();
-  initialize(config.numberConfig, sizeDifference,
-             config.numberOrder, 7, rengine, pipRand);
+  sizeDifference = config.tileLocations.size() - config.numberOrder.size();
+  initialize(config.numberConfig, sizeDifference, config.numberOrder, 7,
+             rengine, pipRand);
 
   // Initialize Board Resources with Configuration
   sizeDifference =
       config.tileLocations.size() - config.boardResourceOrder.size();
   initialize(config.boardResourceConfig, sizeDifference,
-          config.boardResourceOrder, ResourceType::OTHER, rengine,
-          resourceRand);
+             config.boardResourceOrder, ResourceType::OTHER, rengine,
+             resourceRand);
 
   // Initialize Development with Configuration
-  for(int i = 0; i < 5; i++) {
-    if(sizeDifferences[i] < 0) {
-      for(int i = 0; i < -1 * sizeDifferences[i]; i++) {
-        config.developmentOrder.erase(
-          std::find(config.developmentOrder.begin(),
-                    config.developmentOrder.end(),
-                    static_cast<DevelopmentType>(i)));
+  for (int i = 0; i < 5; i++) {
+    if (sizeDifferences[i] < 0) {
+      for (int i = 0; i < -1 * sizeDifferences[i]; i++) {
+        config.developmentOrder.erase(std::find(
+            config.developmentOrder.begin(), config.developmentOrder.end(),
+            static_cast<DevelopmentType>(i)));
       }
     }
     std::uniform_int_distribution<size_t> developRand(i, i);
     initialize(config.developmentConfig, sizeDifferences[i],
-          config.developmentOrder, DevelopmentType::OTHER, rengine,
-          developRand);
+               config.developmentOrder, DevelopmentType::OTHER, rengine,
+               developRand);
   }
 
   config.numberOrder.push_back(7);

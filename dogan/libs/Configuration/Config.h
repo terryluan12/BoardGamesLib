@@ -24,7 +24,7 @@ public:
         developmentCount(configDefault::developmentCount),
         boardResourceOrder(configDefault::boardResourceOrder),
         portResourceOrder(configDefault::portResourceOrder),
-        numberOrder(configDefault::numberOrder), 
+        numberOrder(configDefault::numberOrder),
         developmentOrder(configDefault::developmentOrder),
         boardResourceConfig(configDefault::boardResourceConfig),
         portResourceConfig(configDefault::portResourceConfig),
@@ -43,7 +43,6 @@ public:
   std::vector<ResourceType> getBoardResourceOrder();
   std::vector<ResourceType> getPortResourceOrder();
   std::vector<pip> getNumberOrder();
-
 
   friend class ConfigBuilder;
 
@@ -78,7 +77,6 @@ private:
   std::array<size_t, 5> resourceCount;
   std::array<size_t, 5> developmentCount;
 
-
   // Orders
   std::vector<ResourceType> boardResourceOrder;
   std::vector<ResourceType> portResourceOrder;
@@ -90,6 +88,5 @@ private:
   Configuration portResourceConfig;
   Configuration numberConfig;
   Configuration developmentConfig;
-
 };
 } // namespace Dogan

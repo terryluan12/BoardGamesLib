@@ -27,7 +27,7 @@ Board::Board(Config config) {
     ports.push_back(std::make_shared<Port>(portConfiguration[i], docks));
     ++i;
   }
-  
+
   i = 0;
   // create all tiles
   for (const auto &c : config.getTileLocations()) {

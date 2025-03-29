@@ -3,6 +3,7 @@
 #include "Bank.h"
 #include "Board.h"
 #include "DoganConfigBuilder.h"
+#include "DoganResponse.h"
 #include "Player.h"
 #include <random>
 
@@ -24,22 +25,23 @@ public:
    * @brief Construct a new Game object
    *
    * @param config A config object needed to set up the game.
+   * @param throwErrors Whether the game should throw errors or not.
    */
-  Game(Config config = Config());
+  Game(Config config = Config(), bool throwErrors = true);
 
   /**
    * @brief Add a player to the game
    *
    * @param pid The player ID of the player to add
    */
-  void addPlayer(int pid);
+  Response addPlayer(int pid);
 
   /**
    * @brief Remove a player to the game
    *
    * @param pid The player ID of the player to remove
    */
-  void removePlayer(int pid);
+  Response removePlayer(int pid);
 
   /**
    * @brief
@@ -47,7 +49,7 @@ public:
    * @param playerID The player id of the player to give resources to
    * @param resources An array of integers representing the resources to give
    */
-  void giveResources(int playerID, std::array<int, 5> resources);
+  Response giveResources(int playerID, std::array<int, 5> resources);
 
   /**
    * @brief Roll two dice. Does not distribute resources
@@ -61,7 +63,7 @@ public:
    *
    * @param numberRolled
    */
-  void distributeResources(int numberRolled);
+  Response distributeResources(int numberRolled);
 
   /**
    * @brief Build a structure on the game board.
@@ -78,16 +80,16 @@ public:
    * positive integers
    * @param mustBeAdjacent Whether the structure must be connected to a road
    */
-  void buildStructure(int playerID, StructureType structType,
-                      Coordinate2D tileLocation, Direction direction,
-                      std::array<int, 5> cost, bool mustBeAdjacent = true);
+  Response buildStructure(int playerID, StructureType structType,
+                          Coordinate2D tileLocation, Direction direction,
+                          std::array<int, 5> cost, bool mustBeAdjacent = true);
   /**
    * @brief Purchase a development card
    *
    * @param playerID The player ID of the player purchasing the development card
    * @param cost The cost of the development card. Should be positive integers
    */
-  void purchaseDevelopmentCard(int playerID, std::array<int, 5> cost);
+  Response purchaseDevelopmentCard(int playerID, std::array<int, 5> cost);
   /**
    * @brief Trade resources between two players
    *
@@ -98,8 +100,8 @@ public:
    * @param resources2 The resources the second player is trading to the first.
    * If negative, indicates the player is receiving resources
    */
-  void tradeResources(int playerID1, std::array<int, 5> resources1,
-                      int playerID2, std::array<int, 5> resources2);
+  Response tradeResources(int playerID1, std::array<int, 5> resources1,
+                          int playerID2, std::array<int, 5> resources2);
 
   /**
    * @brief Use a robber to steal resources from a player
@@ -110,7 +112,8 @@ public:
    * @param direction The direction of the structure to steal from. If the tile
    * has no structures, use Direction::NONE
    */
-  void useRobber(int playerID, Coordinate2D tileLocation, Direction direction);
+  Response useRobber(int playerID, Coordinate2D tileLocation,
+                     Direction direction);
 
   /**
    * @brief Use the monopoly development card.
@@ -120,7 +123,7 @@ public:
    * @param playerID The player ID of the player using the monopoly card
    * @param resource The ResourceType to take
    */
-  void useMonopolyDevelopmentCard(int playerID, ResourceType resource);
+  Response useMonopolyDevelopmentCard(int playerID, ResourceType resource);
   /**
    * @brief Use the soldier development card.
    * The soldier development card allows the player to move the robber and steal
@@ -133,8 +136,8 @@ public:
    * @param direction The direction to steal from. If the tile has no
    * structures, use Direction::NONE
    */
-  void useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
-                                 Direction direction);
+  Response useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
+                                     Direction direction);
   /**
    * @brief Use the road development card.
    * The road development card allows the player to build up to two roads
@@ -145,9 +148,9 @@ public:
    * @param directions An array of two Direction enums representing the
    * directions to build the roads
    */
-  void useRoadDevelopmentCard(int playerID,
-                              std::array<Coordinate2D, 2> tileLocations,
-                              std::array<Direction, 2> directions);
+  Response useRoadDevelopmentCard(int playerID,
+                                  std::array<Coordinate2D, 2> tileLocations,
+                                  std::array<Direction, 2> directions);
   /**
    * @brief Use the take two development card.
    * Allows the player to take any two resources from the bank
@@ -155,8 +158,8 @@ public:
    * @param playerID The player ID of the player using the take two card
    * @param resources An array of the two resources to take
    */
-  void useTakeTwoDevelopmentCard(int playerID,
-                                 std::array<ResourceType, 2> resources);
+  Response useTakeTwoDevelopmentCard(int playerID,
+                                     std::array<ResourceType, 2> resources);
 
   /**
    * @brief Gets an array representation of all the resource cards a player has.
@@ -195,12 +198,21 @@ public:
    */
   bool hasStructure(Coordinate2D coord, Direction direction,
                     StructureType structureType) const;
+  /**
+   * @brief Checks if a player exists
+   *
+   * @param playerID The player ID of the player to check existence
+   * @return true
+   * @return false
+   */
+  const bool hasPlayer(int playerID) const;
   void resetTurn(void);
 
   friend std::ostream &operator<<(std::ostream &os, Game const &dg);
 
 private:
-  Config config; //!< The configuration object for the game
+  Config config;    //!< The configuration object for the game
+  bool throwErrors; //!< Whether game should throw errors
   std::uniform_int_distribution<pip>
       die;                       //!< A random number generator for dice rolls
   Bank bank;                     //!< The bank object for the game

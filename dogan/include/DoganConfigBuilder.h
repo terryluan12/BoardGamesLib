@@ -2,6 +2,7 @@
 
 #include "Config.h"
 #include "Coordinate.h"
+#include "DoganResponse.h"
 #include <array>
 #include <vector>
 
@@ -23,8 +24,8 @@ public:
   ConfigBuilder &setNumberConfig(Configuration numberConfig);
   ConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
   ConfigBuilder &setBoardResourceConfig(Configuration boardResourceConfig);
-  ConfigBuilder &setDevelopmentOrder(
-      std::vector<DevelopmentType> developmentConfigurations);
+  ConfigBuilder &
+  setDevelopmentOrder(std::vector<DevelopmentType> developmentConfigurations);
   ConfigBuilder &setNumberOrder(std::vector<int> numberOrder);
   ConfigBuilder &
   setPortLocations(std::vector<std::set<VertexPrimitive>> portLocations);
@@ -32,7 +33,7 @@ public:
   setPortLocations(std::vector<std::vector<VertexPrimitive>> portLocations);
   ConfigBuilder &setBoardResourceOrder(std::vector<int> boardResourceOrder);
   ConfigBuilder &setPortResourceOrder(std::vector<int> portResourceOrder);
-  void validate(void);
+  Response validate(bool throwError = true);
   Config build();
 
 private:

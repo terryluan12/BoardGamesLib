@@ -9,18 +9,9 @@ public:
 
   const HexDirection getDirection(void) const { return direction; }
 
-  bool operator==(const Element &other) const {
-    return this->coordinate == other.coordinate &&
-           this->direction == other.direction;
-  }
+  bool operator==(const Element &other) const;
 
-  bool operator<(const Element &other) const {
-    if (this->coordinate != other.coordinate) {
-      return this->coordinate < other.coordinate;
-    } else {
-      return this->direction < other.direction;
-    }
-  }
+  bool operator<(const Element &other) const;
 
 protected:
   Element(Coordinate2D c, HexDirection d) : coordinate(c), direction(d){};

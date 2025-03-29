@@ -11,9 +11,16 @@ import (
 func main() {
 	log.Println("Start Test")
 
-	config := dogan.NewConfigBuilder().Build()
+	config := dogan.NewConfigBuilder()
+	config.SetRobberLocation(dogan.NewCoordinate2D(0, 0))
 
-	game := dogan.NewGame(config)
+	if response := config.Validate(false); response.GetSucceeded() {
+		panic("Error: Validate should return false")
+	}
+	config.SetRobberLocation(dogan.NewCoordinate2D(0, 2))
+	config.Build()
+
+	game := dogan.NewGame(config, false)
 
 	game.AddPlayer(0)
 	tenArrays := dogan.NewIntArray5()
@@ -23,7 +30,6 @@ func main() {
 	game.GiveResources(0, tenArrays)
 
 	coord := dogan.NewCoordinate2D(0, 0)
-
 
 	game.BuildStructure(0, dogan.DoganStructureTypeType_VILLAGE, coord, dogan.AxialDirectionDirection_NORTH, zeroArrays, false)
 	for resourceCount, i := game.GetResourceCount(0), 0; i < int(resourceCount.Size()); i++ {

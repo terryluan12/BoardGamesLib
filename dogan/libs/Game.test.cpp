@@ -22,7 +22,7 @@ protected:
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
     std::vector<int> numberOrder{2, 3, 3, 4, 4,  5,  5,  6,  6,
-                                     8, 8, 9, 9, 10, 10, 11, 11, 12};
+                                 8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config2 =
         Dogan::ConfigBuilder()
             .setNumberConfig(generalConfig)
@@ -32,10 +32,10 @@ protected:
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
             .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
-                                      Dogan::DevelopmentType::BUILDROAD,
-                                      Dogan::DevelopmentType::SOLDIER,
-                                      Dogan::DevelopmentType::MONOPOLY,
-                                      Dogan::DevelopmentType::VICPOINT})
+                                  Dogan::DevelopmentType::BUILDROAD,
+                                  Dogan::DevelopmentType::SOLDIER,
+                                  Dogan::DevelopmentType::MONOPOLY,
+                                  Dogan::DevelopmentType::VICPOINT})
             .setDevelopmentCount({1, 1, 1, 1, 1})
             .build();
     nGame = Dogan::Game(config1);
@@ -66,7 +66,7 @@ protected:
     Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
                                        Dogan::ReplaceConfiguration::EXACT};
     std::vector<int> numberOrder{2, 3, 3, 4, 4,  5,  5,  6,  6,
-                                     8, 8, 9, 9, 10, 10, 11, 11, 12};
+                                 8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config =
         Dogan::ConfigBuilder()
             .setNumberConfig(generalConfig)
@@ -76,10 +76,10 @@ protected:
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
             .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
-                                      Dogan::DevelopmentType::BUILDROAD,
-                                      Dogan::DevelopmentType::SOLDIER,
-                                      Dogan::DevelopmentType::MONOPOLY,
-                                      Dogan::DevelopmentType::VICPOINT})
+                                  Dogan::DevelopmentType::BUILDROAD,
+                                  Dogan::DevelopmentType::SOLDIER,
+                                  Dogan::DevelopmentType::MONOPOLY,
+                                  Dogan::DevelopmentType::VICPOINT})
             .setDevelopmentCount({1, 1, 1, 1, 1})
             .build();
     game = Dogan::Game(config);

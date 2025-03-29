@@ -68,8 +68,7 @@ TEST(BuildConfigReplaceExactTestSuite, DevelopmentSuccessTest) {
 void testValidation(ConfigBuilder builder, std::string expectedString) {
   try {
     builder.validate();
-  }
-  catch( const std::invalid_argument& e) {
+  } catch (const std::invalid_argument &e) {
     EXPECT_STREQ(expectedString.c_str(), e.what());
     throw;
   }
@@ -88,10 +87,18 @@ TEST(BuildConfigReplaceExactTestSuite, NumberConfigFailTest) {
   builder.setTileLocations(board);
 
   builder.setNumberOrder(numbers1);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore number location size: 1 must equal to board size: 2\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(builder,
+                     "Error: ReplaceConfiguration::EXACT set. Therefore number "
+                     "location size: 1 must equal to board size: 2\n"),
+      std::invalid_argument);
 
   builder.setNumberOrder(numbers3);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore number location size: 3 must equal to board size: 2\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(builder,
+                     "Error: ReplaceConfiguration::EXACT set. Therefore number "
+                     "location size: 3 must equal to board size: 2\n"),
+      std::invalid_argument);
 }
 
 TEST(BuildConfigReplaceExactTestSuite, PortResourceFailTest) {
@@ -109,10 +116,18 @@ TEST(BuildConfigReplaceExactTestSuite, PortResourceFailTest) {
   builder.setPortResourceConfig(c);
   builder.setPortLocations(ports);
   builder.setPortResourceOrder(numbers1);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Port Resources size: 1 must equal to Port locations size: 2\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(
+          builder, "Error: ReplaceConfiguration::EXACT set. Therefore Port "
+                   "Resources size: 1 must equal to Port locations size: 2\n"),
+      std::invalid_argument);
 
   builder.setPortResourceOrder(numbers3);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Port Resources size: 3 must equal to Port locations size: 2\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(
+          builder, "Error: ReplaceConfiguration::EXACT set. Therefore Port "
+                   "Resources size: 3 must equal to Port locations size: 2\n"),
+      std::invalid_argument);
 }
 
 TEST(BuildConfigReplaceExactTestSuite, ResourceFailTest) {
@@ -129,10 +144,16 @@ TEST(BuildConfigReplaceExactTestSuite, ResourceFailTest) {
   builder.setNumberOrder(numbers2);
   builder.setTileLocations(board);
   builder.setBoardResourceOrder(numbers1);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Resources size: 1 must equal to board size: 2\n"), std::invalid_argument);
+  EXPECT_THROW(testValidation(
+                   builder, "Error: ReplaceConfiguration::EXACT set. Therefore "
+                            "Resources size: 1 must equal to board size: 2\n"),
+               std::invalid_argument);
 
   builder.setBoardResourceOrder(numbers3);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Resources size: 3 must equal to board size: 2\n"), std::invalid_argument);
+  EXPECT_THROW(testValidation(
+                   builder, "Error: ReplaceConfiguration::EXACT set. Therefore "
+                            "Resources size: 3 must equal to board size: 2\n"),
+               std::invalid_argument);
 }
 
 TEST(BuildConfigReplaceExactTestSuite, DevelopmentFailTest) {
@@ -152,14 +173,41 @@ TEST(BuildConfigReplaceExactTestSuite, DevelopmentFailTest) {
   builder.setDevelopmentConfig(c);
   builder.setDevelopmentCount(developmentCount);
   builder.setDevelopmentOrder(dl1);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Victory Point must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Monopoly must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Soldier must equal to 0\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(
+          builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount "
+                   "of DevelopmentCard type: Victory Point must equal to "
+                   "1\nError: ReplaceConfiguration::EXACT set. Therefore "
+                   "Amount of DevelopmentCard type: Monopoly must equal to "
+                   "1\nError: ReplaceConfiguration::EXACT set. Therefore "
+                   "Amount of DevelopmentCard type: Soldier must equal to 0\n"),
+      std::invalid_argument);
 
   builder.setDevelopmentOrder(dl2);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Monopoly must equal to 1\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(builder,
+                     "Error: ReplaceConfiguration::EXACT set. Therefore Amount "
+                     "of DevelopmentCard type: Monopoly must equal to 1\n"),
+      std::invalid_argument);
 
   builder.setDevelopmentOrder(dl3);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Build Road must equal to 0\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(builder,
+                     "Error: ReplaceConfiguration::EXACT set. Therefore Amount "
+                     "of DevelopmentCard type: Build Road must equal to 0\n"),
+      std::invalid_argument);
 
   builder.setDevelopmentOrder(dl4);
-  EXPECT_THROW(testValidation(builder, "Error: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Victory Point must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Monopoly must equal to 1\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Build Road must equal to 0\nError: ReplaceConfiguration::EXACT set. Therefore Amount of DevelopmentCard type: Take Two must equal to 0\n"), std::invalid_argument);
+  EXPECT_THROW(
+      testValidation(
+          builder,
+          "Error: ReplaceConfiguration::EXACT set. Therefore Amount of "
+          "DevelopmentCard type: Victory Point must equal to 1\nError: "
+          "ReplaceConfiguration::EXACT set. Therefore Amount of "
+          "DevelopmentCard type: Monopoly must equal to 1\nError: "
+          "ReplaceConfiguration::EXACT set. Therefore Amount of "
+          "DevelopmentCard type: Build Road must equal to 0\nError: "
+          "ReplaceConfiguration::EXACT set. Therefore Amount of "
+          "DevelopmentCard type: Take Two must equal to 0\n"),
+      std::invalid_argument);
 }
