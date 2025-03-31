@@ -10,6 +10,7 @@
 using Direction = Dogan::Direction;
 using StructureType = Dogan::StructureType;
 using ResourceType = Dogan::ResourceType;
+using intConfig = std::array<int, 2>;
 
 class GameFixture : public ::testing::Test {
 protected:
@@ -19,8 +20,9 @@ protected:
     playerID3 = 2;
 
     Dogan::Config config1 = Dogan::ConfigBuilder().build();
-    Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
-                                       Dogan::ReplaceConfiguration::EXACT};
+    intConfig generalConfig{2, 2};
+    // Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
+    //                                    Dogan::ReplaceConfiguration::EXACT};
     std::vector<int> numberOrder{2, 3, 3, 4, 4,  5,  5,  6,  6,
                                  8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config2 =
@@ -31,11 +33,12 @@ protected:
             .setBoardResourceOrder(
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
-            .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
-                                  Dogan::DevelopmentType::BUILDROAD,
-                                  Dogan::DevelopmentType::SOLDIER,
-                                  Dogan::DevelopmentType::MONOPOLY,
-                                  Dogan::DevelopmentType::VICPOINT})
+            .setDevelopmentOrder({4, 3, 2, 1, 0})
+            // .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
+            //                       Dogan::DevelopmentType::BUILDROAD,
+            //                       Dogan::DevelopmentType::SOLDIER,
+            //                       Dogan::DevelopmentType::MONOPOLY,
+            //                       Dogan::DevelopmentType::VICPOINT})
             .setDevelopmentCount({1, 1, 1, 1, 1})
             .build();
     nGame = Dogan::Game(config1);
@@ -63,8 +66,9 @@ protected:
     playerID2 = 1;
     playerID3 = 2;
 
-    Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
-                                       Dogan::ReplaceConfiguration::EXACT};
+    intConfig generalConfig{1, 1};
+    // Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
+    //                                    Dogan::ReplaceConfiguration::EXACT};
     std::vector<int> numberOrder{2, 3, 3, 4, 4,  5,  5,  6,  6,
                                  8, 8, 9, 9, 10, 10, 11, 11, 12};
     Dogan::Config config =
@@ -75,11 +79,12 @@ protected:
             .setBoardResourceOrder(
                 {4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4})
             .setDevelopmentConfig(generalConfig)
-            .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
-                                  Dogan::DevelopmentType::BUILDROAD,
-                                  Dogan::DevelopmentType::SOLDIER,
-                                  Dogan::DevelopmentType::MONOPOLY,
-                                  Dogan::DevelopmentType::VICPOINT})
+            .setDevelopmentOrder({4, 3, 2, 1})
+            // .setDevelopmentOrder({Dogan::DevelopmentType::TAKETWO,
+            //                       Dogan::DevelopmentType::BUILDROAD,
+            //                       Dogan::DevelopmentType::SOLDIER,
+            //                       Dogan::DevelopmentType::MONOPOLY,
+            //                       Dogan::DevelopmentType::VICPOINT})
             .setDevelopmentCount({1, 1, 1, 1, 1})
             .build();
     game = Dogan::Game(config);
@@ -448,19 +453,21 @@ protected:
     playerID1 = 0;
     playerID2 = 1;
     playerID3 = 2;
+    intConfig generalConfig{1, 1};
 
-    Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
-                                       Dogan::ReplaceConfiguration::EXACT};
+    // Dogan::Configuration generalConfig{Dogan::OrderConfiguration::EXACT,
+    //                                    Dogan::ReplaceConfiguration::EXACT};
     Dogan::Config config = Dogan::ConfigBuilder()
                                .setDevelopmentConfig(generalConfig)
-                               .setDevelopmentOrder({
-                                   Dogan::DevelopmentType::TAKETWO,
-                                   Dogan::DevelopmentType::TAKETWO,
-                                   Dogan::DevelopmentType::BUILDROAD,
-                                   Dogan::DevelopmentType::SOLDIER,
-                                   Dogan::DevelopmentType::MONOPOLY,
-                                   Dogan::DevelopmentType::VICPOINT,
-                               })
+                               //  .setDevelopmentOrder({
+                               //      Dogan::DevelopmentType::TAKETWO,
+                               //      Dogan::DevelopmentType::TAKETWO,
+                               //      Dogan::DevelopmentType::BUILDROAD,
+                               //      Dogan::DevelopmentType::SOLDIER,
+                               //      Dogan::DevelopmentType::MONOPOLY,
+                               //      Dogan::DevelopmentType::VICPOINT,
+                               //  })
+                               .setDevelopmentOrder({4, 4, 3, 2, 1, 0})
                                .setDevelopmentCount({1, 1, 1, 1, 2})
                                .build();
 

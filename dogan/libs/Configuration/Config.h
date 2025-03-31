@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace Dogan {
-using VertexPrimitive = std::pair<Coordinate2D, Direction>;
+using VertexPrimitive = std::tuple<Coordinate2D, Direction>;
 
 class ConfigBuilder;
 class Config {
@@ -36,8 +36,8 @@ public:
   Coordinate2D getRobberLocation(void) const;
 
   std::array<int, 3> getTotalStructureCount(void) const;
-  const std::array<size_t, 5> getResourceCount(void) const;
-  const std::array<size_t, 5> getDevelopmentCount(void) const;
+  const std::array<int, 5> getResourceCount(void) const;
+  const std::array<int, 5> getDevelopmentCount(void) const;
 
   std::vector<DevelopmentType> getDevelopmentOrder();
   std::vector<ResourceType> getBoardResourceOrder();
@@ -53,8 +53,8 @@ private:
   void setRobberLocation(Coordinate2D irl);
 
   void setTotalStructureCount(std::array<int, 3> tsc);
-  void setResourceCount(std::array<size_t, 5> rc);
-  void setDevelopmentCount(std::array<size_t, 5> dc);
+  void setResourceCount(std::array<int, 5> rc);
+  void setDevelopmentCount(std::array<int, 5> dc);
 
   void setBoardResourceOrder(std::vector<ResourceType> r);
   void setPortResourceOrder(std::vector<ResourceType> pr);
@@ -74,8 +74,8 @@ private:
 
   // Counts
   std::array<int, 3> totalStructureCount; // {Villages, Cities, Roads}
-  std::array<size_t, 5> resourceCount;
-  std::array<size_t, 5> developmentCount;
+  std::array<int, 5> resourceCount;
+  std::array<int, 5> developmentCount;
 
   // Orders
   std::vector<ResourceType> boardResourceOrder;

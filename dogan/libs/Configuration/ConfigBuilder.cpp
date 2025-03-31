@@ -8,7 +8,7 @@
 namespace Dogan {
 
 ConfigBuilder &
-ConfigBuilder::setTileLocations(std::vector<Coordinate2D> tileLocations) {
+ConfigBuilder::setTileLocations(std::vector<Coordinate> tileLocations) {
   std::vector<Coordinate2D> tls;
   for (Coordinate2D tileLocation : tileLocations) {
     tls.emplace_back(tileLocation);
@@ -17,19 +17,30 @@ ConfigBuilder::setTileLocations(std::vector<Coordinate2D> tileLocations) {
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setPortLocations(
-  std::vector<std::set<VertexPrimitive>> portLocations) {
-config.setPortLocations(portLocations);
-return *this;
+ConfigBuilder &
+ConfigBuilder::setPortLocations(std::vector<std::vector<Point>> portLocations) {
+  std::vector<std::set<VertexPrimitive>> sets;
+
+  for (const auto &port : portLocations) {
+    auto set = std::set<VertexPrimitive>();
+    for (const auto &dock : port) {
+      VertexPrimitive newDock{};
+      std::get<0>(newDock) = std::get<0>(dock);
+      std::get<1>(newDock) = static_cast<HexDirection>(std::get<1>(dock));
+      set.insert(newDock);
+    }
+    if (set.size() != portLocations.size()) {
+      std::cerr << "WARNING: Duplicate Port locations. please check your "
+                   "configuration or data for errors."
+                << std::endl;
+    }
+    sets.push_back(set);
+  }
+  config.setPortLocations(sets);
+  return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setPortLocations(
-  std::vector<std::vector<VertexPrimitive>> portLocations) {
-config.setPortLocations(portLocations);
-return *this;
-}
-
-ConfigBuilder &ConfigBuilder::setRobberLocation(Coordinate2D robberLocations) {
+ConfigBuilder &ConfigBuilder::setRobberLocation(Coordinate robberLocations) {
   config.setRobberLocation(robberLocations);
   return *this;
 }
@@ -40,12 +51,12 @@ ConfigBuilder &ConfigBuilder::setTotalStructureCount(
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setResourceCount(std::array<size_t, 5> rc) {
+ConfigBuilder &ConfigBuilder::setResourceCount(std::array<int, 5> rc) {
   config.setResourceCount(rc);
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setDevelopmentCount(std::array<size_t, 5> dc) {
+ConfigBuilder &ConfigBuilder::setDevelopmentCount(std::array<int, 5> dc) {
   config.setDevelopmentCount(dc);
   return *this;
 }
@@ -76,33 +87,56 @@ ConfigBuilder &ConfigBuilder::setNumberOrder(std::vector<int> numberOrder) {
   return *this;
 }
 
-ConfigBuilder &ConfigBuilder::setDevelopmentOrder(
-    std::vector<DevelopmentType> developmentOrder) {
-  config.setDevelopmentOrder(developmentOrder);
+ConfigBuilder &
+ConfigBuilder::setDevelopmentOrder(std::vector<int> developmentOrder) {
+  std::vector<DevelopmentType> order;
+  for (int i : developmentOrder) {
+    order.emplace_back(static_cast<DevelopmentType>(i));
+  }
+  config.setDevelopmentOrder(order);
   return *this;
 }
 
 ConfigBuilder &
-ConfigBuilder::setBoardResourceConfig(Configuration boardResourceConfig) {
-  config.setBoardResourceConfig(boardResourceConfig);
+ConfigBuilder::setBoardResourceConfig(intConfig boardResourceConfig) {
+  Configuration brConfig{};
+  std::get<0>(brConfig) =
+      static_cast<OrderConfiguration>(boardResourceConfig[0]);
+  std::get<1>(brConfig) =
+      static_cast<ReplaceConfiguration>(boardResourceConfig[1]);
+  config.setBoardResourceConfig(brConfig);
   return *this;
 }
 
 ConfigBuilder &
-ConfigBuilder::setPortResourceConfig(Configuration portResourceConfig) {
-  config.setPortResourceConfig(portResourceConfig);
+ConfigBuilder::setPortResourceConfig(intConfig portResourceConfig) {
+  Configuration prConfig{};
+  std::get<0>(prConfig) =
+      static_cast<OrderConfiguration>(portResourceConfig[0]);
+  std::get<1>(prConfig) =
+      static_cast<ReplaceConfiguration>(portResourceConfig[1]);
+  config.setPortResourceConfig(prConfig);
+  return *this;
+}
+
+ConfigBuilder &ConfigBuilder::setNumberConfig(intConfig numberConfiguration) {
+  Configuration nConfig{};
+  std::get<0>(nConfig) =
+      static_cast<OrderConfiguration>(numberConfiguration[0]);
+  std::get<1>(nConfig) =
+      static_cast<ReplaceConfiguration>(numberConfiguration[1]);
+  config.setNumberConfig(nConfig);
   return *this;
 }
 
 ConfigBuilder &
-ConfigBuilder::setNumberConfig(Configuration numberConfiguration) {
-  config.setNumberConfig(numberConfiguration);
-  return *this;
-}
-
-ConfigBuilder &
-ConfigBuilder::setDevelopmentConfig(Configuration developmentConfiguration) {
-  config.setDevelopmentConfig(developmentConfiguration);
+ConfigBuilder::setDevelopmentConfig(intConfig developmentConfiguration) {
+  Configuration dConfig{};
+  std::get<0>(dConfig) =
+      static_cast<OrderConfiguration>(developmentConfiguration[0]);
+  std::get<1>(dConfig) =
+      static_cast<ReplaceConfiguration>(developmentConfiguration[1]);
+  config.setDevelopmentConfig(dConfig);
   return *this;
 }
 
@@ -110,68 +144,66 @@ bool followsReplaceExactConfiguration(Configuration c, int sizeDifference) {
   auto &[orderConfig, replaceConfig] = c;
   if (replaceConfig == ReplaceConfiguration::EXACT) {
     if (sizeDifference != 0) {
-      return true;
+      return false;
     }
   }
-  return false;
+  return true;
 }
 
 Response ConfigBuilder::validate(bool throwError) {
   std::stringstream ss;
   std::string message{};
   Response answer{};
-  int sizeDifference = config.tileLocations.size() - config.numberOrder.size();
-  if (followsReplaceExactConfiguration(config.numberConfig, sizeDifference)) {
+  int sizeDifference =
+      config.tileLocations.size() - config.boardResourceOrder.size();
+  if (!followsReplaceExactConfiguration(config.boardResourceConfig,
+                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
-       << "Therefore number location size: " << config.numberOrder.size()
-       << " must equal to board size: " << config.tileLocations.size()
+       << "Therefore Resources size must equal to board size: "
+       << config.tileLocations.size() << " not "
+       << config.boardResourceOrder.size() << "\n";
+  }
+
+  sizeDifference = config.tileLocations.size() - config.numberOrder.size();
+  if (!followsReplaceExactConfiguration(config.numberConfig, sizeDifference)) {
+    ss << "Error: ReplaceConfiguration::EXACT set. "
+       << "Therefore number location size must equal to board size: "
+       << config.tileLocations.size() << " not " << config.numberOrder.size()
        << std::endl;
   }
 
   sizeDifference =
       config.portLocations.size() - config.portResourceOrder.size();
-  if (followsReplaceExactConfiguration(config.portResourceConfig,
-                                       sizeDifference)) {
+  if (!followsReplaceExactConfiguration(config.portResourceConfig,
+                                        sizeDifference)) {
     ss << "Error: ReplaceConfiguration::EXACT set. "
-       << "Therefore Port Resources size: " << config.portResourceOrder.size()
-       << " must equal to Port locations size: " << config.portLocations.size()
-       << std::endl;
-  }
-
-  sizeDifference =
-      config.tileLocations.size() - config.boardResourceOrder.size();
-  if (followsReplaceExactConfiguration(config.boardResourceConfig,
-                                       sizeDifference)) {
-    ss << "Error: ReplaceConfiguration::EXACT set. "
-       << "Therefore Resources size: " << config.boardResourceOrder.size()
-       << " must equal to board size: " << config.tileLocations.size()
-       << std::endl;
+       << "Therefore Port Resources size must equal to Port locations size: "
+       << config.portLocations.size() << " not "
+       << config.portResourceOrder.size() << "\n";
   }
 
   for (int i = 0; i < 5; i++) {
-    sizeDifferences[i] = static_cast<int>(config.developmentCount[i]);
+    sizeDifferences[i] = config.developmentCount[i];
   }
   for (auto &d : config.developmentOrder) {
     sizeDifferences[static_cast<int>(d)] -= 1;
   }
   for (int i = 0; i < 5; i++) {
-    if (followsReplaceExactConfiguration(config.developmentConfig,
-                                         sizeDifferences[i])) {
+    if (!followsReplaceExactConfiguration(config.developmentConfig,
+                                          sizeDifferences[i])) {
       ss << "Error: ReplaceConfiguration::EXACT set. "
          << "Therefore Amount of DevelopmentCard type: "
          << static_cast<DevelopmentType>(i) << " must equal to "
-         << config.developmentCount[i] << std::endl;
+         << config.developmentCount[i] << " not "
+         << config.developmentCount[i] - sizeDifferences[i] << "\n";
     }
   }
 
   const auto &it = std::find(config.tileLocations.begin(),
                              config.tileLocations.end(), config.robberLocation);
   if (it != config.tileLocations.end()) {
-    for (auto it : config.tileLocations) {
-      ss << "IT IS " << it << std::endl;
-    }
     ss << "Error: Robber location " << config.robberLocation
-       << " must be separate from TileLocations";
+       << " must be separate from TileLocations\n";
   }
 
   if (!ss.str().empty()) {

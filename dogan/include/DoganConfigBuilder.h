@@ -13,26 +13,28 @@ namespace Dogan {
  */
 class ConfigBuilder {
 public:
+  using Coordinate = std::array<int, 2>;
+  using Point = std::pair<Coordinate, int>;
+  using intConfig = std::array<int, 2>;
+
   ConfigBuilder(void) : rengine(std::random_device{}()){};
-  ConfigBuilder &setTileLocations(std::vector<Coordinate2D> tileLocations);
+  ConfigBuilder &setTileLocations(std::vector<Coordinate> tileLocations);
   ConfigBuilder &
-  setPortLocations(std::vector<std::set<VertexPrimitive>> portLocations);
-  ConfigBuilder &
-  setPortLocations(std::vector<std::vector<VertexPrimitive>> portLocations);
-  ConfigBuilder &setRobberLocation(Coordinate2D robberLocations);
+  setPortLocations(std::vector<std::vector<Point>> portLocations);
+  ConfigBuilder &setRobberLocation(Coordinate robberLocations);
   ConfigBuilder &
   setTotalStructureCount(std::array<int, 3> totalPlayerStructureCount);
-  ConfigBuilder &setResourceCount(std::array<size_t, 5> resourceCount);
-  ConfigBuilder &setDevelopmentCount(std::array<size_t, 5> developmentCount);
+  ConfigBuilder &setResourceCount(std::array<int, 5> resourceCount);
+  ConfigBuilder &setDevelopmentCount(std::array<int, 5> developmentCount);
   ConfigBuilder &setBoardResourceOrder(std::vector<int> boardResourceOrder);
   ConfigBuilder &setPortResourceOrder(std::vector<int> portResourceOrder);
   ConfigBuilder &setNumberOrder(std::vector<int> numberOrder);
   ConfigBuilder &
-  setDevelopmentOrder(std::vector<DevelopmentType> developmentConfigurations);
-  ConfigBuilder &setBoardResourceConfig(Configuration boardResourceConfig);
-  ConfigBuilder &setPortResourceConfig(Configuration portResourceConfig);
-  ConfigBuilder &setNumberConfig(Configuration numberConfig);
-  ConfigBuilder &setDevelopmentConfig(Configuration developmentConfig);
+  setDevelopmentOrder(std::vector<int> developmentConfigurations);
+  ConfigBuilder &setBoardResourceConfig(intConfig boardResourceConfig);
+  ConfigBuilder &setPortResourceConfig(intConfig portResourceConfig);
+  ConfigBuilder &setNumberConfig(intConfig numberConfig);
+  ConfigBuilder &setDevelopmentConfig(intConfig developmentConfig);
   Response validate(bool throwError = true);
   Config build();
 

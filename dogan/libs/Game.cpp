@@ -73,7 +73,7 @@ Response Game::distributeResources(int numberRolled) {
     auto buildings = board.getResourceDistribution(numberRolled);
     for (auto [pid, resources] : buildings) {
       checkPlayerExists(pid);
-      for (size_t i = 0; i < resources.size(); i++) {
+      for (int i = 0; i < resources.size(); i++) {
         checkBankCanAfford(static_cast<ResourceType>(i), resources[i]);
         bank.addResource(static_cast<ResourceType>(i), -1 * resources[i]);
         players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);

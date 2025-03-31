@@ -5,6 +5,7 @@
 #include "DoganResponse.h"
 #include "DoganConfigBuilder.h"
 #include "DoganGame.h"
+#include <vector>
 using namespace Dogan;
 %}
 
@@ -14,26 +15,23 @@ using namespace Dogan;
 #cgo LDFLAGS: -lGame -lBoard -lCell -lBank -lStructure -lBuilding -lConfig -lConfigBuilder -lElement -lVertex -lEdge -lAxialDirection -lPlayer -lenums
 %}
 
-%include <std_array.i>
-%include <std_vector.i>
-%include "exception.i"
+%include "std_array.i"
+%include "std_vector.i"
+%include "std_pair.i"
 %include "std_string.i"
-
-%template(IntArray5) std::array<int, 5>;
-%template(IntArray2) std::array<int, 2>;
-
 %include "Coordinate.h"
-%template(Coordinate2D) Coordinate<2>;
-
 %include "AxialDirection.h"
 %include "enums.h"
-%exception {
-    try {
-        $function;
-    } catch (const std::invalid_argument& e) {
-        SWIG_exception(SWIG_AttributeError, e.what());
-    }
-}
+
+
+%template(IntArray2) std::array<int, 2>;
+%template(IntArray3) std::array<int, 3>;
+%template(IntArray5) std::array<int, 5>;
+%template(IntVector) std::vector<int>;
+%template(CoordinateVector) std::vector<std::array<int, 2>>;
+%template(Point) std::pair<std::array<int, 2>, int>;
+%template(DockVector) std::vector<std::pair<std::array<int, 2>, int>>;
+%template(PortVector) std::vector<std::vector<std::pair<std::array<int, 2>, int>>>;
 
 %include "DoganResponse.h"
 %include "DoganConfigBuilder.h"

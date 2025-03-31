@@ -3,10 +3,12 @@
 #include "Coordinate.h"
 #include "Port.h"
 #include "config.enum.h"
+#include "Config.h"
 #include <vector>
 
 namespace Dogan {
 namespace configDefault {
+    using VertexPrimitive = std::tuple<Coordinate2D, Direction>;
 
     inline const std::vector<Coordinate2D> tileLocations = { 
                 {0, 0}, {1, 0}, {2, 0}, 
@@ -16,7 +18,7 @@ namespace configDefault {
                 {-2, 4}, {-1, 4}, {0, 4} 
     };
 
-    inline std::vector<std::set<std::pair<Coordinate2D, Direction>>> portLocations = {
+    inline std::vector<std::set<VertexPrimitive>> portLocations = {
         {{{1, 0}, Direction::NORTH},        {{1, 0}, Direction::NORTHWEST}},
         {{{2, 0}, Direction::NORTH},        {{2, 0}, Direction::NORTHWEST}},
         {{{0, 1}, Direction::NORTHWEST},    {{0, 1}, Direction::SOUTHWEST}},
@@ -31,8 +33,8 @@ namespace configDefault {
     
     // Default Counts
     inline const std::array<int, 3> totalStructureCount = {5, 4, 15};
-    inline const std::array<size_t, 5> resourceCount = {19, 19, 19, 19, 19};
-    inline const std::array<size_t, 5> developmentCount = {5, 2, 2, 2, 2};
+    inline const std::array<int, 5> resourceCount = {19, 19, 19, 19, 19};
+    inline const std::array<int, 5> developmentCount = {5, 2, 2, 2, 2};
 
     // Default Orders
     inline const std::vector<ResourceType> boardResourceOrder = {

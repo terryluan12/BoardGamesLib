@@ -12,12 +12,18 @@ func main() {
 	log.Println("Start Test")
 
 	config := dogan.NewConfigBuilder()
+	defer dogan.DeleteConfigBuilder(config)
 	config.SetRobberLocation(dogan.NewCoordinate2D(0, 0))
-
 	if response := config.Validate(false); response.GetSucceeded() {
 		panic("Error: Validate should return false")
 	}
-	config.SetRobberLocation(dogan.NewCoordinate2D(0, 2))
+	coordinate_0_2 := dogan.NewCoordinate2D(0, 2)
+	defer dogan.DeleteCoordinate2D(coordinate_0_2)
+	coordinate_3_3 := dogan.NewCoordinate2D(3, 3)
+	defer dogan.DeleteCoordinate2D(coordinate_3_3)
+	tileLocations := []dogan.Coordinate2D{&coordinate_0_2, &coordinate_3_3}
+	config.SetTileLocations(tileLocations)
+
 	config.Build()
 
 	game := dogan.NewGame(config, false)
