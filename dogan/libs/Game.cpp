@@ -9,6 +9,18 @@
 #include <sstream>
 
 namespace Dogan {
+
+
+std::ostream &operator<<(std::ostream &os, std::array<int, 5> arr) {
+  os << "[";
+  for(int i = 0; i < 4; i++) {
+    os << arr[i] << ", ";
+  }
+  os << arr[4] << "]";
+  return os;
+}
+
+
 Game::Game(Config config, bool throwErrors)
     : config(config), throwErrors(throwErrors), die(1, 6), board(Board(config)),
       usedDevCard(false), rengine(std::random_device{}()) {
@@ -35,7 +47,7 @@ Response Game::addPlayer(int pid) {
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  return Response{true, "Successfully added Player " + pid};
 };
 
 Response Game::removePlayer(int pid) {
@@ -49,7 +61,7 @@ Response Game::removePlayer(int pid) {
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  return Response{true, "Sucessfully removed Player " + pid};
 }
 
 Response Game::giveResources(int playerID, std::array<int, 5> resources) {
@@ -63,12 +75,16 @@ Response Game::giveResources(int playerID, std::array<int, 5> resources) {
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  std::stringstream ss;
+  
+  ss << "Successfully gave player " << playerID << " " << resources;
+  return Response{true, ss.str()};
 }
 
 int Game::rollDice(void) { return die(rengine) + die(rengine); }
 
 Response Game::distributeResources(int numberRolled) {
+  std::vector<int> resultVector;
   try {
     auto buildings = board.getResourceDistribution(numberRolled);
     for (auto [pid, resources] : buildings) {
@@ -77,6 +93,8 @@ Response Game::distributeResources(int numberRolled) {
         checkBankCanAfford(static_cast<ResourceType>(i), resources[i]);
         bank.addResource(static_cast<ResourceType>(i), -1 * resources[i]);
         players.at(pid).addResource(static_cast<ResourceType>(i), resources[i]);
+        resultVector.push_back(pid);
+        resultVector.push_back(i);
       }
     }
   } catch (std::exception &e) {
@@ -86,13 +104,15 @@ Response Game::distributeResources(int numberRolled) {
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  
+  return Response{true, "Successfully distributed resources", resultVector};
 }
 
 Response Game::buildStructure(int playerID, StructureType structType,
-                              Coordinate2D tileLocation, Direction direction,
+                              PrimitiveCoordinate tileLocation, IntDirection d,
                               std::array<int, 5> cost, bool mustBeAdjacent) {
   try {
+    auto direction = static_cast<Direction>(d);
     std::shared_ptr<Structure> element;
     checkPlayerExists(playerID);
     checkPlayerCanAfford(playerID, cost);
@@ -123,15 +143,19 @@ Response Game::buildStructure(int playerID, StructureType structType,
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  std::stringstream ss;
+  
+  ss << "Successfully built " << structType << " for " << playerID;
+  return Response{true, ss.str()};
 }
 
 Response Game::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
+  DevelopmentType dt;
   try {
     checkPlayerExists(playerID);
     checkPlayerCanAfford(playerID, cost);
 
-    DevelopmentType dt = bank.popDevelopment();
+    dt = bank.popDevelopment();
     players.at(playerID).giveDevelopment(dt);
     bank.addResources(cost);
   } catch (std::exception &e) {
@@ -141,7 +165,10 @@ Response Game::purchaseDevelopmentCard(int playerID, std::array<int, 5> cost) {
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  std::stringstream ss;
+  
+  ss << "Successfully purchased a development card for " << playerID;
+  return Response{true, ss.str(), {static_cast<int>(dt)}};
 }
 
 Response Game::tradeResources(int playerID1, std::array<int, 5> resources1,
@@ -168,16 +195,19 @@ Response Game::tradeResources(int playerID1, std::array<int, 5> resources1,
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  return Response{true, "Successfully traded resources"};
 }
 
-Response Game::useRobber(int playerID, Coordinate2D tileLocation,
-                         Direction direction) {
+Response Game::useRobber(int playerID, PrimitiveCoordinate tileLocation,
+                         IntDirection d) {
+  int stolenPID;
+  int stolenResource;
   try {
     checkPlayerExists(playerID);
     checkCoordinateValid(tileLocation);
+    auto direction = static_cast<Direction>(d); 
 
-    if (direction == Direction::NONE) {
+    if (static_cast<Direction>(direction) == Direction::NONE) {
       return Response{false, "Error: Direction cannot be NONE"};
     }
 
@@ -191,8 +221,8 @@ Response Game::useRobber(int playerID, Coordinate2D tileLocation,
 
     board.moveRobber(tileLocation);
 
-    int stolenPID = board.getBuilding(tileLocation, direction)->getPlayerID();
-    stealResource(playerID, stolenPID);
+    stolenPID = board.getBuilding(tileLocation, direction)->getPlayerID();
+    stolenResource = static_cast<int>(stealResource(playerID, stolenPID));
   } catch (std::exception &e) {
     if (throwErrors) {
       throw e;
@@ -200,10 +230,15 @@ Response Game::useRobber(int playerID, Coordinate2D tileLocation,
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  std::stringstream ss;
+  
+  ss << "Successfully robbed " << stolenPID;
+  return Response{true, ss.str(), {stolenPID, stolenResource}};
 }
 
 Response Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
+  std::vector<int> stolenCounts;
+  stolenCounts.resize(players.size(), 0);
   try {
     checkPlayerExists(playerID);
     checkPlayerHasDevelopmentCard(playerID, DevelopmentType::MONOPOLY);
@@ -216,6 +251,8 @@ Response Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
       if (pid == playerID)
         continue;
       int stolenCount = p.getResourceCount()[resourceIndex];
+      stolenCounts.at(playerID) += stolenCount;
+      stolenCounts.at(pid) -= stolenCount;
       players.at(playerID).addResource(resource, stolenCount);
       p.addResource(resource, -1 * stolenCount);
     }
@@ -227,17 +264,21 @@ Response Game::useMonopolyDevelopmentCard(int playerID, ResourceType resource) {
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  std::stringstream ss;
+  
+  ss << "Successfully used Monopoly Dev card on " << resource;
+  return Response{true, ss.str(), stolenCounts};
 }
 
 Response Game::useSoldierDevelopmentCard(int playerID,
-                                         Coordinate2D tileLocation,
-                                         Direction direction) {
+                                         PrimitiveCoordinate tileLocation,
+                                         IntDirection direction) {
+  Response robberResponse;
   try {
     checkPlayerHasDevelopmentCard(playerID, DevelopmentType::SOLDIER);
     checkUsedDevCard();
 
-    useRobber(playerID, tileLocation, direction);
+    robberResponse = useRobber(playerID, tileLocation, direction);
 
     players.at(playerID).increaseSoldierCount();
     int soldierCount = players.at(playerID).getSoldierCount();
@@ -254,12 +295,15 @@ Response Game::useSoldierDevelopmentCard(int playerID,
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  std::stringstream ss;
+  
+  ss << "Successfully used Soldier Dev card";
+  return Response{true, ss.str(), robberResponse.result};
 }
 
 Response Game::useRoadDevelopmentCard(int playerID,
-                                      std::array<Coordinate2D, 2> tileLocations,
-                                      std::array<Direction, 2> directions) {
+                                      std::array<PrimitiveCoordinate, 2> tileLocations,
+                                      std::array<IntDirection, 2> directions) {
   try {
     checkPlayerExists(playerID);
     checkPlayerHasDevelopmentCard(playerID, DevelopmentType::BUILDROAD);
@@ -276,7 +320,7 @@ Response Game::useRoadDevelopmentCard(int playerID,
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  return Response{true, "Successfully used Road Dev card"};
 }
 Response
 Game::useTakeTwoDevelopmentCard(int playerID,
@@ -307,7 +351,7 @@ Game::useTakeTwoDevelopmentCard(int playerID,
       return Response{false, e.what()};
     }
   }
-  return Response{true};
+  return Response{true, "Successfully used Take Two Dev card"};
 }
 
 const std::array<int, 5> Game::getResourceCount(int playerID) const {
@@ -330,9 +374,9 @@ int Game::getVictoryPoints(int playerID) const {
   return players.at(playerID).getVictoryPoints();
 }
 
-bool Game::hasStructure(Coordinate2D coord, Direction direction,
+bool Game::hasStructure(PrimitiveCoordinate coord, IntDirection direction,
                         StructureType structureType) const {
-  return board.hasStructure(coord, direction, structureType);
+  return board.hasStructure(coord, static_cast<Direction>(direction), structureType);
 }
 
 const bool Game::hasPlayer(int playerID) const {
@@ -341,7 +385,7 @@ const bool Game::hasPlayer(int playerID) const {
 
 void Game::resetTurn(void) { usedDevCard = false; }
 
-void Game::stealResource(int playerID, int stolenPlayerID) {
+ResourceType Game::stealResource(int playerID, int stolenPlayerID) {
   checkPlayerExists(playerID);
   checkPlayerExists(stolenPlayerID);
   auto resourceCount = players.at(stolenPlayerID).getResourceCount();
@@ -364,6 +408,7 @@ void Game::stealResource(int playerID, int stolenPlayerID) {
 
   players.at(stolenPlayerID).addResource(resourceStolen, -1);
   players.at(playerID).addResource(resourceStolen, 1);
+  return resourceStolen;
 }
 
 // Utility Functions
@@ -394,7 +439,7 @@ void Game::checkPlayerHasDevelopmentCard(int playerID,
     throw InsufficientDevelopmentsException(oss.str());
   }
 }
-void Game::checkCoordinateValid(Coordinate2D coord) const {
+void Game::checkCoordinateValid(PrimitiveCoordinate coord) const {
   if (!board.hasTile(coord)) {
     throw CoordinateNotFoundException("Error: Invalid Coordinate");
   }

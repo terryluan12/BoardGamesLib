@@ -14,6 +14,10 @@
 
 //! Public interfaces in the %Dogan library
 namespace Dogan {
+  
+using PrimitiveCoordinate = std::array<int, 2>;
+using Point = std::pair<PrimitiveCoordinate, int>;
+using IntDirection = int;
 /**
  * @brief Interface for the Game class
  *
@@ -62,6 +66,7 @@ public:
    * @brief Distribute all resources to players based on the dice roll
    *
    * @param numberRolled
+   * @return A vector representing players and their id's to distribute to. For example an array with [1, 2, 2, 3] would indicate that resources 2 and 3 have been distributed to players 1 and 2 respectively 
    */
   Response distributeResources(int numberRolled);
 
@@ -73,7 +78,7 @@ public:
    *
    * @param playerID The player ID of the player building the structure
    * @param structType The Structure Type to build
-   * @param tileLocation A Coordinate2D object representing a tile to build the
+   * @param tileLocation A PrimitiveCoordinate object representing a tile to build the
    * structure
    * @param direction The direction to build the structure
    * @param cost A cost array representing the cost of the structure. Should be
@@ -81,7 +86,7 @@ public:
    * @param mustBeAdjacent Whether the structure must be connected to a road
    */
   Response buildStructure(int playerID, StructureType structType,
-                          Coordinate2D tileLocation, Direction direction,
+                          PrimitiveCoordinate tileLocation, IntDirection direction,
                           std::array<int, 5> cost, bool mustBeAdjacent = true);
   /**
    * @brief Purchase a development card
@@ -107,13 +112,13 @@ public:
    * @brief Use a robber to steal resources from a player
    *
    * @param playerID The player ID of the player using the robber
-   * @param tileLocation A Coordinate2D object representing the tile to place
+   * @param tileLocation A PrimitiveCoordinate object representing the tile to place
    * the robber
    * @param direction The direction of the structure to steal from. If the tile
    * has no structures, use Direction::NONE
    */
-  Response useRobber(int playerID, Coordinate2D tileLocation,
-                     Direction direction);
+  Response useRobber(int playerID, PrimitiveCoordinate tileLocation,
+                     IntDirection direction);
 
   /**
    * @brief Use the monopoly development card.
@@ -136,21 +141,21 @@ public:
    * @param direction The direction to steal from. If the tile has no
    * structures, use Direction::NONE
    */
-  Response useSoldierDevelopmentCard(int playerID, Coordinate2D tileLocation,
-                                     Direction direction);
+  Response useSoldierDevelopmentCard(int playerID, PrimitiveCoordinate tileLocation,
+                                     IntDirection direction);
   /**
    * @brief Use the road development card.
    * The road development card allows the player to build up to two roads
    *
    * @param playerID The player ID of the player using the road card
-   * @param tileLocations An array of two Coordinate2D objects representing the
+   * @param tileLocations An array of two PrimitiveCoordinate objects representing the
    * tiles to build the roads on
    * @param directions An array of two Direction enums representing the
    * directions to build the roads
    */
   Response useRoadDevelopmentCard(int playerID,
-                                  std::array<Coordinate2D, 2> tileLocations,
-                                  std::array<Direction, 2> directions);
+                                  std::array<PrimitiveCoordinate, 2> tileLocations,
+                                  std::array<IntDirection, 2> directions);
   /**
    * @brief Use the take two development card.
    * Allows the player to take any two resources from the bank
@@ -190,13 +195,13 @@ public:
   /**
    * @brief Checks if a structure exists on a tile
    *
-   * @param coord The Coordinate2D object representing the tile
+   * @param coord The PrimitiveCoordinate object representing the tile
    * @param direction The direction of the structure
    * @param structureType The type of structure to check for
    * @return true
    * @return false
    */
-  bool hasStructure(Coordinate2D coord, Direction direction,
+  bool hasStructure(PrimitiveCoordinate coord, IntDirection direction,
                     StructureType structureType) const;
   /**
    * @brief Checks if a player exists
@@ -226,13 +231,13 @@ private:
   bool usedDevCard; //!< Whether a player has used a development card this turn
   std::mt19937 rengine;
 
-  void stealResource(int playerID, int stolenPlayerID);
+  ResourceType stealResource(int playerID, int stolenPlayerID);
   void checkPlayerExists(int playerID) const;
   void checkPlayerCanAfford(int playerID, std::array<int, 5> cost) const;
   void checkBankCanAfford(ResourceType resourceType, int num) const;
   void checkPlayerHasDevelopmentCard(int playerID,
                                      DevelopmentType devType) const;
-  void checkCoordinateValid(Coordinate2D coord) const;
+  void checkCoordinateValid(PrimitiveCoordinate coord) const;
   void checkResourceType(ResourceType resourceType) const;
   void checkUsedDevCard(void) const;
 };
